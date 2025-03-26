@@ -1,0 +1,35 @@
+import { useState } from 'react'
+import React from 'react';
+import Hero from './components/Hero';
+import Navbar from './components/Navbar';
+import Noise from './components/Noise';
+import Show from './components/FirstShow';
+import Section2 from './components/Section2';
+import CategorySection from './components/CategorySection';
+import BestSeller from './components/BestSeller';
+
+
+
+const App = () => {
+  return (
+
+    <div className="App bg-[#121212] min-h-screen w-full overflow-x-hidden relative flex flex-col justify-center gap-[12rem]">
+      <div className='flex flex-col relative justify-center h-full'>
+        <Navbar />
+        <Noise patternSize={400} patternAlpha={13} />
+        <Hero />
+      </div>
+
+
+      <div className='flex flex-col justify-center gap-[6rem]'>
+      <Section2 />
+      <CategorySection/>
+      <BestSeller/>
+      </div>
+
+    </div>
+
+  );
+};
+
+export default App;
