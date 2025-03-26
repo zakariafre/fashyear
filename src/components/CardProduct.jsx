@@ -21,7 +21,7 @@ const CardProduct = (props) => {
         <div className='flex justify-center items-center'>
             <div className='flex flex-col gap-1 cursor-pointer'>
                 {/***** Card Box ******/}
-                <div className="group relative w-[22vw] h-[55vh] bg-black flex rounded-[0.6rem] justify-center items-center overflow-hidden  ">
+                <div className="group relative w-[22vw] h-[55vh] bg-black flex rounded-[4%] justify-center items-center overflow-hidden  ">
 
                     {/* wishlist icon */}
                     <div className="absolute top-3 right-4 z-30 w-4 h-4" onClick={toggleLike}>

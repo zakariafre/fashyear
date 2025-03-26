@@ -8,6 +8,7 @@ import Section2 from './components/Section2';
 import CategorySection from './components/CategorySection';
 import Description from './components/Description';
 import CollectionSection from './components/CollectionSection';
+import SupportedBy from './components/SupportedBy';
 
 
 
@@ -27,6 +28,7 @@ const App = () => {
       <CategorySection/>
       <Description/>
       <CollectionSection/>
+      <SupportedBy/>
       </div>
 
     </div>

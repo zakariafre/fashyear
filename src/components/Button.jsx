@@ -6,7 +6,7 @@ const Btn = ({ text, HeightNumber, WidthNumber}) => {
   return (
 
     <div
-      className="group bg-white rounded-[30rem] z-50 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden duration-200 hover:bg-transparent hover:border hover:border-white"
+      className="group border border-white bg-white rounded-[30rem] z-50 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden duration-200 hover:bg-transparent"
       style={{ width: `${WidthNumber}vw`, height: `${HeightNumber}vh` }}
     >
       <p 
