@@ -6,7 +6,6 @@ import Noise from './components/Noise';
 import Show from './components/FirstShow';
 import Section2 from './components/Section2';
 import CategorySection from './components/CategorySection';
-import BestSeller from './components/BestSeller';
 
 
 
@@ -24,7 +23,6 @@ const App = () => {
       <div className='flex flex-col justify-center gap-[6rem]'>
       <Section2 />
       <CategorySection/>
-      <BestSeller/>
       </div>
 
     </div>

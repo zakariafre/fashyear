@@ -10,6 +10,7 @@ import Top3 from '../assets/Tops/2.png'
 import Bottom1 from '../assets/Bottoms/1.png'
 import Bottom2 from '../assets/Bottoms/2.png'
 import Button from './Button'
+import arrow from '../assets/Icons/arrowTop.svg'
 
 
 
@@ -19,7 +20,7 @@ const CategorySection = () => {
     return (
         <div className='flex flex-col gap-12 h-auto w-full '>
             <h2 className='text-white tracking-tighter font-extralight text-3xl relative left-8'>Shop by Category</h2>
-            <div className='flex flex-row flex-wrap justify-center gap-2'>
+            <div className='flex flex-row flex-wrap justify-evenly gap-2'>
                 <CategoryBtn
                     text="All"
                     isActive={activeButton === 'All'}
@@ -63,10 +64,20 @@ const CategorySection = () => {
 
             </div>
 
-            <div className='relative left-6 bottom-6'>
-            <Button text="View more" HeightNumber={5.5} WidthNumber={10} />
+            <div className='w-full flex justify-center'>
+                <div
+                    className="bg-transparent outline border w-[14vw] h-[6vh] border-white rounded-[30rem] z-50 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden duration-200 hover:outline-solid hover:outline-1 hover:outline-white "
+                >
+                    <p
+                        className="text-white tracking-tighter transition-all duration-200 text-[0.9rem] font-light">
+                            View more
+                    </p>
+                    <div className="h-6 w-6 rounded-full flex items-center justify-center transition-all duration-200 group-hover:bg-transparent">
+                        <img src={arrow} className="h-4 w-4 relative top-0.5" alt="" />
+                    </div>
+                </div>
             </div>
-            
+
 
         </div>
     )

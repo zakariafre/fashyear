@@ -24,19 +24,6 @@ const CardProduct = (props) => {
                 <div className="group relative w-[22vw] h-[55vh] bg-black flex rounded-[0.8rem] justify-center items-center overflow-hidden  ">
 
                     {/* wishlist icon */}
-                    {/* <svg
-                        onClick={toggleLike}
-                        className='h-4 absolute top-3 right-4 z-30 cursor-pointer'
-                        xmlns="http://www.w3.org/2000/svg"
-                        viewBox="0 0 130 100"
-                        x="0px" y="0px"
-                        fill={isLiked ? '#212121' : 'none'}
-                        stroke={isLiked ? '#212121' : '#212121'}
-                        strokeWidth="5"
-                    >
-                        <path d="M50 91s-36-27-42-51c-5-19 9-36 27-36 10 0 19 6 23 15 4-9 13-15 23-15 18 0 32 17 27 36-6 24-42 51-42 51z" />
-                    </svg> */}
-
                     <div className="absolute top-3 right-4 z-30 w-4 h-4" onClick={toggleLike}>
                         {/* Loading Circle */}
                         {isLoading && (
@@ -93,7 +80,7 @@ const CardProduct = (props) => {
                 </div>
                 <div className='text-white font-extralight text-[0.7rem]'>
                     <h2>{props.title}</h2>
-                    <p className=' font-light text-neutral-500'>{props.price}<span>.00 DH</span></p>
+                    <p className=' font-light text-neutral-400'>{props.price}<span>.00 DH</span></p>
                 </div>
             </div>
         </div>
