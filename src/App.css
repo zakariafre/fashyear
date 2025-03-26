@@ -13,33 +13,17 @@
     padding-right: 1.8rem;
     margin: 0 1rem;
     position: relative;
-    border: 1px solid transparent;
+    border: 0.01rem solid #fff;
+    outline: 0rem solid transparent;
+    box-sizing: border-box;
+    transition: all 0.3s ease-out;
 }
 
 #customSpan2:hover{
-    transform: scale(1.03);
-    transition: all 0.1s ease-out;
-    
+    outline: 0.1px solid #fff;
+    transition: all 0.3s ease-out;
 }
 
-
-#customSpan2::before {
-    content: "";
-    position: absolute;
-    background: linear-gradient(to right, rgba(255,255,255,0.8), rgba(255,255,255,0), rgba(255,255,255,0),rgba(255,255,255,0), rgba(255,255,255,0.8));
-    top: -2px;
-    left: -2px;
-    right: -2px;
-    bottom: -2px;
-    border-radius: 30rem;
-    padding: 1px;
-    -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box, 
-    linear-gradient(#fff 0 0);
-    -webkit-mask-composite: xor;
-    mask-composite: exclude;
-    pointer-events: none;
-}
 
 
 #customSpan{

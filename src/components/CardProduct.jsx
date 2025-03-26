@@ -1,8 +1,21 @@
-import React from 'react'
-import Button from './Button';
+import React, { useState } from 'react';
 import arrow from '../assets/Icons/arrowTop.svg'
 
-const CardProduct = (props , isActive, onClick) => {
+
+const CardProduct = (props) => {
+
+    const [isLiked, setIsLiked] = useState(false);
+    const [isLoading, setIsLoading] = useState(false);
+
+    const toggleLike = () => {
+        if (isLoading) return; // Prevent multiple clicks during animation
+        setIsLoading(true);
+
+        setTimeout(() => {
+            setIsLiked(!isLiked);
+            setIsLoading(false);
+        }, 1000); // Delay effect (1s)
+    };
 
     return (
         <div className='flex justify-center items-center'>
@@ -11,21 +24,64 @@ const CardProduct = (props , isActive, onClick) => {
                 <div className="group relative w-[22vw] h-[55vh] bg-black flex rounded-[0.8rem] justify-center items-center overflow-hidden  ">
 
                     {/* wishlist icon */}
-                    <svg
-                        className='h-4 opacity-85 absolute top-3 right-4 z-30 cursor-pointer'
+                    {/* <svg
+                        onClick={toggleLike}
+                        className='h-4 absolute top-3 right-4 z-30 cursor-pointer'
                         xmlns="http://www.w3.org/2000/svg"
-                        data-name="Слой 1"
-                        viewBox="0 0 100 100"
-                        x="0px" y="0px">
-                        <path fill='#212121' d="M50,92.94352L48.7192,91.72821c-2.17586-2.06305-4.81569-4.63554-7.73926-7.48639-2.15588-2.10308-4.46817-4.35717-6.866-6.67134C20.813,64.73353,16.5595,60.31628,11.984,53.69041,7.101,46.62062,3.57341,41.512,3.27318,33.9201A26.21086,26.21086,0,0,1,9.30781,15.71443,24.8175,24.8175,0,0,1,23.25089,7.48934,25.3124,25.3124,0,0,1,38.81861,9.64159,30.70992,30.70992,0,0,1,50,18.46337,30.70959,30.70959,0,0,1,61.18139,9.64159,25.29408,25.29408,0,0,1,76.74911,7.48934a24.81749,24.81749,0,0,1,13.94308,8.22509A26.21086,26.21086,0,0,1,96.72682,33.9201C96.42659,41.512,92.899,46.62062,88.016,53.69041c-4.57553,6.62587-8.829,11.04312-22.13,23.88006-2.39779,2.31417-4.71014,4.56827-6.866,6.67134-2.92357,2.85085-5.5634,5.42334-7.73926,7.48639ZM27.76278,10.77867a19.9247,19.9247,0,0,0-3.79869.3675,21.07428,21.07428,0,0,0-11.82547,6.99155A22.505,22.505,0,0,0,6.99546,33.77459c0.2456,6.22016,2.93091,10.3809,8.0559,17.79814,4.38993,6.35847,8.55794,10.68288,21.64958,23.31607,2.40149,2.31962,4.71929,4.57917,6.88062,6.68594C45.93932,83.8725,48.10973,85.99018,50,87.80217c1.89023-1.812,4.06065-3.92967,6.41847-6.22743,2.16127-2.10677,4.47907-4.36632,6.88056-6.68594C76.3907,62.25562,80.55871,57.93121,84.94871,51.57274c5.12493-7.41724,7.81023-11.578,8.05584-17.79814a22.505,22.505,0,0,0-5.14316-15.63688h0A21.07431,21.07431,0,0,0,76.036,11.14616a21.48661,21.48661,0,0,0-13.30818,1.8866A26.8758,26.8758,0,0,0,51.59,22.65136L50,25.253,48.41,22.65136A26.87867,26.87867,0,0,0,37.274,13.03276,22.41124,22.41124,0,0,0,27.76278,10.77867Z" />
-                    </svg>
+                        viewBox="0 0 130 100"
+                        x="0px" y="0px"
+                        fill={isLiked ? '#212121' : 'none'}
+                        stroke={isLiked ? '#212121' : '#212121'}
+                        strokeWidth="5"
+                    >
+                        <path d="M50 91s-36-27-42-51c-5-19 9-36 27-36 10 0 19 6 23 15 4-9 13-15 23-15 18 0 32 17 27 36-6 24-42 51-42 51z" />
+                    </svg> */}
+
+                    <div className="absolute top-3 right-4 z-30 w-4 h-4" onClick={toggleLike}>
+                        {/* Loading Circle */}
+                        {isLoading && (
+                            <svg
+                                className="absolute top-0 right-1 animate-spin"
+                                width="10"
+                                height="10"
+                                viewBox="0 0 50 50"
+                            >
+                                <circle
+                                    cx="25"
+                                    cy="25"
+                                    r="20"
+                                    fill="none"
+                                    stroke="#212121"
+                                    strokeWidth="4"
+                                    strokeDasharray="120"
+                                    strokeDashoffset="20"
+                                    strokeLinecap="round"
+                                />
+                            </svg>
+                        )}
+
+                        {/* Heart Icon */}
+                        {!isLoading && (
+                            <svg
+                                className="absolute inset-0 transition-all duration-300"
+                                xmlns="http://www.w3.org/2000/svg"
+                                viewBox="0 0 120 100"
+                                fill={isLiked ? "#212121" : "none"}
+                                stroke="#212121"
+                                strokeWidth="5"
+                            >
+                                <path d="M50 91s-36-27-42-51c-5-19 9-36 27-36 10 0 19 6 23 15 4-9 13-15 23-15 18 0 32 17 27 36-6 24-42 51-42 51z" />
+                            </svg>
+                        )}
+                    </div>
+
 
                     {/* Add to cart button */}
                     <div
                         className="opacity-0 group-hover:opacity-100 h-[5vh] w-[10vw] bg-white rounded-[30rem] absolute bottom-2 right-2 z-30 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden duration-400 ease-in-out "
                     >
                         <p className="text-[rgb(33,33,33)] text-[0.8rem] tracking-tighter">
-                            ADD TO CART 
+                            ADD TO CART
                         </p>
                         <div className="h-6 w-6 bg-[#212121] rounded-full flex items-center justify-center">
                             <img src={arrow} className="h-4 w-4 relative top-0.5  " alt="" />
