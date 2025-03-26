@@ -32,7 +32,7 @@ const Hero = ({ text, disabled = false, speed = 5, className = '' }) => {
 
             <div className="flex flex-row gap-10">
             {/* Hero card design */}
-                <div className=" border-[0.03rem] border-neutral-700 relative bg-center bg-cover h-[53vh] w-[33vw] rounded-[1.5rem] overflow-hidden cursor-pointer ">
+                <div className=" border-[0.03rem] border-neutral-700 relative bg-center bg-cover h-[53vh] w-[33vw] rounded-[5%] overflow-hidden cursor-pointer ">
                     {/* Image behind */}
                     <img src={HeroCardImg} alt="" className=" w-full h-full object-cover z-0 " />
                     {/* Gradient overlay on top */}
@@ -66,7 +66,7 @@ const Hero = ({ text, disabled = false, speed = 5, className = '' }) => {
 
 
                 {/* Hero card design */}
-                <div className="absolute top-0 right-0 h-[77vh] w-[46vw] bg-black rounded-[1.5rem] overflow-hidden cursor-pointer border-[0.03rem] border-neutral-700">
+                <div className="absolute top-0 right-0 h-[77vh] w-[46vw] bg-black rounded-[5%] overflow-hidden cursor-pointer border-[0.03rem] border-neutral-700">
                     {/* Image behind */}
                     <img src={HeroCardImg2} alt="" className=" w-full h-full object-cover z-0 scale-x-[-1] grayscale-30"  />
                     {/* Gradient overlay on top */}

@@ -6,6 +6,8 @@ import Noise from './components/Noise';
 import Show from './components/FirstShow';
 import Section2 from './components/Section2';
 import CategorySection from './components/CategorySection';
+import Description from './components/Description';
+import CollectionSection from './components/CollectionSection';
 
 
 
@@ -20,9 +22,11 @@ const App = () => {
       </div>
 
 
-      <div className='flex flex-col justify-center gap-[6rem]'>
+      <div className='flex flex-col justify-center gap-[7rem]'>
       <Section2 />
       <CategorySection/>
+      <Description/>
+      <CollectionSection/>
       </div>
 
     </div>
