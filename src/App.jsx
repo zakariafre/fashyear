@@ -18,7 +18,7 @@ const App = () => {
     <div className="App bg-[#121212] min-h-screen w-full overflow-x-hidden relative flex flex-col justify-center gap-[12rem]">
       <div className='flex flex-col relative justify-center h-full'>
         <Navbar />
-        <Noise patternSize={400} patternAlpha={13} />
+        <Noise patternSize={400} patternAlpha={15} />
         <Hero />
       </div>
 

@@ -66,7 +66,7 @@ const CategorySection = () => {
 
             <div className='w-full flex justify-center'>
                 <div
-                    className="bg-transparent outline border w-[14vw] h-[6vh] border-white rounded-[30rem] z-50 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden duration-200 hover:outline-solid hover:outline-1 hover:outline-white "
+                    className="bg-transparent outline border w-[14vw] h-[6vh] border-white rounded-[30rem] z-30 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden duration-200 hover:outline-solid hover:outline-1 hover:outline-white "
                 >
                     <p
                         className="text-white tracking-tighter transition-all duration-200 text-[0.9rem] font-light">

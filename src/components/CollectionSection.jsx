@@ -14,7 +14,7 @@ const CollectionSection = () => {
 
             <div className=' h-full w-[40%] flex flex-col gap-7 '>
                 <h2 className='text-[4.5rem] tracking-tighter text-white leading-[4rem]'>Winter <br /> Collection </h2>
-                <Button text="Discover" HeightNumber={5.5} WidthNumber={10} />
+                <Button className="z-30" text="Discover" HeightNumber={5.5} WidthNumber={10} />
                 {/* Card 2 */}
                 <div className=' pointer-events-none h-[60%] bg-white rounded-[8%] overflow-hidden'>
 
