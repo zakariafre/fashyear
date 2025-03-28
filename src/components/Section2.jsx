@@ -30,6 +30,7 @@ const Section2 = () => {
                         src={Sectionpic}
                         alt=""
                         className='relative bottom-5 transition-transform duration-300 group-hover:scale-110'
+                        draggable="false"
                     />
                 </div>
             </Magnet>
@@ -50,6 +51,7 @@ const Section2 = () => {
                         src={Sectionpic2}
                         alt=""
                         className='relative scale-110 transition-transform duration-300 group-hover:scale-110'
+                        draggable="false"
                     />
                 </div>
             </Magnet>
@@ -69,7 +71,8 @@ const Section2 = () => {
                     <img
                         src={Logo}
                         alt=""
-                        className='relative scale-125 transition-transform duration-300 group-hover:scale-110'
+                        className='relative scale-90 transition-transform duration-300 group-hover:scale-110'
+                        draggable="false"
                     />
                 </div>
             </Magnet>

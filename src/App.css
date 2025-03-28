@@ -1,4 +1,9 @@
-.App{
+.TopSections {
+    padding-left: 10%;
+    padding-right: 10%;
+}
+
+.Sections{
     padding-left: 10%;
     padding-right: 10%;
 }

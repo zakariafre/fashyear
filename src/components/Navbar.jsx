@@ -40,7 +40,7 @@ const Navbar = () => {
 
         {/* fashyear Logo */}
         <div className='w-[40%] h-[100%]  flex justify-center items-center'>
-          <img src={logo1} className=' h-[7rem] cursor-pointer' />
+          <img src={logo1} className=' h-[2rem] cursor-pointer'draggable="false" />
         </div>
 
 

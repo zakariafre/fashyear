@@ -9,6 +9,7 @@ import CategorySection from './components/CategorySection';
 import Description from './components/Description';
 import CollectionSection from './components/CollectionSection';
 import SupportedBy from './components/SupportedBy';
+import Footer from './components/Footer';
 
 
 
@@ -16,20 +17,22 @@ const App = () => {
   return (
 
     <div className="App bg-[#121212] min-h-screen w-full overflow-x-hidden relative flex flex-col justify-center gap-[12rem]">
-      <div className='flex flex-col relative justify-center h-full'>
+      <div className='TopSections flex flex-col relative justify-center h-full'>
         <Navbar />
         <Noise patternSize={400} patternAlpha={15} />
         <Hero />
       </div>
 
 
-      <div className='flex flex-col justify-center gap-[7rem]'>
+      <div className=' Sections flex flex-col justify-center gap-[7rem]'>
       <Section2 />
       <CategorySection/>
       <Description/>
       <CollectionSection/>
       <SupportedBy/>
+      <Footer/>
       </div>
+      
 
     </div>
 

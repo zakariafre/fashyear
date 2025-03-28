@@ -76,7 +76,7 @@ const CardProduct = (props) => {
                     </div>
 
                     {/* Card Image */}
-                    <img src={props.img} className='relative z-3 top-8 scale-110 transition-all duration-200' alt="" />
+                    <img src={props.img} className='relative z-3 top-8 scale-110 transition-all duration-200' alt="" draggable="false" />
                 </div>
                 <div className='text-white font-extralight text-[0.7rem]'>
                     <h2>{props.title}</h2>
