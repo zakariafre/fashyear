@@ -3,7 +3,7 @@
     padding-right: 10%;
 }
 
-.Sections{
+.Sections {
     padding-left: 10%;
     padding-right: 10%;
 }
@@ -13,7 +13,7 @@
     font-family: 'BentonModDispLt', sans-serif;
 }
 
-#customSpan2{
+#customSpan2 {
     padding-left: 1.8rem;
     padding-right: 1.8rem;
     margin: 0 1rem;
@@ -24,14 +24,14 @@
     transition: all 0.3s ease-out;
 }
 
-#customSpan2:hover{
+#customSpan2:hover {
     outline: 0.1px solid #fff;
     transition: all 0.3s ease-out;
 }
 
 
 
-#customSpan{
+#customSpan {
     padding-left: 2.5rem;
     padding-right: 2.5rem;
     margin: 0 1rem;
@@ -45,16 +45,16 @@
 #customSpan::before {
     content: "";
     position: absolute;
-    background: linear-gradient(to right, rgba(255,255,255,0.8), rgba(255,255,255,0), rgba(255,255,255,0),rgba(255,255,255,0), rgba(255,255,255,0.8));
+    background: linear-gradient(to right, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.8));
     top: -2px;
     left: -2px;
     right: -2px;
     bottom: -2px;
     border-radius: 30rem;
     padding: 1px;
-    -webkit-mask: 
-    linear-gradient(#fff 0 0) content-box, 
-    linear-gradient(#fff 0 0);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
@@ -76,10 +76,20 @@
     border-radius: 1rem;
     background: linear-gradient(to right bottom, rgba(255, 255, 255, 0.8), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0), rgba(255, 255, 255, 0.8));
     padding: 0.7px;
-    -webkit-mask: 
-      linear-gradient(#fff 0 0) content-box, 
-      linear-gradient(#fff 0 0);
+    -webkit-mask:
+        linear-gradient(#fff 0 0) content-box,
+        linear-gradient(#fff 0 0);
     -webkit-mask-composite: xor;
     mask-composite: exclude;
     pointer-events: none;
 }
+
+
+  
+  /* Apply to the custom cursor container */
+  .Custom-cursor {
+    cursor: url('./assets/Icons/cursor.svg'), auto;
+  }
+
+
+

@@ -13,7 +13,7 @@ const Navbar = () => {
       initial={{ filter: "blur(6px)", opacity: 0, y: -20 }}
       animate={{ filter: "blur(0px)", opacity: 1, y: 0 }}
       transition={{ duration: 1, ease: "easeInOut" }}
-      className="shadow-neutral-800/40 shadow-lg z-50 fixed top-5 left-1/2 transform -translate-x-1/2 w-[60vw] rounded-[30rem] h-[10vh] flex items-center justify-center backdrop-blur-[5px] mx-auto "
+      className="shadow-neutral-800/40 shadow-lg z-50 fixed top-5 left-1/2 transform -translate-x-1/2 w-[60vw] rounded-[30rem] h-[10vh] flex items-center justify-center backdrop-blur-[15px] mx-auto "
 
     >
       <div className="bg-white/[12%] w-[60vw] h-[10vh] rounded-[30rem] flex items-center justify-center"
