@@ -1,14 +1,13 @@
 import { useState } from 'react'
 import React from 'react';
-import Hero from './components/Hero';
+import Hero from './pages/HomePage/Hero';
 import Navbar from './components/Navbar';
 import Noise from './components/Noise';
-import Show from './components/FirstShow';
-import Section2 from './components/Section2';
-import CategorySection from './components/CategorySection';
-import Description from './components/Description';
-import CollectionSection from './components/CollectionSection';
-import SupportedBy from './components/SupportedBy';
+import Section2 from './pages/HomePage/Section2';
+import CategorySection from './pages/HomePage/CategorySection';
+import Description from './pages/HomePage/Description';
+import CollectionSection from './pages/HomePage/CollectionSection';
+import SupportedBy from './pages/HomePage/SupportedBy';
 import Footer from './components/Footer';
 
 
