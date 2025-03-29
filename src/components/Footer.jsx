@@ -8,17 +8,17 @@ const Footer = () => {
             <hr className='text-neutral-800 relative bottom-[10%] w-[90%]' />
             <img className=' absolute max-w-[70%] mx-auto !mt-[3%] opacity-[2%] ' src={FyLogo} alt="" draggable="false" />
 
-            <div className='flex flex-col gap-10 !mb-10 font-light'>
-                <img className=' max-w-[15%] mx-auto opacity-75' src={BflyIcon} alt="" draggable="false" />
-                <h2 className='w-[35%] text-2xl text-[#A1A1A1] leading-7 tracking-tighter select-none '><span className='text-white'>Elevating everyday style</span> with timeless elegance and modern sophistication</h2>
-                <p className='absolute bottom-[0.5%] text-neutral-500 text-xs '>@ 2025 fashyear Inc. All rights reserved.</p>
-                <ul className='flex flex-row gap-10 text-neutral-500 cursor-pointer text-xs absolute bottom-[0.5%] right-[10%]'>
+            <div className='flex flex-col gap-10 font-light'>
+                <img className=' max-w-[15%] mx-auto relative left-10 opacity-75' src={BflyIcon} alt="" draggable="false" />
+                <h2 className='w-[35%] text-2xl relative left-10 text-[#A1A1A1] leading-7 tracking-tighter select-none '><span className='text-white'>Elevating everyday style</span> with timeless elegance and modern sophistication</h2>
+                <p className='absolute left-[13%] bottom-[0.5%] text-neutral-500 text-xs '>@ 2025 fashyear Inc. All rights reserved.</p>
+                <ul className='flex flex-row gap-10 text-neutral-500 cursor-pointer text-xs absolute bottom-[0.5%] right-[15%]'>
                     <li>Terms of Services</li>
                     <li>Privacy Policy </li>
                     <li>Cookies</li>
                 </ul>
             </div>
-            <div className=' text-[#A1A1A1] absolute right-[10%] bottom-[3.5%] flex flex-col gap-3'>
+            <div className=' text-[#A1A1A1] absolute right-[15%] bottom-[3.5%] flex flex-col gap-3'>
                 <ul className='flex flex-row gap-20 font-bold '>
                     <li>FOLLOW
                         <ul className='flex flex-col relative top-5 gap-2 font-light cursor-pointer '>
