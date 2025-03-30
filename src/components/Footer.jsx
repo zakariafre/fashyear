@@ -18,6 +18,7 @@ const Footer = () => {
                     <li>Cookies</li>
                 </ul>
             </div>
+            
             <div className=' text-[#A1A1A1] absolute right-[15%] bottom-[3.5%] flex flex-col gap-3'>
                 <ul className='flex flex-row gap-20 font-bold '>
                     <li>FOLLOW

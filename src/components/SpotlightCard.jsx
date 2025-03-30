@@ -23,16 +23,16 @@ const SpotlightCard = ({ children, className = "", spotlightColor = "rgba(255, 2
     const distance = Math.sqrt(Math.pow(x - centerX, 2) + Math.pow(y - centerY, 2));
 
     // If the distance is below a certain threshold (e.g., 50px), hide the circle
-    if (distance < 50) {
+    if (distance < 30) {
       setOpacity(0);
     } else {
-      setOpacity(0.3);
+      setOpacity(0.4);
     }
   };
 
   const handleFocus = () => {
     setIsFocused(true);
-    setOpacity(0.3);
+    setOpacity(0.4);
   };
 
   const handleBlur = () => {
@@ -41,7 +41,7 @@ const SpotlightCard = ({ children, className = "", spotlightColor = "rgba(255, 2
   };
 
   const handleMouseEnter = () => {
-    setOpacity(0.3);
+    setOpacity(0.4);
   };
 
   const handleMouseLeave = () => {

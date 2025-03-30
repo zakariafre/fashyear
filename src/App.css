@@ -64,7 +64,6 @@
 
 
 .card-border {
-    position: relative;
     overflow: hidden;
 }
 
@@ -93,3 +92,16 @@
 
 
 
+  .Links{
+    border-bottom: 1px solid transparent;
+    border-image: linear-gradient(to right, #909090, transparent) 1;
+    transition: all 0.5s;
+}
+
+
+.Links:hover{
+    border-image: linear-gradient(to right, #fff, transparent) 1;
+  }
+
+
+  
