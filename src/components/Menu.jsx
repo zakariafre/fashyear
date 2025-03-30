@@ -27,7 +27,7 @@ const SidebarMenu = ({ isOpen, setIsOpen }) => {
                     }`}
             >
 
-                <div className="relative flex flex-col gap-20 !pl-[13%] top-7 ">
+                <div className="relative flex flex-col gap-14 !pl-[13%] top-7 ">
 
                     {/* Close button */}
                     <button
@@ -50,9 +50,18 @@ const SidebarMenu = ({ isOpen, setIsOpen }) => {
                                 <span className="inline-block transition-transform duration-400 group-hover:translate-x-5">About fashyear</span>
                             </li>
                             <li className="group Links relative w-[80%] overflow-hidden Custom-cursor !pb-3 !pt-5 border-b transition-all duration-500 hover:border-b hover:border-white">
-                                <span className="inline-block transition-transform duration-400 group-hover:translate-x-5">Blog</span>
+                                <span className="inline-block transition-transform duration-500 group-hover:translate-x-5">Blog</span>
                             </li>
                         </ul>
+                    </div>
+
+                    <div className=" top-10 right-5 relative flex flex-col justify-center">
+                            <hr className="opacity-30" />
+                        <div className="flex flex-col text-xl text-neutral-400 font-light relative top-10 left-5">
+                            <h2 className="">Can we help you ?</h2>
+                            <h2 className=" underline cursor-pointer">+2126 154 937 32</h2>
+                        </div>
+
                     </div>
 
                 </div>
