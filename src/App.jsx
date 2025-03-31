@@ -11,6 +11,7 @@ import CollectionSection from './pages/HomePage/CollectionSection';
 import SupportedBy from './pages/HomePage/SupportedBy';
 import Footer from './components/Footer';
 import Menu from './components/Menu';
+import WishListPopUp from './Pop-ups/WishListPopUp';
 
 
 
@@ -43,7 +44,7 @@ const App = () => {
         <Noise patternSize={400} patternAlpha={15} />
         <Hero />
         <Menu isOpen={isOpen} setIsOpen={setIsOpen} />
-
+        <WishListPopUp />
       </div>
 
 

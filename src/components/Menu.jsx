@@ -13,7 +13,7 @@ const SidebarMenu = ({ isOpen, setIsOpen }) => {
             {/* Background overlay (optional) */}
             {isOpen && (
                 <div
-                    className="fixed inset-0 bg-black/70 backdrop-blur-xs z-40 transition-opacity duration-300"
+                    className="fixed inset-0 bg-black/70 backdrop-blur-xs z-60 transition-opacity duration-300"
                     onClick={() => setIsOpen(false)} // Click outside to close menu
                 ></div>
             )}
@@ -22,7 +22,7 @@ const SidebarMenu = ({ isOpen, setIsOpen }) => {
 
             {/* Sidebar Menu */}
             <div
-                className={`fixed top-3 left-10 h-[96%] w-[25%] bg-[#303030]/90 rounded-[1rem] card-border text-white transition-transform duration-300 z-50 
+                className={`fixed top-3 left-10 h-[96%] w-[25%] bg-[#303030]/90 rounded-[1rem] card-border text-white transition-transform duration-300 z-70 
                 ${isOpen ? "translate-x-0" : "-translate-x-[120%]"
                     }`}
             >
@@ -59,7 +59,7 @@ const SidebarMenu = ({ isOpen, setIsOpen }) => {
                             <hr className="opacity-30" />
                         <div className="flex flex-col text-xl text-neutral-400 font-light relative top-10 left-5">
                             <h2 className="">Can we help you ?</h2>
-                            <h2 className=" underline cursor-pointer">+2126 154 937 32</h2>
+                            <h2 className=" underline cursor-pointer hover:text-neutral-300 duration-200">+2126 154 937 32</h2>
                         </div>
 
                     </div>

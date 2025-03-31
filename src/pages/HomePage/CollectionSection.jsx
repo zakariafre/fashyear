@@ -15,10 +15,9 @@ const CollectionSection = () => {
 
             <div className=' h-full w-[40%] flex flex-col gap-7 '>
                 <h2 className='text-[4.5rem] tracking-tighter text-white leading-[4rem]'>Winter <br /> Collection </h2>
-                <Button className="z-30" text="Discover" HeightNumber={5.5} WidthNumber={10} />
+                <Button text="Discover" HeightNumber={5.5} WidthNumber={10} />
                 {/* Card 2 */}
                 <div className='Custom-cursor h-[60%] bg-white rounded-[8%] overflow-hidden'>
-
                 <img className='scale-105 relative bottom-14' src={CollectionPic2} alt="" />
                 </div>
             </div>
