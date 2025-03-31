@@ -2,7 +2,7 @@ import { useRef, useEffect } from "react";
 import "../index.css";
 
 const Noise = ({
-  patternSize = 5000,
+  patternSize = 5,
   patternScaleX = 1,
   patternScaleY = 1,
   patternAlpha = 15, 

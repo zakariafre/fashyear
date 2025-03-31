@@ -12,6 +12,7 @@ import SupportedBy from './pages/HomePage/SupportedBy';
 import Footer from './components/Footer';
 import Menu from './components/Menu';
 import WishListPopUp from './Pop-ups/WishListPopUp';
+import Search from './Pop-ups/Search';
 
 
 
@@ -45,6 +46,7 @@ const App = () => {
         <Hero />
         <Menu isOpen={isOpen} setIsOpen={setIsOpen} />
         <WishListPopUp />
+        <Search />
       </div>
 
 
