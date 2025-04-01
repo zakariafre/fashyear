@@ -1,51 +1,73 @@
-import React from 'react'
-import BflyIcon from '../assets/Icons/4.png'
-import FyLogo from '../assets/Icons/1.png'
+import React from 'react';
+import BflyIcon from '../assets/Icons/4.png';
 
 const Footer = () => {
     return (
-        <div className='max-w-full h-[50vh] flex items-center flex-col'>
-            <hr className='text-neutral-800 relative bottom-[10%] w-[90%]' />
-            <img className=' absolute max-w-[70%] mx-auto !mt-[3%] opacity-[2%] ' src={FyLogo} alt="" draggable="false" />
+        <footer className="w-full !mt-auto border-t border-neutral-800 bg-transparent text-[#A1A1A1] !pt-12 !pb-8">
+            <div className="container !mx-auto !px-6">
+                {/* Main Content */}
+                <div className="flex flex-col md:flex-row justify-between items-start">
+                    {/* Left Section - Tagline */}
+                    <div className="!mb-12 md:!mb-0 md:w-[40%]">
+                        <h2 className="text-2xl w-[90%] leading-tight tracking-tight">
+                            <span className="text-white">Elevating everyday style</span> with timeless elegance and modern sophistication
+                        </h2>
+                    </div>
 
-            <div className='flex flex-col gap-10 font-light'>
-                <img className=' max-w-[15%] mx-auto relative left-10 opacity-75' src={BflyIcon} alt="" draggable="false" />
-                <h2 className='w-[35%] text-2xl relative left-10 text-[#A1A1A1] leading-7 tracking-tighter select-none '><span className='text-white'>Elevating everyday style</span> with timeless elegance and modern sophistication</h2>
-                <p className='absolute left-[13%] bottom-[0.5%] text-neutral-500 text-xs '>@ 2025 fashyear Inc. All rights reserved.</p>
-                <ul className='flex flex-row gap-10 text-neutral-500 cursor-pointer text-xs absolute bottom-[0.5%] right-[15%]'>
-                    <li>Terms of Services</li>
-                    <li>Privacy Policy </li>
-                    <li>Cookies</li>
-                </ul>
+                    {/* Right Section - Links */}
+                    <div className="grid grid-cols-3 gap-12 w-full md:w-auto">
+                        {/* FOLLOW */}
+                        <div>
+                            <h3 className="font-bold text-sm !mb-4">FOLLOW</h3>
+                            <ul className="space-y-2 text-sm flex flex-col gap-1">
+                                {['Instagram', 'Facebook', 'X (Twitter)'].map(item => (
+                                    <li key={item} className="hover:text-white cursor-pointer transition-colors">
+                                        {item}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* PAGES */}
+                        <div>
+                            <h3 className="font-bold text-sm !mb-4">PAGES</h3>
+                            <ul className="space-y-2 text-sm flex flex-col gap-1">
+                                {['Home', 'Shop', 'About'].map(item => (
+                                    <li key={item} className="hover:text-white cursor-pointer transition-colors">
+                                        {item}
+                                    </li>
+                                ))}
+                            </ul>
+                        </div>
+
+                        {/* CONTACT */}
+                        <div>
+                            <h3 className="font-bold text-sm !mb-4">CONTACT</h3>
+                            <ul className="space-y-2 text-sm flex flex-col gap-2">
+                                <li className="hover:text-white cursor-pointer transition-colors">
+                                    Reach Us
+                                </li>
+                            </ul>
+                        </div>
+                    </div>
+                </div>
+
+                {/* Bottom Bar */}
+                <div className="!mt-12 !pt-6 flex flex-col md:flex-row justify-between items-center">
+                    <p className="text-xs order-2 md:order-1 !mt-4 md:mt-0">
+                        © 2025 fashyear Inc. All rights reserved.
+                    </p>
+                    <ul className="flex space-x-6 flex-row gap-5 text-xs order-1 md:order-2">
+                        {['Terms of Services', 'Privacy Policy', 'Cookies'].map(item => (
+                            <li key={item} className="hover:text-neutral-500 cursor-pointer transition-colors">
+                                {item}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
             </div>
-            
-            <div className=' text-[#A1A1A1] absolute right-[15%] bottom-[3.5%] flex flex-col gap-3'>
-                <ul className='flex flex-row gap-20 font-bold '>
-                    <li>FOLLOW
-                        <ul className='flex flex-col relative top-5 gap-2 font-light cursor-pointer '>
-                            <li className=' hover:text-neutral-200 duration-200'>Instagram</li>
-                            <li className=' hover:text-neutral-200 duration-200'>Facebook</li>
-                            <li className=' hover:text-neutral-200 duration-200'>X (Twitter)</li>
-                        </ul>
-                    </li>
-                    <li>PAGES
-                        <ul className='flex flex-col relative top-5 gap-2 font-light cursor-pointer'>
-                            <li className=' hover:text-neutral-200 duration-200'>Home</li>
-                            <li className=' hover:text-neutral-200 duration-200'>Shop</li>
-                            <li className=' hover:text-neutral-200 duration-200'>About</li>
-                        </ul>
-                    </li>
-                    <li>CONTACT
-                        <ul className='flex flex-col relative top-5 gap-2 font-light cursor-pointer'>
-                            <li className=' hover:text-neutral-200 duration-200'>Reach Us</li>
-                        </ul>
-                    </li>
-                </ul>
-            </div>
+        </footer>
+    );
+};
 
-
-        </div>
-    )
-}
-
-export default Footer
+export default Footer;

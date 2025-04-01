@@ -27,7 +27,7 @@ const Hero = ({ text, disabled = false, speed = 5, className = '' }) => {
       }, []);
 
     return (
-        <div className=" relative h-[80vh] top-[20vh] w-full flex flex-col gap-[4%]  text-white z-1  ">
+        <div className="relative h-[80vh] top-[20vh] w-full flex flex-col gap-[4%]  text-white z-1">
 
             {/* Main text of the hero  */}
             <div className="text-4xl font-light tracking-tighter leading-9">

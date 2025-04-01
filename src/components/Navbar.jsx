@@ -9,10 +9,11 @@ import { motion } from "motion/react"
 import Menu from './Menu'
 import '../App.css'
 
-const Navbar = ({ isOpen, setIsOpen }) => {
 
-  const [menuOpen, setMenuOpen] = useState(true); // Control menu visibility
 
+const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
+
+  
 
   return (
     <>
@@ -21,12 +22,12 @@ const Navbar = ({ isOpen, setIsOpen }) => {
         initial={{ filter: "blur(6px)", opacity: 0, y: -20 }}
         animate={{ filter: "blur(0px)", opacity: 1, y: 0 }}
         transition={{ duration: 1, ease: "easeInOut" }}
-        className={`shadow-neutral-800/40 shadow-lg fixed top-5 left-1/2 transform -translate-x-1/2 w-[80%] rounded-[1.5rem] h-[10vh] flex items-center justify-center backdrop-blur-[8px] mx-auto transition-all duration-300 ${isOpen ? "backdrop-blur-md z-30" : "z-50"}`}
+        className={`shadow-neutral-800/40 shadow-lg fixed top-5 left-1/2 transform -translate-x-1/2 w-[80%] rounded-[1.5rem] h-[10vh] flex items-center justify-center backdrop-blur-[8px] mx-auto transition-all duration-300 ${isOpen ? "backdrop-blur-md z-30" : "z-50"} ${isSearchOpen ? "backdrop-blur-xs z-80" : "z-50" }`}
       >
 
         <div className="bg-white/[12%] w-full h-[10vh] rounded-[1.5rem] flex items-center justify-center"
           style={{
-            borderWidth: "1.4px",
+            borderWidth: "1px",
             borderStyle: "solid",
             borderImage: "linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.25), rgba(255,255,255,0)) 1"
           }}
@@ -36,7 +37,7 @@ const Navbar = ({ isOpen, setIsOpen }) => {
             {/* Menu logo & text */}
             <div
               className='flex flex-row items-center text-white cursor-pointer'
-              onClick={() => setIsOpen(true)} // Open the sidebar menu
+              onClick={() => {setIsOpen(true) ; setIsSearchOpen(false)}} // Open the sidebar menu
             >
               <img src={menuIcon} alt="Menu" className='drop-shadow-sm shadow-neutral-950 h-[80%] relative top-1' />
               <p className='drop-shadow-sm shadow-neutral-950 font-extralight'>Menu</p>
@@ -44,7 +45,10 @@ const Navbar = ({ isOpen, setIsOpen }) => {
 
 
             {/* Search logo & text */}
-            <div className='flex flex-row gap-1 items-center text-white cursor-pointer'>
+            <div
+              className='flex flex-row gap-1 items-center text-white cursor-pointer'
+              onClick={() => setIsSearchOpen(true)}
+            >
               <img src={searchIcon} alt="" className=' drop-shadow-sm shadow-neutral-950 h-[60%] relative top-0.5' />
               <p className='drop-shadow-sm shadow-neutral-950 font-extralight'>Search</p>
             </div>

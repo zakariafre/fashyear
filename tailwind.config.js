@@ -2,6 +2,7 @@ module.exports = {
   content: ["./index.html", "./src/**/*.{js,jsx,ts,tsx}"],
   theme: {
     extend: {
+      
       animation: {
         'fade-in': 'fadeIn 1s ease-in-out',
       },

@@ -12,7 +12,7 @@ import Logo from '../../assets/Icons/4.png'
 
 const Section2 = () => {
     return (
-        <div className=" w-full h-[50vh] flex flex-col justify-center items-center text-white text-center tracking-tighter text-[2.5rem] leading-[3.5rem]">
+        <div className=" w-full h-[50vh] flex flex-col justify-center items-center !mt-12  text-white text-center tracking-tighter text-[2.5rem] leading-[3.5rem]">
             <div className='absolute'>
             <Magnet
                 wrapperClassName="relative"

@@ -8,7 +8,7 @@ import icon3 from '../../assets/Icons/icon3.png'
 const SupportedBy = () => {
 
     return (
-        <div className='h-[50vh] w-full flex flex-col gap-10 text-white'>
+        <div className='h-[40vh] w-full flex flex-col gap-10 text-white'>
             <h2 className='tracking-tighter font-extralight text-3xl relative left-6'>We Supported By</h2>
 
             <div className=' flex flex-row gap-3 justify-center'>

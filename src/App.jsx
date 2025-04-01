@@ -13,12 +13,14 @@ import Footer from './components/Footer';
 import Menu from './components/Menu';
 import WishListPopUp from './Pop-ups/WishListPopUp';
 import Search from './Pop-ups/Search';
+import Shop from './pages/ShopPage/Shop';
 
 
 
 const App = () => {
 
   const [isOpen, setIsOpen] = useState(false);  // Manage the menu open state here
+  const [isSearchOpen, setIsSearchOpen] = useState(false);  // Manage the menu open state here
 
   // Disable scroll when sidebar is open
   useEffect(() => {
@@ -36,30 +38,40 @@ const App = () => {
 
 
 
+  // Product Search 
+  const products = [
+    { id: 1, name: "Essential Gray Dress" },
+    { id: 2, name: "Blue Denim Jeans Skirt" },
+    { id: 4, name: "Cream Fleece Casual Pants" },
+    { id: 3, name: "Mocha Pearl Dress" },
+    { id: 5, name: "Collection Winter" },
+    { id: 6, name: "Black brocade dress" },
+    { id: 7, name: "Taupe down jacket" },
+    { id: 8, name: "Beige faux leather trench coat" },
+  ];
+
 
   return (
 
-    <div className="App bg-[#121212] min-h-screen w-full overflow-x-hidden relative flex flex-col justify-center gap-[12rem]">
-      <div className='TopSections flex flex-col relative justify-center h-full'>
-        <Navbar isOpen={isOpen} setIsOpen={setIsOpen} />
-        <Noise patternSize={400} patternAlpha={15} />
-        <Hero />
-        <Menu isOpen={isOpen} setIsOpen={setIsOpen} />
-        <WishListPopUp />
-        <Search />
-      </div>
+    <div className="App bg-[#121212] min-h-screen w-full overflow-x-hidden relative">
+      {/* Global Overlays/Modals (not tied to sections) */}
+      <Noise patternSize={400} patternAlpha={10} />
+      <Menu isOpen={isOpen} setIsOpen={setIsOpen} />
+      <WishListPopUp />
 
-
-      <div className=' Sections flex flex-col justify-center gap-[7rem]'>
+      {/* Main Content */}
+      <div className="Sections flex flex-col min-h-screen gap-[10rem] md:gap-[10rem]">
+        <Search isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} products={products} />
+        <Navbar isOpen={isOpen} setIsOpen={setIsOpen} isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} />
+        {/* <Hero />
         <Section2 />
         <CategorySection />
         <Description />
         <CollectionSection />
-        <SupportedBy />
+        <SupportedBy /> */}
+        <Shop/>
         <Footer />
       </div>
-
-
     </div>
 
   );

@@ -1,7 +1,3 @@
-.TopSections {
-    padding-left: 10%;
-    padding-right: 10%;
-}
 
 .Sections {
     padding-left: 10%;
@@ -88,7 +84,7 @@
   /* Apply to the custom cursor container */
   .Custom-cursor {
     cursor: url('./assets/Icons/cursor.svg'), auto;
-  }
+}
 
 
 
@@ -97,5 +93,6 @@
     border-image: linear-gradient(to right, #909090, transparent) 1;
     transition: all 0.5s;
 }
+
 
 
