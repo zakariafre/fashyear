@@ -26,7 +26,7 @@ const CardProduct = ({ img, title, price, setIsOpen }) => {
     return (
         <div className="flex justify-center items-center">
             <div className="flex flex-col gap-1 cursor-pointer">
-                <div className="group relative w-[22vw] h-[55vh] bg-black flex rounded-[4%] justify-center items-center overflow-hidden">
+                <div className="group relative w-[20vw] h-[50vh] bg-black flex rounded-[0.5rem] justify-center items-center overflow-hidden">
 
                     {/* Wishlist Icon */}
                     <div className="absolute top-3 right-4 z-30 w-4 h-4" onClick={toggleLike}>
@@ -45,10 +45,10 @@ const CardProduct = ({ img, title, price, setIsOpen }) => {
                     </div>
 
                     {/* Add to cart button */}
-                    <div className="opacity-0 group-hover:opacity-100 h-[5vh] w-[10vw] bg-white rounded-[30rem] absolute bottom-2 right-2 z-30 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden duration-400 ease-in-out">
-                        <p className="text-[rgb(33,33,33)] text-[0.8rem] tracking-tighter">ADD TO CART</p>
-                        <div className="h-6 w-6 bg-[#212121] rounded-full flex items-center justify-center">
-                            <img src={arrow} className="h-4 w-4 relative top-0.5" alt="" />
+                    <div className="opacity-0 group-hover:opacity-100 h-[5vh] w-[9vw] bg-white rounded-[30rem] absolute bottom-2 right-2 z-30 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden duration-400 ease-in-out">
+                        <p className="text-[rgb(33,33,33)] text-[0.7rem] tracking-tighter">ADD TO CART</p>
+                        <div className="h-5 w-5 bg-[#212121] rounded-full flex items-center justify-center">
+                            <img src={arrow} className="h-3 w-3 relative top-0.5" alt="" />
                         </div>
                     </div>
 
@@ -57,7 +57,7 @@ const CardProduct = ({ img, title, price, setIsOpen }) => {
                 </div>
                 <div className="text-white font-extralight text-[0.7rem]">
                     <h2>{title}</h2>
-                    <p className="font-light text-neutral-400">{price}<span>.00 DH</span></p>
+                    <p className="font-light text-neutral-400">{price}<span> DH</span></p>
                 </div>
             </div>
         </div>

@@ -11,9 +11,10 @@ import CollectionSection from './pages/HomePage/CollectionSection';
 import SupportedBy from './pages/HomePage/SupportedBy';
 import Footer from './components/Footer';
 import Menu from './components/Menu';
-import WishListPopUp from './Pop-ups/WishListPopUp';
-import Search from './Pop-ups/Search';
+import WishListPopUp from './components/WishListPopUp';
+import Search from './components/Search';
 import Shop from './pages/ShopPage/Shop';
+import ScrollBlurText from './components/BlurEffect';
 
 
 
@@ -57,21 +58,30 @@ const App = () => {
       {/* Global Overlays/Modals (not tied to sections) */}
       <Noise patternSize={400} patternAlpha={10} />
       <Menu isOpen={isOpen} setIsOpen={setIsOpen} />
+      <ScrollBlurText />
       <WishListPopUp />
 
-      {/* Main Content */}
-      <div className="Sections flex flex-col min-h-screen gap-[10rem] md:gap-[10rem]">
+      {/* Main Page */}
+      {/* <div className="Sections flex flex-col min-h-screen gap-[10rem] md:gap-[6rem]">
         <Search isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} products={products} />
         <Navbar isOpen={isOpen} setIsOpen={setIsOpen} isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} />
-        {/* <Hero />
+        <Hero />
         <Section2 />
         <CategorySection />
         <Description />
         <CollectionSection />
-        <SupportedBy /> */}
-        <Shop/>
+        <SupportedBy />
         <Footer />
-      </div>
+      </div> */}
+
+      <div className='Sections flex flex-col items-center min-h-screen gap-[10rem] md:gap-[3rem]'>
+        <Search isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} products={products} />
+        <Navbar isOpen={isOpen} setIsOpen={setIsOpen} isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} />
+        <Shop />
+        <Footer />
+      </div >
+
+
     </div>
 
   );

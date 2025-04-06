@@ -11,7 +11,7 @@ import Bottom1 from '../../assets/Bottoms/1.png'
 import Bottom2 from '../../assets/Bottoms/2.png'
 import Button from '../../components/Button'
 import arrow from '../../assets/Icons/arrowTop.svg'
-import WishListPopUp from '../../Pop-ups/WishListPopUp';
+import WishListPopUp from '../../components/WishListPopUp';
 
 
 

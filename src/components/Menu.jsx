@@ -13,7 +13,7 @@ const SidebarMenu = ({ isOpen, setIsOpen }) => {
             {/* Background overlay (optional) */}
             {isOpen && (
                 <div
-                    className="fixed inset-0 bg-black/70 backdrop-blur-xs z-80 transition-opacity duration-300"
+                    className="fixed inset-0 bg-black/90 backdrop-blur-xs z-80 transition-opacity duration-300"
                     onClick={() => setIsOpen(false)} // Click outside to close menu
                 ></div>
             )}
