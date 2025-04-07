@@ -5,6 +5,7 @@ import WishListPopUp from "../../components/WishListPopUp";
 import DownArrow from "../../assets/Icons/DownArrow.svg";
 import filtersIcon from "../../assets/Icons/filters.svg";
 import ContainerPIc2 from "../../assets/Icons/SetsCollection.png";
+// Product Pics
 import BrownSet from "../../assets/Sets/BrownSet.png";
 import WhiteSet from "../../assets/Sets/WhiteSet.png";
 import DarkSet from "../../assets/Sets/DarkSet.png";
@@ -15,14 +16,16 @@ import BlackKnit from "../../assets/Sets/BlackKnit.png";
 import LightCozySet from "../../assets/Sets/LightCozySet.png";
 import PantsuitSet from "../../assets/Sets/PantsuitSet.png";
 import CreamKnittedSet from "../../assets/Sets/CreamKnittedSet.png";
-import BlackSweaterSkirtSet from "../../assets/Sets/BlackSweaterSkirtSet.png";
 import BlackSweaterSkirtSet2 from "../../assets/Sets/BlackSweaterSkirtSet2.png";
 import BeigeCozySet from "../../assets/Sets/BeigeCozySet.png";
 import Filters from './Filters'
 import SupportedBy from "../HomePage/SupportedBy";
 
+import pattern from '../../assets/Icons/pattern.png'
+import arrow from "../../assets/Icons/arrowTop.svg";
 
 
+// Products informations 
 const initialProducts = [
     {
         img: BrownSet,
@@ -252,7 +255,7 @@ const Shop = () => {
                 {/* filter button */}
                 <button
                     onClick={() => setIsFiltersOpen(true)}
-                    className=" opacity-50 hover:opacity-80 cursor-pointer !px-3 font-extralight text-xs bg-transparent border border-white transition-all ease-in duration-200 w-fit h-[4.5vh] rounded-[1.5rem] flex flex-row justify-center items-center gap-3 relative left-3"
+                    className=" opacity-50 hover:opacity-80 cursor-pointer !px-3 font-extralight text-xs bg-transparent border border-white transition-all ease-in duration-200 w-fit h-[4.5vh] rounded-[1.5rem] flex flex-row justify-center items-center gap-3"
                 >
                     <div className="flex flex-row items-center justify-center font-extralight gap-1">
                         Filters
@@ -268,22 +271,76 @@ const Shop = () => {
 
 
 
-            {/* Message and Products Grid */}
+            {/* No match Message and You might like */}
             <>
                 {/* Message "No product Match filters" */}
-                {filteredProducts.length === 0 && (
-                    <div className="w-full h-[70vh] flex flex-col items-center justify-center gap-6 font-extralight">
-                        <h3 className="text-2xl text-neutral-400 font-extralight tracking-tight">Your perfect match isn't here... yet</h3>
-                        <button
-                            onClick={clearAllFilters}
-                            className="!px-8 !py-2 underline underline-offset-5 cursor-pointer opacity-70 hover:opacity-100 duration-200"
-                        >
-                            Clear all filters
-                        </button>
-                    </div>
-                )}
-                {/******* Products Grid ********/}
-                <div className="w-full !mt-12 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 gap-x-10">
+                {filteredProducts.length === 0 ? (
+                    <>
+                        <div className="w-full h-[40vh] !mt-12 rounded-[1rem] bg-black/40 flex flex-col items-center justify-center gap-6 font-extralight overflow-hidden">
+
+                            <div className="z-10 absolute flex flex-col gap-6 justify-center items-center">
+                                <h3 className="text-2xl text-center text-neutral-400 font-medium tracking-tight">Oops, we’re still stitching up the perfect piece for you !</h3>
+                                {/* buttons */}
+                                <div className="flex flex-row justify-center items-center gap-5">
+                                    <button
+                                        className="!px-5 !py-2 flex flex-row gap-3 justify-center items-center text-xs font-light border border-neutral-600 hover:border-neutral-300 text-neutral-200 rounded-full cursor-pointer ease-in-out duration-200"
+                                    >
+                                        <p>Return to Home</p>
+                                        <img src={arrow} className="h-3.5 !mt-0.5 " alt="" />
+
+                                    </button>
+
+                                    <button
+                                        onClick={clearAllFilters}
+                                        className="!px-5 !py-2 text-xs font-extralight border  border-neutral-700  bg-neutral-700 rounded-full cursor-pointer hover:bg-neutral-800 ease-in-out duration-200"
+                                    >
+                                        Browse All Products
+                                    </button>
+
+                                </div>
+
+                            </div>
+                            <div className='w-full relative '>
+                                <img src={pattern} draggable="false" alt="pattern" className='relative inset-0 z-3 opacity-[4%] scale-100 filter brightness-100 contrast-0 saturate-0 ' />
+                            </div>
+                        </div>
+
+                        {/* you might like */}
+                        <div className="w-full !mt-10 !mb-10 font-extralight tracking-tight text-2xl">
+                            <h2>You might like these</h2>
+
+                            <div className="w-full !mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 gap-x-10">
+                                <ShopCard
+                                    img={""}
+                                    title={""}
+                                    price={""}
+                                    setIsOpen={setIsOpen}
+                                />
+                                <ShopCard
+                                    img={""}
+                                    title={""}
+                                    price={""}
+                                    setIsOpen={setIsOpen}
+                                />
+                                <ShopCard
+                                    img={""}
+                                    title={""}
+                                    price={""}
+                                    setIsOpen={setIsOpen}
+                                />
+                                <ShopCard
+                                    img={""}
+                                    title={""}
+                                    price={""}
+                                    setIsOpen={setIsOpen}
+                                />
+                            </div>
+
+                        </div>
+                    </>
+                ) : ( 
+
+                <div className="w-full !mt-12 !mb-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 gap-x-10">
                     {filteredProducts.map((product, index) => (
                         <ShopCard
                             key={index}
@@ -294,6 +351,7 @@ const Shop = () => {
                         />
                     ))}
                 </div>
+                )}
             </>
 
 
@@ -301,7 +359,7 @@ const Shop = () => {
 
 
             {/* View More and Scroll to top Buttons */}
-            <div className="w-full !mt-20 flex flex-col items-center gap-8 justify-center">
+            <div className="w-full flex flex-col items-center justify-center">
                 {/* <button
                     onClick={() => setShowMore(true)}
                     className="bg-transparent border w-[16vw] h-[6vh] border-white hover:border-[1.5px] duration-200 rounded-[30rem] z-30 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden transition-all"
@@ -318,7 +376,7 @@ const Shop = () => {
                     <img src={DownArrow} className="h-3 rotate-180 opacity-40 cursor-pointer" alt="" />
                 </button>
 
-                <div className="w-full relative top-7">
+                <div className="w-full relative top-10">
                     <hr className="opacity-5" />
                 </div>
 
