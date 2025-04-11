@@ -1,13 +1,24 @@
 import React from "react";
 import arrow from "../assets/Icons/arrowTop.svg";
+import { useNavigate } from 'react-router-dom'; 
 
 const Btn = ({ text, HeightNumber, WidthNumber}) => {
+
+  
+  const navigate = useNavigate();
+
+  const handleShopNow = () => {
+    navigate('/shop');
+  };
+
+
 
   return (
 
     <div
       className="group border border-white bg-white rounded-[30rem] z-40 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden duration-200 hover:bg-transparent"
       style={{ width: `${WidthNumber}vw`, height: `${HeightNumber}vh` }}
+      onClick={handleShopNow}
     >
       <p 
       className="text-[rgb(33,33,33)] tracking-tighter transition-all duration-200 text-[0.9rem] group-hover:text-white group-hover:font-light">

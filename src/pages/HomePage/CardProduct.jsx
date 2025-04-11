@@ -1,13 +1,21 @@
 import React, { useState } from "react";
 import arrow from "../../assets/Icons/arrowTop.svg";
+import { useNavigate } from "react-router-dom";
+import productData from '../../../ProductsDB.json'
 
-const CardProduct = ({ img, title, price, setIsOpen }) => {
-
+const CardProduct = ({ img, title, price, setIsOpen, id }) => {
+    const navigate = useNavigate();
 
     const [isLiked, setIsLiked] = useState(false);
     const [isLoading, setIsLoading] = useState(false);
 
-    const toggleLike = () => {
+    const handleCardClick = () => {
+        navigate(`/product/${productData.id}`);
+    };
+
+
+    const toggleLike = (e) => {
+        e.stopPropagation(); // Prevent card click when clicking like button
         if (isLoading) return;
         setIsLoading(true);
 
@@ -18,14 +26,14 @@ const CardProduct = ({ img, title, price, setIsOpen }) => {
 
             if (newLikedState) {
                 setIsOpen(true); // Open wishlist popup
-                setTimeout(() => setIsOpen(false), 2000 ); // Auto-close after 2s
+                setTimeout(() => setIsOpen(false), 2000); // Auto-close after 2s
             }
         }, 1000);
     };
 
     return (
         <div className="flex justify-center items-center">
-            <div className="flex flex-col gap-1 cursor-pointer">
+            <div className="flex flex-col gap-1 cursor-pointer" onClick={handleCardClick}>
                 <div className="group relative w-[20vw] h-[50vh] bg-black flex rounded-[0.5rem] justify-center items-center overflow-hidden">
 
                     {/* Wishlist Icon */}

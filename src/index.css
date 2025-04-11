@@ -41,11 +41,14 @@ body{
 }  
 
 
+
+
 /* Custom Scrollbar */
 ::-webkit-scrollbar {
-  width: 5px; /* Width of the scrollbar */
+  width: 2px; /* Width of the scrollbar */
   height: 8px; /* Height for horizontal scrollbar */
 }
+
 
 ::-webkit-scrollbar-track {
   background: #252525;
@@ -53,8 +56,12 @@ body{
 
 ::-webkit-scrollbar-thumb {
   background: #6d6d6d; 
-  border-radius: 0px;
+  border-radius: 3px;
 }
+
+
+
+
 
 /* Change text selection color */
 ::selection {

@@ -5,19 +5,9 @@ import WishListPopUp from "../../components/WishListPopUp";
 import DownArrow from "../../assets/Icons/DownArrow.svg";
 import filtersIcon from "../../assets/Icons/filters.svg";
 import ContainerPIc2 from "../../assets/Icons/SetsCollection.png";
-// Product Pics
-import BrownSet from "../../assets/Sets/BrownSet.png";
-import WhiteSet from "../../assets/Sets/WhiteSet.png";
-import DarkSet from "../../assets/Sets/DarkSet.png";
-import BeigeSet from "../../assets/Sets/BeigeSet.png";
-import BlackSet from "../../assets/Sets/BlackSet.png";
-import GraySet from "../../assets/Sets/GraySet.png";
-import BlackKnit from "../../assets/Sets/BlackKnit.png";
-import LightCozySet from "../../assets/Sets/LightCozySet.png";
-import PantsuitSet from "../../assets/Sets/PantsuitSet.png";
-import CreamKnittedSet from "../../assets/Sets/CreamKnittedSet.png";
-import BlackSweaterSkirtSet2 from "../../assets/Sets/BlackSweaterSkirtSet2.png";
-import BeigeCozySet from "../../assets/Sets/BeigeCozySet.png";
+// Import the JSON file from the root directory
+import productsData from "../../../ProductsDB.json";
+
 import Filters from './Filters'
 import SupportedBy from "../HomePage/SupportedBy";
 
@@ -25,109 +15,19 @@ import pattern from '../../assets/Icons/pattern.png'
 import arrow from "../../assets/Icons/arrowTop.svg";
 
 
-// Products informations 
-const initialProducts = [
-    {
-        img: BrownSet,
-        title: "Flowing chocolate pants and top set",
-        price: 359.99,
-        category: "Sets",
-        color: "Brown",
-        size: "M"
-    },
 
-    {
-        img: WhiteSet,
-        title: "Fluid taupe pants and top set",
-        price: 359.99,
-        category: "Sets",
-        color: "Beige",
-        size: "XL"
-    },
-    {
-        img: DarkSet,
-        title: "Black flowing pants and top set",
-        price: 399.99,
-        category: "Sets",
-        color: "Black",
-        size: ["M", "XL"]
-    },
-    {
-        img: BlackSet,
-        title: "Black knitted pants and sweater",
-        price: 399.99,
-        category: "Sets",
-        color: "Black",
-        size: "S"
-    },
-    {
-        img: GraySet,
-        title: "Dark gray knit skirt and sweater set",
-        price: 459.99,
-        category: "Sets",
-        color: "Gray",
-        size: ["XXL"]
-    },
-    {
-        img: BlackKnit,
-        title: "Black knit skirt and sweater set",
-        price: 449.99,
-        category: "Sets",
-        color: "Black",
-        size: ["L"]
-    },
-    {
-        img: PantsuitSet,
-        title: "Brown pantsuit set",
-        price: 399.99,
-        category: "Sets",
-        color: "Brown",
-        size: ["L"]
-    },
-    {
-        img: CreamKnittedSet,
-        title: "Cream knitted skirt set",
-        price: 439.99,
-        category: "Sets",
-        color: "White",
-        size: ["L"]
-    },
-    {
-        img: BlackSweaterSkirtSet2,
-        title: "Black sweater skirt winter set",
-        price: 429.99,
-        category: "Sets",
-        color: "Black",
-        size: ["XL"]
-    },
-    {
-        img: LightCozySet,
-        title: "Light taupe cozy set",
-        price: 429.99,
-        category: "Sets",
-        color: "white",
-        size: "S"
-    },
-    {
-        img: BeigeCozySet,
-        title: "Beige cozy set",
-        price: 429.99,
-        category: "Sets",
-        color: "Beige",
-        size: "XL"
-    },
-    {
-        img: BeigeSet,
-        title: "Taupe sweater dress and long cardigan set",
-        price: 469.99,
-        category: "Sets",
-        color: "Beige",
-        size: "M"
-    },
-];
+
+
+
+
 
 
 const Shop = () => {
+
+
+
+    // Use the imported JSON data
+    const initialProducts = productsData;
 
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
@@ -164,8 +64,8 @@ const Shop = () => {
 
             // Filter by color - check if product has color and if it matches selected colors
             const colorMatch = selectedColor.length === 0 ||
-                (product.color && selectedColor.some(color =>
-                    product.color.toLowerCase() === color.toLowerCase()));
+                (product.colors && product.colors.some(color =>
+                    selectedColor.includes(color.name)));
 
 
             // Filter by size - handle both string and array sizes
@@ -279,7 +179,7 @@ const Shop = () => {
                         <div className="w-full h-[40vh] !mt-12 rounded-[1rem] bg-black/40 flex flex-col items-center justify-center gap-6 font-extralight overflow-hidden">
 
                             <div className="z-10 absolute flex flex-col gap-6 justify-center items-center">
-                                <h3 className="text-2xl text-center text-neutral-400 font-medium tracking-tight">Oops, we’re still stitching up the perfect piece for you !</h3>
+                                <h3 className="text-2xl text-center text-neutral-400 font-medium tracking-tight">Oops, we're still stitching up the perfect piece for you !</h3>
                                 {/* buttons */}
                                 <div className="flex flex-row justify-center items-center gap-5">
                                     <button
@@ -310,47 +210,34 @@ const Shop = () => {
                             <h2>You might like these</h2>
 
                             <div className="w-full !mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 gap-x-10">
-                                <ShopCard
-                                    img={""}
-                                    title={""}
-                                    price={""}
-                                    setIsOpen={setIsOpen}
-                                />
-                                <ShopCard
-                                    img={""}
-                                    title={""}
-                                    price={""}
-                                    setIsOpen={setIsOpen}
-                                />
-                                <ShopCard
-                                    img={""}
-                                    title={""}
-                                    price={""}
-                                    setIsOpen={setIsOpen}
-                                />
-                                <ShopCard
-                                    img={""}
-                                    title={""}
-                                    price={""}
-                                    setIsOpen={setIsOpen}
-                                />
+                                {initialProducts.slice(0, 4).map((product) => (
+                                    <ShopCard
+                                        key={product.id}
+                                        id={product.id}
+                                        img={product.img[0]}
+                                        title={product.title}
+                                        price={product.price}
+                                        setIsOpen={setIsOpen}
+                                    />
+                                ))}
                             </div>
 
                         </div>
                     </>
-                ) : ( 
+                ) : (
 
-                <div className="w-full !mt-12 !mb-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 gap-x-10">
-                    {filteredProducts.map((product, index) => (
-                        <ShopCard
-                            key={index}
-                            img={product.img}
-                            title={product.title}
-                            price={product.price}
-                            setIsOpen={setIsOpen}
-                        />
-                    ))}
-                </div>
+                    <div className="w-full !mt-12 !mb-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 gap-x-10">
+                        {filteredProducts.map((product) => (
+                            <ShopCard
+                                key={product.id}
+                                id={product.id}
+                                img={product.img[0]}
+                                title={product.title}
+                                price={product.price}
+                                setIsOpen={setIsOpen}
+                            />
+                        ))}
+                    </div>
                 )}
             </>
 

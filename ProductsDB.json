@@ -1,0 +1,242 @@
+[
+    {
+      "id": "13",
+      "img": ["/src/assets/Dresses/Dress_Gray_Pos1.png", "/src/assets/Dresses/Dress_Gray_Pos2.png", "/src/assets/Dresses/Dress_Gray_Pos3.png"],
+      "title": "Essential gray dress",
+      "description": "Discover the essential casual dress, designed for those looking for an outfit that is elegant, sober and comfortable. Its fluid fabric accompanies movements with lightness, offering a pleasant sensation throughout the day. Its wide rolled-up sleeves add a touch of modernity, while the discreet clip system holds the sleeves. Designed to adapt to all occasions, this dress embodies a simple elegance, perfect for a style that is both modest and sophisticated. Pockets. Its fluid and refined look makes it a must-have piece. To finish, we paired it with a black premium Jersey hijab.",
+      "price": 349.99,
+      "category": "Dresses",
+      "colors": [
+        { "name": "Gray", "value": "#808080" }
+      ],
+      "size": ["S" , "M" , "L"]
+    },
+    {
+      "id": "1",
+      "img": ["/src/assets/Sets/Set_Brown_Pos1.png", "/src/assets/Sets/Set_Brown_Pos2.png", "/src/assets/Sets/Set_Brown_Pos3.png"],
+      "title": "Flowing chocolate pants and top set",
+      "description": "A relaxed, chocolate-toned set designed for timeless elegance and everyday comfort.",
+      "price": 359.99,
+      "category": "Sets",
+      "colors": [
+        { "name": "Brown", "value": "#8B4513" }
+      ],
+      "size": ["M"]
+    },
+    {
+      "id": "14",
+      "img": ["/src/assets/Dresses/BlackBrocadeDress_Pos1.png", "/src/assets/Dresses/BlackBrocadeDress_Pos2.png", "/src/assets/Dresses/BlackBrocadeDress_Pos3.png"],
+      "title": "Black brocade dress",
+      "description": "Discover the perfect harmony between refinement and ease with our wide satin dress , a fluid and sophisticated piece that adapts to all occasions. Made from a quality satin fabric, it offers an elegant drape and unmatched comfort",
+      "price": 399.99,
+      "category": "Dresses",
+      "colors": [
+        { "name": "Black", "value": "#000000" }
+      ],
+      "size": ["M" , "L" , "XL"]
+    },
+    {
+      "id": "2",
+      "img": ["/src/assets/Sets/Set_Beige_Pos1.png", "/src/assets/Sets/Set_Beige_Pos2.png", "/src/assets/Sets/Set_Beige_Pos3.png"],
+      "title": "Fluid taupe pants and top set",
+      "description": "Soft beige tones meet flowy tailoring in this refined yet effortless set.",
+      "price": 359.99,
+      "category": "Sets",
+      "colors": [
+        { "name": "Beige", "value": "#F5F5DC" }
+      ],
+      "size": ["XL"]
+    },
+    {
+      "id": "15",
+      "img": ["/src/assets/Dresses/essential-navy-dress_Pos1.png", "/src/assets/Dresses/essential-navy-dress_Pos2.png", "/src/assets/Dresses/essential-navy-dress_Pos3.png"],
+      "title": "Essential navy dress",
+      "description": "Discover the essential casual dress, designed for those looking for an outfit that is elegant, sober and comfortable. Its fluid fabric accompanies movements with lightness, offering a pleasant sensation throughout the day. Its wide rolled-up sleeves add a touch of modernity, while the discreet clip system holds the sleeves. Designed to adapt to all occasions, this dress embodies a simple elegance, perfect for a style that is both modest and sophisticated. Pockets. Its fluid and refined look makes it a must-have piece. To finish, we paired it with the dark blue premium jersey hijab.",
+      "price": 349.99,
+      "category": "Dresses",
+      "colors": [
+        { "name": "Navy Blue", "value": "#000000" }
+      ],
+      "size": ["M" , "L"]
+    },
+    {
+      "id": "3",
+      "img": ["/src/assets/Sets/Set_Dark_Pos1.png", "/src/assets/Sets/Set_Dark_Pos2.png", "/src/assets/Sets/Set_Dark_Pos3.png"],
+      "title": "Black flowing pants and top set",
+      "description": "All-black sophistication crafted for movement, comfort, and confidence.",
+      "price": 399.99,
+      "category": "Sets",
+      "colors": [
+        { "name": "Black", "value": "#000000" }
+      ],
+      "size": ["M", "XL"]
+    },
+    {
+      "id": "16",
+      "img": ["/src/assets/Dresses/essential-taupe-dress_Pos1.png", "/src/assets/Dresses/essential-taupe-dress_Pos2.png", "/src/assets/Dresses/essential-taupe-dress_Pos3.png"],
+      "title": "Essential taupe dress",
+      "description": "Discover the essential casual dress, designed for those looking for an outfit that is elegant, sober and comfortable. Its fluid fabric accompanies movements with lightness, offering a pleasant sensation throughout the day. Its wide rolled-up sleeves add a touch of modernity, while the discreet clip system holds the sleeves. Designed to adapt to all occasions, this dress embodies a simple elegance, perfect for a style that is both modest and sophisticated. Pockets. Its fluid and refined look makes it a must-have piece. To finish, we paired it with the ready-to-tie hijab in brown premium jersey.",
+      "price": 349.99,
+      "category": "Dresses",
+      "colors": [
+        { "name": "Brown", "value": "#808080" }
+      ],
+      "size": ["L" , "XL" , "XXL"]
+    },
+    {
+      "id": "4",
+      "img": ["/src/assets/Sets/Set_Black_Pos1.png", "/src/assets/Sets/Set_Black_Pos2.png", "/src/assets/Sets/Set_Black_Pos3.png"],
+      "title": "Black knitted pants and sweater",
+      "description": "A cozy knit combo offering minimalism with a modern edge.",
+      "price": 399.99,
+      "category": "Sets",
+      "colors": [
+        { "name": "Black", "value": "#000000" }
+      ],
+      "size": ["S"]
+    },
+    {
+      "id": "17",
+      "img": ["/src/assets/Dresses/minimalist-two-tone-black-and-be_Pos1.png", "/src/assets/Dresses/minimalist-two-tone-black-and-be_Pos2.png", "/src/assets/Dresses/minimalist-two-tone-black-and-be_Pos3.png"],
+      "title": "Two-tone black and beige dress",
+      "description": "Discover Fashyear's two-tone dress , a must-have piece for veiled women looking for elegance and comfort. With its sober and refined design, this dress combines modernity and simplicity , ideal for all occasions.",
+      "price": 299.99,
+      "category": "Dresses",
+      "colors": [
+        { "name": "Black", "value": "#000000" }
+      ],
+      "size": ["S" , "M" , "XL"]
+    },
+    {
+      "id": "5",
+      "img": ["/src/assets/Sets/Set_Gray_Pos1.png", "/src/assets/Sets/Set_Gray_Pos2.png", "/src/assets/Sets/Set_Gray_Pos3.png"],
+      "title": "Dark gray knit skirt and sweater set",
+      "description": "Refined gray tones in a snug silhouette, made to move with grace.",
+      "price": 459.99,
+      "category": "Sets",
+      "colors": [
+        { "name": "Gray", "value": "#808080" }
+      ],
+      "size": ["XXL"]
+    },
+    {
+      "id": "18",
+      "img": ["/src/assets/Dresses/midnight-blue-satin-kimono-set_Pos1.png", "/src/assets/Dresses/midnight-blue-satin-kimono-set_Pos2.png", "/src/assets/Dresses/midnight-blue-satin-kimono-set_Pos3.png"],
+      "title": "Midnight blue satin kimono set",
+      "description": "Discover refined elegance with this satin set consisting of a sleeveless dress and a long kimono with wide sleeves.",
+      "price": 449.99,
+      "category": "Dresses",
+      "colors": [
+        { "name": "Navy Blue", "value": "#000080" }
+      ],
+      "size": ["S" , "L"]
+    },
+    {
+      "id": "6",
+      "img": ["/src/assets/Sets/Set_BlackKnit_Pos1.png", "/src/assets/Sets/Set_BlackKnit_Pos2.png", "/src/assets/Sets/Set_BlackKnit_Pos3.png"],
+      "title": "Black knit skirt and sweater set",
+      "description": "A sleek, modest look for colder days—black, bold, and beautiful.",
+      "price": 449.99,
+      "category": "Sets",
+      "colors": [
+        { "name": "Black", "value": "#000000" }
+      ],
+      "size": ["L"]
+    },
+    {
+      "id": "19",
+      "img": ["/src/assets/Dresses/minimalist-two-tone-beige-and-br_Pos1.png", "/src/assets/Dresses/minimalist-two-tone-beige-and-br_Pos2.png", "/src/assets/Dresses/minimalist-two-tone-beige-and-br_Pos3.png"],
+      "title": "Two-tone beige and brown dress",
+      "description": "Discover the Chic and Modesty two-tone dress , a must-have piece for veiled women looking for elegance and comfort. With its sober and refined design, this dress combines modernity and simplicity , ideal for all occasions.",
+      "price": 299.99,
+      "category": "Dresses",
+      "colors": [
+        { "name": "Beige", "value": "#F5F5DC" }
+      ],
+      "size": ["S" , "XL"]
+    },
+    {
+      "id": "7",
+      "img": ["/src/assets/Sets/Set_Pantsuit_Pos1.png", "/src/assets/Sets/Set_Pantsuit_Pos2.png", "/src/assets/Sets/Set_Pantsuit_Pos3.png"],
+      "title": "Brown pantsuit set",
+      "description": "Tailored brown pantsuit crafted to blend structure with softness.",
+      "price": 399.99,
+      "category": "Sets",
+      "colors": [
+        { "name": "Brown", "value": "#8B4513" }
+      ],
+      "size": ["L"]
+    },
+    {
+      "id": "20",
+      "img": ["/src/assets/Dresses/brown-taupe-fleece-dress_Pos1.png", "/src/assets/Dresses/brown-taupe-fleece-dress_Pos2.png", "/src/assets/Dresses/brown-taupe-fleece-dress_Pos3.png"],
+      "title": "Brown taupe fleece dress",
+      "description": "This fleece dress is the perfect ally for cool days, designed for absolute comfort and unmatched softness. Its ultra-soft fleece fabric wraps the body in delicate warmth, ideal for facing autumn and winter while remaining elegant and covered.",
+      "price": 249.99,
+      "category": "Dresses",
+      "colors": [
+        { "name": "Brown", "value": "#808080" }
+      ],
+      "size": ["S" , "L" , "M"]
+    },
+    {
+      "id": "8",
+      "img": ["/src/assets/Sets/Set_CreamKnitted_Pos1.png", "/src/assets/Sets/Set_CreamKnitted_Pos2.png", "/src/assets/Sets/Set_CreamKnitted_Pos3.png"],
+      "title": "Cream knitted skirt set",
+      "description": "A light, luxurious cream knit for elevated simplicity and warmth.",
+      "price": 439.99,
+      "category": "Sets",
+      "colors": [
+        { "name": "White", "value": "#ffffff" }
+      ],
+      "size": ["L"]
+    },
+    {
+      "id": "9",
+      "img": ["/src/assets/Sets/Set_BlackSweaterSkirt_Pos2.png", "/src/assets/Sets/Set_BlackSweaterSkirt_Pos1.png", "/src/assets/Sets/Set_BlackSweaterSkirt_Pos3.png"],
+      "title": "Black sweater skirt winter set",
+      "description": "A winter-ready black ensemble that speaks quiet confidence.",
+      "price": 429.99,
+      "category": "Sets",
+      "colors": [
+        { "name": "Black", "value": "#000000" }
+      ],
+      "size": ["XL"]
+    },
+    {
+      "id": "10",
+      "img": ["/src/assets/Sets/Set_LightCozy_Pos1.png", "/src/assets/Sets/Set_LightCozy_Pos2.png", "/src/assets/Sets/Set_LightCozy_Pos3.png"],
+      "title": "Light taupe cozy set",
+      "description": "Soft and serene in light taupe, perfect for calm winter days.",
+      "price": 429.99,
+      "category": "Sets",
+      "colors": [
+        { "name": "White", "value": "#ffffff" }
+      ],
+      "size": ["S"]
+    },
+    {
+      "id": "11",
+      "img": ["/src/assets/Sets/Set_BeigeCozy_Pos1.png", "/src/assets/Sets/Set_BeigeCozy_Pos2.png", "/src/assets/Sets/Set_BeigeCozy_Pos3.png"],
+      "title": "Beige cozy set",
+      "description": "Effortless warmth and elegance in a beige-toned knit set.",
+      "price": 429.99,
+      "category": "Sets",
+      "colors": [
+        { "name": "Beige", "value": "#F5F5DC" }
+      ],
+      "size": ["XL"]
+    },
+    {
+      "id": "12",
+      "img": ["/src/assets/Sets/Set_White_Pos1.png", "/src/assets/Sets/Set_White_Pos2.png", "/src/assets/Sets/Set_White_Pos3.png"],
+      "title": "Taupe sweater dress and long cardigan set",
+      "description": "Layered taupe tones for a modest, graceful winter look.",
+      "price": 469.99,
+      "category": "Sets",
+      "colors": [
+        { "name": "Beige", "value": "#F5F5DC" }
+      ],
+      "size": ["M"]
+    }
+]

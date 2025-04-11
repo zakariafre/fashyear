@@ -1,7 +1,7 @@
 import React, { useState } from "react";
 import { useEffect } from "react";
 import { ChevronDown, X } from "lucide-react";
-import '../../App.css'
+import '../../App.css';
 
 
 
@@ -21,6 +21,8 @@ const Filters = ({
 
     setTotalFilterCount
 }) => {
+
+
 
     const categories = ["Sets", "Dresses", "Tops", "Bottoms"];
 
@@ -96,13 +98,14 @@ const Filters = ({
 
 
 
-    const handleColorChange = (color) => {
+    const handleColorChange = (colorName) => {
         setLocalSelectedColor(prev =>
-            prev.includes(color)
-                ? prev.filter(c => c !== color)
-                : [...prev, color]
+            prev.includes(colorName)
+                ? prev.filter(c => c !== colorName)
+                : [...prev, colorName]
         );
     };
+
 
 
     // Calculate filter count
@@ -163,8 +166,9 @@ const Filters = ({
         { name: "Black", value: "#000000" },
         { name: "White", value: "#ffffff" },
         { name: "Brown", value: "#8B4513" },
-        { name: "Beige", value: "#F5F5DC" },
-        { name: "Gray", value: "#808080" }
+        { name: "Beige", value: "#D5B895" },
+        { name: "Gray", value: "#808080" },
+        { name: "Navy Blue", value: "#022658" }
     ];
 
 
@@ -307,10 +311,10 @@ const Filters = ({
                             <div className="!pb-7 flex flex-wrap gap-6 h-full ">
                                 {colors.map((color) => (
                                     <div
+                                        key={color.name}
                                         onClick={() => handleColorChange(color.name)}
                                         className={`flex flex-col border border-neutral-600 !p-2 gap-1 rounded-[0.3rem] text-[0.6rem] cursor-pointer ${localSelectedColor.includes(color.name) ? "text-white border-white transition-all duration-100 ease-in" : "text-neutral-500 transition-all duration-100 ease-in hover:border-neutral-500"}`}>
                                         <div
-                                            key={color.value}
                                             className={`w-20 h-20 rounded-[0.2rem]`}
                                             style={{ backgroundColor: color.value }}
                                             title={color.name}

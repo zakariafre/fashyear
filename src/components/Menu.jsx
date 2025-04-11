@@ -1,24 +1,16 @@
 import React from "react";
 import '../App.css'
 
-
-
-
-const SidebarMenu = ({ isOpen, setIsOpen }) => {
-
-
-
+const Menu = ({ isOpen, setIsOpen }) => {
     return (
         <>
-            {/* Background overlay (optional) */}
+            {/* Background overlay */}
             {isOpen && (
                 <div
-                    className="fixed inset-0 bg-black/90 backdrop-blur-xs z-80 transition-opacity duration-300"
-                    onClick={() => setIsOpen(false)} // Click outside to close menu
+                    className="fixed inset-0 bg-black/60 backdrop-blur-xs z-80 transition-opacity duration-300"
+                    onClick={() => setIsOpen(false)}
                 ></div>
             )}
-
-
 
             {/* Sidebar Menu */}
             <div
@@ -27,53 +19,88 @@ const SidebarMenu = ({ isOpen, setIsOpen }) => {
                     borderStyle: "solid",
                     borderImage: "linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,0.5), rgba(255,255,255,0)) 1"
                 }}
-                className={`fixed top-3 left-10 h-[96%] w-[25%] bg-[#303030]/90 rounded-[1rem] text-white transition-transform duration-300 z-90 
-                ${isOpen ? "translate-x-0" : "-translate-x-[120%]"
-                    }`}
+                className={`fixed top-0 h-full w-[30%] bg-[#303030]/0 rounded-[0rem] text-white transition-transform duration-300 z-90 overflow-hidden
+                ${isOpen ? "translate-x-0" : "-translate-x-[120%]"}`}
             >
-
-                <div className="relative flex flex-col gap-14 !pl-[13%] top-7 ">
-
-                    {/* Close button */}
-                    <button
-                        className="text-white  text-[0.9rem]  flex font-light cursor-pointer"
-                        onClick={() => setIsOpen(false)}
-                    >
-                        ✕ <a className=" relative left-2">Close</a>
-                    </button>
-
-
-                    <div className="text-2xl font-light">
-                        <ul className="flex flex-col">
-                            <li className="group Links relative w-[80%] overflow-hidden Custom-cursor !pb-3 !pt-5 border-b transition-all duration-500 hover:border-b hover:border-white">
-                                <span className="inline-block transition-transform duration-400 group-hover:translate-x-5">Home</span>
-                            </li>
-                            <li className="group Links relative w-[80%] overflow-hidden Custom-cursor !pb-3 !pt-5 border-b transition-all duration-500 hover:border-b hover:border-white">
-                                <span className="inline-block transition-transform duration-400 group-hover:translate-x-5">Shop</span>
-                            </li>
-                            <li className="group Links relative w-[80%] overflow-hidden Custom-cursor !pb-3 !pt-5 border-b transition-all duration-500 hover:border-b hover:border-white">
-                                <span className="inline-block transition-transform duration-400 group-hover:translate-x-5">About fashyear</span>
-                            </li>
-                            {/* <li className="group Links relative w-[80%] overflow-hidden Custom-cursor !pb-3 !pt-5 border-b transition-all duration-500 hover:border-b hover:border-white">
-                                <span className="inline-block transition-transform duration-500 group-hover:translate-x-5">Blog</span>
-                            </li> */}
-                        </ul>
+                <div className="relative flex flex-col h-full">
+                    {/* Sticky close button */}
+                    <div className="sticky top-5 z-20 !pl-[13%] pt-7 pb-4">
+                        <button
+                            className="text-white text-[0.9rem] flex font-light cursor-pointer"
+                            onClick={() => setIsOpen(false)}
+                        >
+                            ✕ <span className="relative left-2">Close</span>
+                        </button>
                     </div>
 
-                    <div className=" top-10 right-5 relative flex flex-col justify-center">
-                        <hr className="opacity-30" />
-                        <div className="flex flex-col text-xl text-neutral-400 font-light relative top-10 left-5">
-                            <h2 className="">Can we help you ?</h2>
-                            <h2 className=" underline cursor-pointer hover:text-neutral-300 duration-200">+2126 154 937 32</h2>
+                    {/* fade effect */}
+                    <div className="absolute top-0 left-0 right-0 h-40 pointer-events-none z-10">
+                        {/* <div className="absolute inset-0 bg-gradient-to-b from-[#2c2c2c] via-[#2c2c2c] to-transparent"></div> */}
+                    </div>
+
+                    {/* Scrollable content with fade effect */}
+                    <div className="relative top-10 flex-1 overflow-hidden">
+                        <div className="absolute inset-0 flex flex-col">
+                            {/* Scrollable content */}
+                            <div className="flex-1 overflow-y-auto !pl-[13%] custom-scrollbar">
+                                <div className="text-2xl font-extralight !mt-10">
+                                    <ul className="flex flex-col menu-list">
+                                        {/* Ready to Wear Section */}
+                                        <li className="text-[0.7rem] text-neutral-400 uppercase tracking-wider !pb-2 !pt-5">
+                                            Ready to Wear
+                                        </li>
+                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white">
+                                            <span>Dresses</span>
+                                        </li>
+                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white">
+                                            <span>Sets</span>
+                                        </li>
+                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white">
+                                            <span>Tops</span>
+                                        </li>
+                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white">
+                                            <span>Bottoms</span>
+                                        </li>
+                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white">
+                                            <span>Burkini</span>
+                                        </li>
+                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white">
+                                            <span>Hijabs</span>
+                                        </li>
+
+                                        {/* Featured Section */}
+                                        <li className="text-[0.7rem] text-neutral-400 uppercase tracking-wider !pb-2 !pt-14">
+                                            Featured
+                                        </li>
+                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white">
+                                            <span>New Arrivals</span>
+                                        </li>
+                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white">
+                                            <span>Best Sellers</span>
+                                        </li>
+                                    </ul>
+                                </div>
+
+                                {/* Help section (now scrollable) */}
+                                <div className="w-full !mt-20 !mb-30">
+                                    <hr className="opacity-15 !mr-10" />
+                                    <div className="flex flex-col text-xl text-neutral-400 font-light !pt-10">
+                                        <h2>Can we help you?</h2>
+                                        <h2 className="underline cursor-pointer hover:text-neutral-300 duration-200">+2126 154 937 32</h2>
+                                    </div>
+                                </div>
+                            </div>
+
+                            {/* Enhanced fade effect bottom */}
+                            <div className="absolute bottom-0 left-0 right-0 h-20 pointer-events-none z-10">
+                                {/* <div className="absolute inset-0 bg-gradient-to-t from-[#2c2c2c] via-[#2c2c2c] to-transparent"></div> */}
+                            </div>
                         </div>
-
                     </div>
-
                 </div>
-
             </div>
         </>
     );
 }
 
-export default SidebarMenu;
+export default Menu;

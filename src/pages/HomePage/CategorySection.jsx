@@ -1,91 +1,92 @@
 import React, { useState } from 'react'
 import CategoryBtn from './CategoryBtn'
 import CardProduct from './CardProduct';
-import Dress1 from '../../assets/Dresses/1.png'
-import Dress2 from '../../assets/Dresses/2.png'
-import Dress3 from '../../assets/Dresses/6.png'
-import Top1 from '../../assets/Tops/1.png'
-import Top2 from '../../assets/Tops/3.png'
-import Top3 from '../../assets/Tops/2.png'
-import Bottom1 from '../../assets/Bottoms/1.png'
-import Bottom2 from '../../assets/Bottoms/2.png'
 import Button from '../../components/Button'
 import arrow from '../../assets/Icons/arrowTop.svg'
 import WishListPopUp from '../../components/WishListPopUp';
+import '../../App.css'
 
+// images 
+import dress from '../../assets/Dresses/essential-navy-dress_Pos1.png'
+import set from '../../assets/Sets/Set_Black_Pos1.png'
+import top from '../../assets/Tops/dark-gray-loose-fitting-high-nec_Pos2.png'
+import bottom from '../../assets/Bottoms/jean-loose-salam-light-blue_Pos1.png'
+import Burkini from '../../assets/Burkini/chocolate-palazzo-burkini_Pos1.png'
+import Hijab from '../../assets/Hijabs/hijab-jersey-luxe-soft-ready-to_Pos1.png'
 
+import productsData from '../../../ProductsDB.json';
+import { useNavigate } from 'react-router-dom';
 
 const CategorySection = () => {
     const [activeButton, setActiveButton] = useState('All');
     const [isOpen, setIsOpen] = useState(false);
+    const navigate = useNavigate();
+
+    // Filter products based on selected category
+    const filteredProducts = activeButton === 'All' 
+        ? productsData 
+        : productsData.filter(product => product.category === activeButton);
+
+    // Get the first 9 products from filtered results
+    const displayedProducts = filteredProducts.slice(0, 9);
+
+    
+    const handleShopNow = () => {
+        navigate('/shop');
+    };
 
     return (
-        <div className='flex flex-col gap-12 h-auto w-full '>
-            <h2 className='text-white tracking-tighter font-extralight text-3xl relative left-8'>Shop by Category</h2>
-            <div className='flex flex-row flex-wrap justify-evenly gap-2'>
-                <CategoryBtn
-                    text="All"
-                    isActive={activeButton === 'All'}
-                    onClick={() => setActiveButton('All')}
-                />
-                <CategoryBtn
-                    text="Sets"
-                    isActive={activeButton === 'Sets'}
-                    onClick={() => setActiveButton('Sets')}
-                />
-                <CategoryBtn
-                    text="Tops"
-                    isActive={activeButton === 'Tops'}
-                    onClick={() => setActiveButton('Tops')}
-                />
-                <CategoryBtn
-                    text="Bottoms"
-                    isActive={activeButton === 'Bottoms'}
-                    onClick={() => setActiveButton('Bottoms')}
-                />
-                <CategoryBtn
-                    text="Dresses"
-                    isActive={activeButton === 'Dresses'}
-                    onClick={() => setActiveButton('Dresses')}
-                />
+        <div className='flex flex-col justify-center items-center gap-10 h-auto w-full'>
+            <h2 className='text-white tracking-wider font-normal uppercase text-2xl'>Shop by Category</h2>
+
+            <div className='h-full w-[90%] grid grid-cols-3 gap-x-0 gap-y-3 justify-items-center'>
+        
+                <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center !pt-14 overflow-hidden cursor-pointer'>
+                    <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Dresses</h2>
+                   <img src={dress} className='scale-100 group-hover:blur-md group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-135' alt="" />
+                </div>
+                <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center !pt-20 overflow-hidden cursor-pointer'>
+                    <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Sets</h2>
+                   <img src={set} className='scale-120 group-hover:blur-md group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-150' alt="" />
+                </div>
+                <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center overflow-hidden !pt-14 cursor-pointer'>
+                    <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Tops</h2>
+                   <img src={top} className='scale-120 group-hover:blur-md !mb-10 group-hover:opacity-50 transition-all duration-300 ease-out  group-hover:scale-140' alt="" />
+                </div>
+                <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center overflow-hidden !pt-5 cursor-pointer'>
+                    <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Bottoms</h2>
+                   <img src={bottom} className='scale-110 group-hover:blur-md !mt-5 group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-130 ' alt="" />
+                </div>
+                <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center overflow-hidden !pt-14 cursor-pointer'>
+                    <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Burkini</h2>
+                   <img src={Burkini} className='scale-110 group-hover:blur-md group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-150' alt="" />
+                </div>
+                <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center overflow-hidden !pt-5 cursor-pointer'>
+                    <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Hijabs</h2>
+                   <img src={Hijab} className='scale-100 group-hover:blur-md group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-150' alt="" />
+                </div>
             </div>
 
-            <div className='grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-y-8 justify-items-center'>
 
-                <CardProduct img={Dress1} title="Essential gray dress" price={349.00} setIsOpen={setIsOpen} />
-                <CardProduct img={Top1} title="Beige faux leather trench coat" price={399.00} setIsOpen={setIsOpen} />
-                <CardProduct img={Bottom1} title="Cream fleece casual pants" price={499.00} setIsOpen={setIsOpen} />
 
-                <CardProduct img={Dress2} title="Black brocade dress" price={489.00} setIsOpen={setIsOpen} />
-                <CardProduct img={Top2} title="Taupe down jacket" price={529.00} setIsOpen={setIsOpen} />
-                <CardProduct img={Top3} title="Black faux leather down jacket" price={449.00} setIsOpen={setIsOpen} />
-
-                <CardProduct img={Bottom2} title="Blue denim jeans skirt" price={249.00} setIsOpen={setIsOpen} />
-                <CardProduct img={Top3} title="Black faux leather down jacket" price={449.00} setIsOpen={setIsOpen} />
-                <CardProduct img={Dress3} title="Mocha pearl dress" price={499.00} setIsOpen={setIsOpen} />
-
-                <WishListPopUp isOpen={isOpen} setIsOpen={setIsOpen} />
-
-            </div>
-
-            <div className='w-full flex justify-center'>
+            {/* <div className='w-full flex justify-center'>
                 <div
+                    onClick={handleShopNow}
                     className="bg-transparent outline border w-[14vw] h-[6vh] border-white rounded-[30rem] z-30 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden duration-200 hover:outline-solid hover:outline-1 hover:outline-white "
                 >
                     <p
                         className="text-white tracking-tighter transition-all duration-200 text-[0.9rem] font-light">
-                            View more
+                            Shop Now
                     </p>
                     <div className="h-6 w-6 rounded-full flex items-center justify-center transition-all duration-200 group-hover:bg-transparent">
                         <img src={arrow} className="h-4 w-4 relative top-0.5" alt="" />
                     </div>
                 </div>
-            </div>
+            </div> */}
 
-
+            <WishListPopUp isOpen={isOpen} setIsOpen={setIsOpen} />
         </div>
     )
-
 }
 
 export default CategorySection;

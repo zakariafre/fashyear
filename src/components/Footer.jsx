@@ -9,19 +9,20 @@ const Footer = () => {
                 <div className="flex flex-col md:flex-row justify-between items-start">
                     {/* Left Section - Tagline */}
                     <div className="!mb-12 md:!mb-0 md:w-[40%]">
+                        <img src={BflyIcon} alt="" className="h-16 !mb-8" />
                         <h2 className="text-2xl w-[90%] leading-tight tracking-tight">
                             <span className="text-white">Elevating everyday style</span> with timeless elegance and modern sophistication
                         </h2>
                     </div>
 
                     {/* Right Section - Links */}
-                    <div className="grid grid-cols-3 gap-12 w-full md:w-auto">
+                    <div className="grid grid-cols-3 gap-20 !mt-5 w-full md:w-auto">
                         {/* FOLLOW */}
                         <div>
                             <h3 className="font-bold text-sm !mb-4">FOLLOW</h3>
-                            <ul className="space-y-2 text-sm flex flex-col gap-1">
-                                {['Instagram', 'Facebook', 'X (Twitter)'].map(item => (
-                                    <li key={item} className="hover:text-white cursor-pointer transition-colors">
+                            <ul className="space-y-2 text-sm flex flex-col gap-2">
+                                {['Instagram', 'Facebook', 'X / Twitter'].map(item => (
+                                    <li key={item} className="hover:underline text-xs cursor-pointer transition-colors">
                                         {item}
                                     </li>
                                 ))}
@@ -31,9 +32,9 @@ const Footer = () => {
                         {/* PAGES */}
                         <div>
                             <h3 className="font-bold text-sm !mb-4">PAGES</h3>
-                            <ul className="space-y-2 text-sm flex flex-col gap-1">
-                                {['Home', 'Shop', 'About'].map(item => (
-                                    <li key={item} className="hover:text-white cursor-pointer transition-colors">
+                            <ul className="space-y-2 text-sm flex flex-col gap-2">
+                                {['Home', 'Ready to wear', 'About'].map(item => (
+                                    <li key={item} className="hover:underline cursor-pointer text-xs transition-colors">
                                         {item}
                                     </li>
                                 ))}
@@ -44,7 +45,7 @@ const Footer = () => {
                         <div>
                             <h3 className="font-bold text-sm !mb-4">CONTACT</h3>
                             <ul className="space-y-2 text-sm flex flex-col gap-2">
-                                <li className="hover:text-white cursor-pointer transition-colors">
+                                <li className="hover:underline cursor-pointer text-xs transition-colors">
                                     Reach Us
                                 </li>
                             </ul>
@@ -53,8 +54,8 @@ const Footer = () => {
                 </div>
 
                 {/* Bottom Bar */}
-                <div className="!mt-12 !pt-6 flex flex-col md:flex-row justify-between items-center">
-                    <p className="text-xs order-2 md:order-1 !mt-4 md:mt-0">
+                <div className="!mt-18 flex flex-col md:flex-row justify-between items-center">
+                    <p className="text-xs order-2 md:order-1 md:mt-0">
                         © 2025 fashyear Inc. All rights reserved.
                     </p>
                     <ul className="flex space-x-6 flex-row gap-5 text-xs order-1 md:order-2">

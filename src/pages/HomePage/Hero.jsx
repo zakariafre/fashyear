@@ -6,12 +6,15 @@ import HeroCardImg2 from '../../assets/Icons/heroImg2.webp';
 import ShinyText from "../../components/ShinyText";
 import '../../App.css'
 import '../../index.css'
+import { useNavigate } from 'react-router-dom';
+
 
 
 
 const Hero = ({ text, disabled = false, speed = 5, className = '' }) => {
 
     const animationDuration = `${speed}s`;
+    const navigate = useNavigate();
 
     useEffect(() => {
         const card = document.querySelector('.Custom-cursor');
@@ -25,6 +28,11 @@ const Hero = ({ text, disabled = false, speed = 5, className = '' }) => {
         card.addEventListener('mousemove', updateCursorPos);
         return () => card.removeEventListener('mousemove', updateCursorPos);
       }, []);
+
+    const handleShopNow = () => {
+        navigate('/shop');
+    };
+
 
     return (
         <div className="relative h-[80vh] top-[20vh] w-full flex flex-col gap-[4%]  text-white z-1">
