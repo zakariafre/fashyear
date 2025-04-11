@@ -50,7 +50,7 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
         className={`fixed top-0 left-1/2 transform -translate-x-1/2 w-full h-[10vh] flex items-center justify-center backdrop-blur-[0px] mx-auto transition-all duration-300 
           ${isOpen ? "backdrop-blur-md z-30" : "z-50"}
           ${isSearchOpen ? "backdrop-blur-xs z-80" : "z-50"} 
-          ${isScrolled ? 'bg-neutral-900/30 backdrop-blur-md duration-1000 ease-linear ' : 'duration-1000 ease-linear'}`}
+          ${isScrolled ? 'bg-neutral-900/30 backdrop-blur-md duration-100 ease-linear ' : 'duration-100 ease-linear'}`}
       >
         <div className={`bg-neutral-900/0 w-full h-[10vh] flex items-center justify-center`}
 
@@ -68,7 +68,7 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
               onClick={() => { setIsOpen(true); setIsSearchOpen(false) }} // Open the sidebar menu
             >
               <img src={menuIcon} alt="Menu" className='h-[80%] relative top-1 ' />
-              <p className='font-light tracking-wider uppercase'>Menu</p>
+              <p className='font-light tracking-widest uppercase'>Menu</p>
             </div>
 
 
@@ -78,7 +78,7 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
               onClick={() => setIsSearchOpen(true)}
             >
               <img src={searchIcon} alt="" className='h-[60%] filter brightness-200 relative top-0.5' />
-              <p className='font-light tracking-wider uppercase'>Search</p>
+              <p className='font-light tracking-widest uppercase'>Search</p>
             </div>
           </div>
 

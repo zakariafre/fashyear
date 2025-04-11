@@ -128,7 +128,7 @@ const Shop = () => {
 
 
     return (
-        <div className="relative min-h-screen w-full flex flex-col items-center gap-2 text-white !mt-30 ">
+        <div className="relative min-h-screen w-full flex flex-col items-center gap-2 text-white !mt-25 ">
 
             <Filters
                 isFiltersOpen={isFiltersOpen}
@@ -149,23 +149,24 @@ const Shop = () => {
             />
 
 
+
             {/* Filters button */}
             <div className="absolute w-full z-20 flex justify-end">
 
                 {/* filter button */}
                 <button
                     onClick={() => setIsFiltersOpen(true)}
-                    className=" opacity-50 hover:opacity-80 cursor-pointer !px-3 font-extralight text-xs bg-transparent border border-white transition-all ease-in duration-200 w-fit h-[4.5vh] rounded-[1.5rem] flex flex-row justify-center items-center gap-3"
+                    className="opacity-80 hover:opacity-100 !mr-10 underline underline-offset-4 cursor-pointer !px-3 font-extralight text-xs bg-transparent duration-100 w-fit h-[4.5vh] rounded-[1.5rem] flex flex-row justify-center items-center gap-3"
                 >
-                    <div className="flex flex-row items-center justify-center font-extralight gap-1">
+                    <span className="flex flex-row items-center justify-center font-light uppercase tracking-widest gap-1">
                         Filters
                         {totalFilterCount > 0 && (
                             <span className="text-white text-xs">
                                 ({totalFilterCount})
                             </span>
                         )}
-                    </div>
-                    <img className="h-2.5" src={filtersIcon} alt="" draggable="false" />
+                    </span>
+
                 </button>
             </div>
 
@@ -176,7 +177,7 @@ const Shop = () => {
                 {/* Message "No product Match filters" */}
                 {filteredProducts.length === 0 ? (
                     <>
-                        <div className="w-full h-[40vh] !mt-12 rounded-[1rem] bg-black/40 flex flex-col items-center justify-center gap-6 font-extralight overflow-hidden">
+                        <div className="w-full h-[40vh] !mt-12 flex flex-col items-center justify-center gap-6 font-extralight overflow-hidden">
 
                             <div className="z-10 absolute flex flex-col gap-6 justify-center items-center">
                                 <h3 className="text-2xl text-center text-neutral-400 font-medium tracking-tight">Oops, we're still stitching up the perfect piece for you !</h3>
@@ -206,11 +207,11 @@ const Shop = () => {
                         </div>
 
                         {/* you might like */}
-                        <div className="w-full !mt-10 !mb-10 font-extralight tracking-tight text-2xl">
-                            <h2>You might like these</h2>
+                        <div className="w-full !mx-auto !px-10 !mt-10 !mb-10 font-light tracking-wider flex flex-col justify-center items-center uppercase text-xl">
+                            <h2 className="!mb-4">You might like these</h2>
 
-                            <div className="w-full !mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 gap-x-10">
-                                {initialProducts.slice(0, 4).map((product) => (
+                            <div className="w-full !mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-y-14 gap-x-6 place-items-center">
+                                {initialProducts.slice(0, 6).map((product) => (
                                     <ShopCard
                                         key={product.id}
                                         id={product.id}
@@ -225,18 +226,19 @@ const Shop = () => {
                         </div>
                     </>
                 ) : (
-
-                    <div className="w-full !mt-12 !mb-10 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-4 gap-y-6 gap-x-10">
-                        {filteredProducts.map((product) => (
-                            <ShopCard
-                                key={product.id}
-                                id={product.id}
-                                img={product.img[0]}
-                                title={product.title}
-                                price={product.price}
-                                setIsOpen={setIsOpen}
-                            />
-                        ))}
+                    <div className="container !mx-auto !px-10 !mt-12 !mb-10">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-14 gap-x-6 place-items-center">
+                            {filteredProducts.map((product) => (
+                                <ShopCard
+                                    key={product.id}
+                                    id={product.id}
+                                    img={product.img[0]}
+                                    title={product.title}
+                                    price={product.price}
+                                    setIsOpen={setIsOpen}
+                                />
+                            ))}
+                        </div>
                     </div>
                 )}
             </>
@@ -244,53 +246,9 @@ const Shop = () => {
 
 
 
-
-            {/* View More and Scroll to top Buttons */}
-            <div className="w-full flex flex-col items-center justify-center">
-                {/* <button
-                    onClick={() => setShowMore(true)}
-                    className="bg-transparent border w-[16vw] h-[6vh] border-white hover:border-[1.5px] duration-200 rounded-[30rem] z-30 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden transition-all"
-                >
-                    <p className="text-white tracking-tighter text-[0.9rem] font-light">
-                        View More
-                    </p>
-                </button> */}
-
-                <button
-                    onClick={scrollToTop}
-                    className="flex flex-row justify-center items-center gap-3 text-sm text-neutral-400 font-extralight border border-neutral-500 hover:border-white transition-all duration-200 rounded-full !px-5 !py-2 cursor-pointer">
-                    <p>Scroll to top</p>
-                    <img src={DownArrow} className="h-3 rotate-180 opacity-40 cursor-pointer" alt="" />
-                </button>
-
-                <div className="w-full relative top-10">
-                    <hr className="opacity-5" />
-                </div>
-
-            </div>
-
-
-
-            {/* We supported By ; Section */}
-            <div className="flex w-full !mt-18">
-                <SupportedBy />
-            </div>
-
-
             <div className="flex flex-col w-full !mt-18 gap-10">
                 <hr className="opacity-5" />
-                <p className="text-[0.7rem] !ml-5 w-[50%] font-extralight text-neutral-300">Rooted in elegance and designed with intention, Fashyear redefines modest fashion for the modern woman. Each piece blends timeless style with effortless comfort, offering a wardrobe that speaks to both grace and individuality. With a focus on quality craftsmanship and expressive design, Fashyear empowers women to feel confident, comfortable, and true to themselves—every single day.</p>
-                {/* <hr className="opacity-5" />
-
-                <div className="text-[0.8rem] !ml-5 w-[50%] font-extralight text-neutral-200" >
-                    <button className="underline underline-offset-4 tracking-tight cursor-pointer hover:text-neutral-400 duration-200">
-                        Home
-                    </button> - 
-
-                     <button className="underline underline-offset-4 tracking-tight cursor-pointer hover:text-neutral-400 duration-200">
-                        Shop
-                    </button>
-                </div> */}
+                {/* <p className="text-[0.7rem] !ml-5 w-[50%] font-extralight text-neutral-300">Rooted in elegance and designed with intention, Fashyear redefines modest fashion for the modern woman. Each piece blends timeless style with effortless comfort, offering a wardrobe that speaks to both grace and individuality. With a focus on quality craftsmanship and expressive design, Fashyear empowers women to feel confident, comfortable, and true to themselves—every single day.</p> */}
 
             </div>
 

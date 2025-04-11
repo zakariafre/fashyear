@@ -24,7 +24,7 @@ const Filters = ({
 
 
 
-    const categories = ["Sets", "Dresses", "Tops", "Bottoms"];
+    const categories = ["Sets", "Dresses", "Tops", "Bottoms" , "Burkini" , "Hijabs"];
 
     // States
     const [localSelectedCategories, setLocalSelectedCategories] = useState(currentCategories || []);
@@ -191,13 +191,13 @@ const Filters = ({
                     borderStyle: "solid",
                     borderImage: "linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,0.5), rgba(255,255,255,0)) 1"
                 }}
-                className={`fixed top-3 right-4 h-[96%] w-[45%] bg-[#303030]/90 rounded-[1rem] overflow-y-hidden text-white transition-transform duration-300 z-90 flex flex-col 
+                className={`fixed top-0 right-0 h-full w-[45%]  bg-neutral-800/50 overflow-y-hidden text-white transition-transform duration-300 z-90 flex flex-col 
                 ${isFiltersOpen ? "translate-x-0" : "translate-x-[120%]"}
               `}
             >
                 {/* header */}
-                <div className="sticky z-50 top-0 bg-neutral-700 w-full h-12 flex flex-row justify-between items-center font-light tracking-tight !pl-[13%] !pr-[13%] !mt-10">
-                    <a className="relative text-sm">Filter By</a>
+                <div className="sticky z-50 top-0 bg-neutral-800/60 w-full h-12 flex flex-row justify-between items-center font-light tracking-tight !pl-[13%] !pr-[13%] !mt-10">
+                    <a className="relative uppercase tracking-widest text-xs">Filter By</a>
 
                     <div className="flex items-center gap-4">
                         {/* Show Clear button only if filters are active */}
@@ -210,7 +210,7 @@ const Filters = ({
                         ) && (
                                 <button
                                     onClick={() => clearAllFilters()}
-                                    className="text-gray-300 hover:text-white text-xs flex items-center gap-1 transition-colors underline underline-offset-4 cursor-pointer"
+                                    className="text-gray-300 uppercase tracking-widest hover:text-white text-xs flex items-center gap-1 transition-colors underline underline-offset-4 cursor-pointer"
                                 >
                                     Clear All
                                 </button>
@@ -239,7 +239,7 @@ const Filters = ({
                             className="flex justify-between items-center w-full text-sm cursor-pointer !pt-5 !pb-6"
                             onClick={() => toggleSection("category")}
                         >
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center uppercase tracking-widest gap-2">
                                 Categories
                                 {localSelectedCategories.length > 0 && (
                                     <span className="text-xs text-gray-400">({localSelectedCategories.length})</span>
@@ -296,7 +296,7 @@ const Filters = ({
                             className="flex justify-between items-center w-full text-sm !pt-5 !pb-5 cursor-pointer "
                             onClick={() => toggleSection("color")}
                         >
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center uppercase tracking-widest gap-2">
                                 Color
                                 {localSelectedColor.length > 0 && (
                                     <span className="text-xs text-gray-400">({localSelectedColor.length})</span>
@@ -335,7 +335,7 @@ const Filters = ({
                             className="flex justify-between items-center w-full text-sm cursor-pointer !pt-5 !pb-6"
                             onClick={() => toggleSection("size")}
                         >
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center uppercase tracking-widest gap-2">
                                 Size
                                 {localSelectedSize.length > 0 && (
                                     <span className="text-xs text-gray-400">({localSelectedSize.length})</span>
@@ -386,7 +386,7 @@ const Filters = ({
                             className="flex justify-between items-center w-full text-sm !pt-5 !pb-5 cursor-pointer"
                             onClick={() => toggleSection("sorting")}
                         >
-                            <div className="flex items-center gap-2">
+                            <div className="flex items-center uppercase tracking-widest gap-2">
                                 Sort By
                                 {localSelectedSorting && (
                                     <span className="text-xs text-gray-400">(1)</span>
@@ -425,7 +425,7 @@ const Filters = ({
 
 
                 {/* Show Products button */}
-                <div className="flex-none sticky bottom-0 bg-[#404040] h-[15%] w-full flex justify-center items-center shadow-2xl shadow-black z-50">
+                <div className="flex-none sticky bottom-0 bg-neutral-800 h-[15%] w-full flex justify-center items-center shadow-2xl shadow-black z-50">
                     <button
                         onClick={applyFilters}
                         disabled={!(

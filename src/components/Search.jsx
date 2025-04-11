@@ -59,7 +59,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, products }) => {
                     borderImage: "linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.4), rgba(255,255,255,0)) 1",
                     maxHeight: height, // Dynamically changing height
                 }}
-                className={`fixed top-0 w-full left-1/2 transform -translate-x-1/2 rounded-0 bg-[#303030]/10 z-60 flex flex-col justify-start items-center gap-7 !pt-25 !pb-6 duration-300 overflow-hidden
+                className={`fixed top-0 w-full left-1/2 transform -translate-x-1/2 rounded-0 bg-neutral-800/40 z-60 flex flex-col justify-start items-center gap-7 !pt-25 !pb-6 duration-300 overflow-hidden
                 ${isSearchOpen ? "translate-y-0 " : "-translate-y-[115%]"}
                 transition-all ease-in-out`}
                 ref={contentRef}
@@ -80,7 +80,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, products }) => {
                         Trending Searches
                         <ul className='flex flex-col gap-1 w-full text-white font-medium cursor-pointer'>
                             {["Essential gray dress", "Blue denim jeans skirt", "Mocha pearl dress", "Cream fleece casual pants"].map((item, index) => (
-                                <span key={index} className='group relative right-3 leading-6 border-0 rounded-[0.5rem] flex flex-row items-center gap-3 !pl-3 !pt-1 hover:bg-neutral-700/30 duration-75'>
+                                <span key={index} className='group relative right-3 leading-6 border-0 rounded-[0.5rem] flex flex-row items-center gap-3 !pl-3 !pt-1 hover:bg-neutral-900/30 duration-75'>
                                     <img className='relative h-[0.8rem] rotate-45 opacity-75 group-hover:opacity-100 group-hover:rotate-0 duration-200' src={ArrowTopRIght} alt="" draggable="false" />
                                     {item}
                                 </span>
@@ -96,7 +96,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, products }) => {
                         {filteredProducts.length > 0 ? (
                             <ul className='flex flex-col gap-1 w-full text-white font-medium cursor-pointer'>
                                 {filteredProducts.map((product) => (
-                                    <span key={product.id} className='group relative right-3 leading-6 border-0 rounded-[0.5rem] flex flex-row items-center gap-3 !pl-3 !pt-1 hover:bg-neutral-700/30 duration-75'>
+                                    <span key={product.id} className='group relative right-3 leading-6 border-0 rounded-[0.5rem] flex flex-row items-center gap-3 !pl-3 !pt-1 hover:bg-neutral-900/30 duration-75'>
                                         <img className='relative h-[0.8rem] rotate-45 opacity-75 group-hover:opacity-100 group-hover:rotate-0 duration-200' src={ArrowTopRIght} alt="" draggable="false" />
                                         <li>{product.title}</li>
                                     </span>

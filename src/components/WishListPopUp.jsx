@@ -25,7 +25,7 @@ const WishListPopUp = ({ isOpen, setIsOpen }) => {
             {/* Wishlist Popup with smooth fade-in & zoom-in on open and fade-out & zoom-out on close */}
             {isVisible && (
                 <div
-                    className={`fixed top-[17%] left-[35%] w-[30%] h-[9%] rounded-[1rem] bg-neutral-700/90 z-50 border border-neutral-400/50 
+                    className={`fixed top-[12%] left-[35%] w-[30%] h-[9%] rounded-[1rem] bg-neutral-700/90 z-50 border border-neutral-400/50 
                     flex flex-col justify-center items-center text-neutral-300 font-light transition-all duration-300 
                     ${isOpen ? "opacity-100" : "opacity-0 "}`}
                 >

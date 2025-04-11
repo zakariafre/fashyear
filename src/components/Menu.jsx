@@ -7,7 +7,7 @@ const Menu = ({ isOpen, setIsOpen }) => {
             {/* Background overlay */}
             {isOpen && (
                 <div
-                    className="fixed inset-0 bg-black/60 backdrop-blur-xs z-80 transition-opacity duration-300"
+                    className="fixed inset-0 bg-black/60 backdrop-blur-md z-80 transition-opacity duration-300"
                     onClick={() => setIsOpen(false)}
                 ></div>
             )}
@@ -19,17 +19,17 @@ const Menu = ({ isOpen, setIsOpen }) => {
                     borderStyle: "solid",
                     borderImage: "linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,0.5), rgba(255,255,255,0)) 1"
                 }}
-                className={`fixed top-0 h-full w-[30%] bg-[#303030]/0 rounded-[0rem] text-white transition-transform duration-300 z-90 overflow-hidden
+                className={`fixed top-0 h-full w-[30%] bg-neutral-800/40 rounded-[0rem] text-white transition-transform duration-300 z-90 overflow-hidden
                 ${isOpen ? "translate-x-0" : "-translate-x-[120%]"}`}
             >
                 <div className="relative flex flex-col h-full">
                     {/* Sticky close button */}
                     <div className="sticky top-5 z-20 !pl-[13%] pt-7 pb-4">
                         <button
-                            className="text-white text-[0.9rem] flex font-light cursor-pointer"
+                            className="text-neutral-200 text-[0.9rem] flex font-light cursor-pointer"
                             onClick={() => setIsOpen(false)}
                         >
-                            ✕ <span className="relative left-2">Close</span>
+                            ✕ <span className="relative uppercase tracking-widest left-2">Close</span>
                         </button>
                     </div>
 
@@ -48,23 +48,23 @@ const Menu = ({ isOpen, setIsOpen }) => {
                                         {/* Ready to Wear Section */}
                                         <li className="text-[0.7rem] text-neutral-400 uppercase tracking-wider !pb-2 !pt-5">
                                             Ready to Wear
-                                        </li>
-                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white">
+                                        </li> 
+                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
                                             <span>Dresses</span>
                                         </li>
-                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white">
+                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
                                             <span>Sets</span>
                                         </li>
-                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white">
+                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
                                             <span>Tops</span>
                                         </li>
-                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white">
+                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
                                             <span>Bottoms</span>
                                         </li>
-                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white">
+                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
                                             <span>Burkini</span>
                                         </li>
-                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white">
+                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
                                             <span>Hijabs</span>
                                         </li>
 
@@ -72,10 +72,10 @@ const Menu = ({ isOpen, setIsOpen }) => {
                                         <li className="text-[0.7rem] text-neutral-400 uppercase tracking-wider !pb-2 !pt-14">
                                             Featured
                                         </li>
-                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white">
+                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
                                             <span>New Arrivals</span>
                                         </li>
-                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white">
+                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
                                             <span>Best Sellers</span>
                                         </li>
                                     </ul>

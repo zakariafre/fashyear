@@ -19,6 +19,7 @@ import Shop from './pages/ShopPage/Shop';
 import ScrollBlurText from './components/BlurEffect';
 import ProductData from '../ProductsDB.json'
 import ProductPage from './pages/ProductPage/ProductPage';
+import NewArrival from './pages/HomePage/NewArrival';
 
 
 const App = () => {
@@ -55,11 +56,8 @@ const App = () => {
             <Route path="/" element={
               <div className="flex flex-col min-h-screen gap-[3rem] md:gap-[4rem]">
                 <HeroSection />
-                {/* <Section2 /> */}
                 <CategorySection />
-                {/* <Description /> */}
-                {/* <CollectionSection /> */}
-                {/* <SupportedBy /> */}
+                <NewArrival/>
               </div>
             } />
 

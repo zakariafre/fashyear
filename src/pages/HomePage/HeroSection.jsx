@@ -30,6 +30,7 @@ const Hero = ({ text, disabled = false, speed = 5, className = '' }) => {
         return () => card.removeEventListener('mousemove', updateCursorPos);
     }, []);
 
+
     const handleShopNow = () => {
         navigate('/shop');
     };
@@ -44,7 +45,7 @@ const Hero = ({ text, disabled = false, speed = 5, className = '' }) => {
                 <div className="absolute flex flex-col justify-center items-center !mt-40 gap-2 z-30">
                     <h2 className="uppercase text-[2rem] font-light text-white tracking-wider">new in: hijabs</h2>
 
-                    <h2 className="uppercase text-[0.7rem] font-light text-white tracking-wider underline cursor-pointer">Shop now</h2>
+                    <button onClick={handleShopNow} className="uppercase text-[0.7rem] font-light text-white tracking-wider underline cursor-pointer">Shop now</button>
                 </div>
 
             </div>

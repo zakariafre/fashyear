@@ -23,14 +23,14 @@ const CategorySection = () => {
     const navigate = useNavigate();
 
     // Filter products based on selected category
-    const filteredProducts = activeButton === 'All' 
-        ? productsData 
+    const filteredProducts = activeButton === 'All'
+        ? productsData
         : productsData.filter(product => product.category === activeButton);
 
     // Get the first 9 products from filtered results
     const displayedProducts = filteredProducts.slice(0, 9);
 
-    
+
     const handleShopNow = () => {
         navigate('/shop');
     };
@@ -40,30 +40,30 @@ const CategorySection = () => {
             <h2 className='text-white tracking-wider font-normal uppercase text-2xl'>Shop by Category</h2>
 
             <div className='h-full w-[90%] grid grid-cols-3 gap-x-0 gap-y-3 justify-items-center'>
-        
+
                 <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center !pt-14 overflow-hidden cursor-pointer'>
                     <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Dresses</h2>
-                   <img src={dress} className='scale-100 group-hover:blur-md group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-135' alt="" />
+                    <img src={dress} className='scale-100 group-hover:blur-md group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-135' alt="" />
                 </div>
                 <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center !pt-20 overflow-hidden cursor-pointer'>
                     <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Sets</h2>
-                   <img src={set} className='scale-120 group-hover:blur-md group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-150' alt="" />
+                    <img src={set} className='scale-120 group-hover:blur-md group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-150' alt="" />
                 </div>
                 <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center overflow-hidden !pt-14 cursor-pointer'>
                     <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Tops</h2>
-                   <img src={top} className='scale-120 group-hover:blur-md !mb-10 group-hover:opacity-50 transition-all duration-300 ease-out  group-hover:scale-140' alt="" />
+                    <img src={top} className='scale-120 group-hover:blur-md !mb-10 group-hover:opacity-50 transition-all duration-300 ease-out  group-hover:scale-140' alt="" />
                 </div>
                 <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center overflow-hidden !pt-5 cursor-pointer'>
                     <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Bottoms</h2>
-                   <img src={bottom} className='scale-110 group-hover:blur-md !mt-5 group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-130 ' alt="" />
+                    <img src={bottom} className='scale-110 group-hover:blur-md !mt-5 group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-130 ' alt="" />
                 </div>
                 <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center overflow-hidden !pt-14 cursor-pointer'>
                     <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Burkini</h2>
-                   <img src={Burkini} className='scale-110 group-hover:blur-md group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-150' alt="" />
+                    <img src={Burkini} className='scale-110 group-hover:blur-md group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-150' alt="" />
                 </div>
                 <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center overflow-hidden !pt-5 cursor-pointer'>
                     <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Hijabs</h2>
-                   <img src={Hijab} className='scale-100 group-hover:blur-md group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-150' alt="" />
+                    <img src={Hijab} className='scale-100 group-hover:blur-md group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-150' alt="" />
                 </div>
             </div>
 

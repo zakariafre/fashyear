@@ -72,14 +72,14 @@ const ProductPage = () => {
 
 
   return (
-    <div className="min-h-screen w-full text-white !mt-34">
+    <div className="min-h-screen w-full text-white">
       <div className='flex flex-row gap-20 w-full min-h-screen relative'>
 
         {/* Pictures Side */}
-        <div className='w-[80%] h-full flex flex-col gap-2' onClick={() => setIsDropdownOpen(false)}>
+        <div className='w-[70%] h-full flex flex-col gap-1' onClick={() => setIsDropdownOpen(false)}>
           {currentProduct.img.map((image, index) => (
-            <div key={index} className='w-[100%] h-full rounded-[1rem] overflow-hidden'>
-              <img className='scale-110 hover:scale-115 duration-200 ease' src={image} alt="" />
+            <div key={index} className='w-[100%] h-full overflow-hidden'>
+              <img className='scale-110' src={image} alt="" />
             </div>
           ))}
         </div>
@@ -93,7 +93,7 @@ const ProductPage = () => {
 
 
         {/* Informations Side */}
-        <div className='w-[50%] h-full flex flex-col gap-4 sticky top-10 self-start'>
+        <div className='w-[50%] !mr-24 h-full flex flex-col gap-4 sticky !mt-32 self-start'>
 
           {/* ready to wear and wishlist icon */}
           <div className='flex flex-row justify-between items-center'>
@@ -119,7 +119,7 @@ const ProductPage = () => {
 
           {/* Product Name and price */}
           <div className='flex flex-col gap-1'>
-            <h1 className='text-[1.5rem] font-light text-neutral-300'>{currentProduct.title}</h1>
+            <h1 className='text-[1.5rem] uppercase tracking-wider font-light text-neutral-300'>{currentProduct.title}</h1>
             <h2 className='text-[0.9rem] font-light text-neutral-400'>{currentProduct.price} DH</h2>
           </div>
 
