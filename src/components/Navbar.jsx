@@ -47,7 +47,10 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
         initial={{ filter: "blur(10px)", opacity: 0, y: -40 }}
         animate={{ filter: "blur(0px)", opacity: 1, y: 0 }}
         transition={{ duration: 0, ease: "easeIn" }}
-        className={`fixed top-0 left-1/2 transform -translate-x-1/2 w-full h-[10vh] flex items-center justify-center backdrop-blur-[0px] mx-auto transition-all duration-300 ${isOpen ? "backdrop-blur-md z-30" : "z-50"} ${isSearchOpen ? "backdrop-blur-xs z-80" : "z-50"} ${isScrolled ? 'bg-neutral-900' : ''}`}
+        className={`fixed top-0 left-1/2 transform -translate-x-1/2 w-full h-[10vh] flex items-center justify-center backdrop-blur-[0px] mx-auto transition-all duration-300 
+          ${isOpen ? "backdrop-blur-md z-30" : "z-50"}
+          ${isSearchOpen ? "backdrop-blur-xs z-80" : "z-50"} 
+          ${isScrolled ? 'bg-neutral-900/30 backdrop-blur-md duration-1000 ease-linear ' : 'duration-1000 ease-linear'}`}
       >
         <div className={`bg-neutral-900/0 w-full h-[10vh] flex items-center justify-center`}
 
