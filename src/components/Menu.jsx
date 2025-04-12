@@ -1,7 +1,30 @@
 import React from "react";
 import '../App.css'
+import { useNavigate } from 'react-router-dom';
+import { useEffect } from 'react';
+import { useState } from 'react';
+import { useSearchParams } from 'react-router-dom';
+
 
 const Menu = ({ isOpen, setIsOpen }) => {
+
+    const navigate = useNavigate();
+
+    const [searchParams, setSearchParams] = useSearchParams();
+
+    const handleCategoryClick = (category) => {
+        setSearchParams({ category });
+        navigate(`/shop?category=${category}`);
+        setIsOpen(false);
+    };
+
+    
+
+
+
+
+
+
     return (
         <>
             {/* Background overlay */}
@@ -49,22 +72,22 @@ const Menu = ({ isOpen, setIsOpen }) => {
                                         <li className="text-[0.7rem] text-neutral-400 uppercase tracking-wider !pb-2 !pt-5">
                                             Ready to Wear
                                         </li> 
-                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
+                                        <li onClick={() => handleCategoryClick('Dresses')} className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
                                             <span>Dresses</span>
                                         </li>
-                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
+                                        <li onClick={() => handleCategoryClick('Sets')} className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
                                             <span>Sets</span>
                                         </li>
-                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
+                                        <li onClick={() => handleCategoryClick('Tops')} className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
                                             <span>Tops</span>
                                         </li>
-                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
+                                        <li onClick={() => handleCategoryClick('Bottoms')} className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
                                             <span>Bottoms</span>
                                         </li>
-                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
+                                        <li onClick={() => handleCategoryClick('Burkini')} className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
                                             <span>Burkini</span>
                                         </li>
-                                        <li className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
+                                        <li onClick={() => handleCategoryClick('Hijabs')} className="menu-item Links relative w-[70%] overflow-hidden Custom-cursor !pb-2 !pt-2 pl-4 text-lg border-b hover:border-white uppercase tracking-wider">
                                             <span>Hijabs</span>
                                         </li>
 
@@ -84,8 +107,8 @@ const Menu = ({ isOpen, setIsOpen }) => {
                                 {/* Help section (now scrollable) */}
                                 <div className="w-full !mt-20 !mb-30">
                                     <hr className="opacity-15 !mr-10" />
-                                    <div className="flex flex-col text-xl text-neutral-400 font-light !pt-10">
-                                        <h2>Can we help you?</h2>
+                                    <div className="flex flex-col text-lg text-neutral-400 font-light !pt-10">
+                                        <h2 className="uppercase tracking-wider ">Can we help you ?</h2>
                                         <h2 className="underline cursor-pointer hover:text-neutral-300 duration-200">+2126 154 937 32</h2>
                                     </div>
                                 </div>

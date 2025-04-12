@@ -37,6 +37,7 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
 
   const handleLogoClick = () => {
     navigate('/');
+    window.scrollTo(0, 0);
   };
 
 
@@ -47,16 +48,17 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
         initial={{ filter: "blur(10px)", opacity: 0, y: -40 }}
         animate={{ filter: "blur(0px)", opacity: 1, y: 0 }}
         transition={{ duration: 0, ease: "easeIn" }}
-        className={`fixed top-0 left-1/2 transform -translate-x-1/2 w-full h-[10vh] flex items-center justify-center backdrop-blur-[0px] mx-auto transition-all duration-300 
+        className={`fixed top-0 left-1/2 transform -translate-x-1/2 w-full h-[10vh] flex items-center justify-center hover:bg-neutral-900/30 hover:backdrop-blur-md ease-linear mx-auto transition-all duration-300 
           ${isOpen ? "backdrop-blur-md z-30" : "z-50"}
           ${isSearchOpen ? "backdrop-blur-xs z-80" : "z-50"} 
-          ${isScrolled ? 'bg-neutral-900/30 backdrop-blur-md duration-100 ease-linear ' : 'duration-100 ease-linear'}`}
+          ${isScrolled ? 'bg-neutral-900/30 backdrop-blur-md duration-100 ease-linear' : 'duration-100 ease-linear'}`}
       >
         <div className={`bg-neutral-900/0 w-full h-[10vh] flex items-center justify-center`}
 
           style={{
-            borderWidth: "1.3px",
+            borderWidth: isScrolled ? "1.3px" : "0px",
             borderStyle: "solid",
+            borderTop : 'none' ,
             borderImage: "linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.25), rgba(255,255,255,0)) 1"
           }}
         >
@@ -85,7 +87,7 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
 
           {/* fashyear Logo */}
           <div className='w-[40%] h-[100%]  flex justify-center items-center'>
-            <img src={logo1} className=' h-[45%] cursor-pointer' draggable="false" onClick={handleLogoClick} />
+            <img src={logo1} className=' h-[40%] cursor-pointer' draggable="false" onClick={handleLogoClick} />
           </div>
 
 

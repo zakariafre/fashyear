@@ -191,13 +191,13 @@ const Filters = ({
                     borderStyle: "solid",
                     borderImage: "linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,0.5), rgba(255,255,255,0)) 1"
                 }}
-                className={`fixed top-0 right-0 h-full w-[45%]  bg-neutral-800/50 overflow-y-hidden text-white transition-transform duration-300 z-90 flex flex-col 
+                className={`fixed top-0 right-0 h-full w-[40%] uppercase tracking-widest bg-neutral-800/50 overflow-y-hidden text-white transition-transform duration-300 z-90 flex flex-col 
                 ${isFiltersOpen ? "translate-x-0" : "translate-x-[120%]"}
               `}
             >
                 {/* header */}
-                <div className="sticky z-50 top-0 bg-neutral-800/60 w-full h-12 flex flex-row justify-between items-center font-light tracking-tight !pl-[13%] !pr-[13%] !mt-10">
-                    <a className="relative uppercase tracking-widest text-xs">Filter By</a>
+                <div className="sticky z-50 top-0 bg-neutral-800/60 w-full h-12 flex flex-row justify-between items-center !pl-[13%] !pr-[13%] !mt-10">
+                    <a className="relative text-xs">Filter By</a>
 
                     <div className="flex items-center gap-4">
                         {/* Show Clear button only if filters are active */}
@@ -217,7 +217,7 @@ const Filters = ({
                             )}
 
                         <button
-                            className="text-white text-[0.9rem] w-8 h-8 flex justify-center items-center font-light cursor-pointer hover:bg-white/10 rounded-full transition-colors"
+                            className="text-white text-[0.9rem] w-8 h-8 flex justify-center items-center font-light cursor-pointer rounded-full transition-colors"
                             onClick={() => setIsFiltersOpen(false)}
                         >
                             ✕

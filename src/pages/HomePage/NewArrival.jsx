@@ -20,8 +20,8 @@ const NewArrival = (props) => {
                         <h2 className='text-2xl font-normal '>new sets arrival</h2>
                         <button className='uppercase text-xs relative group cursor-pointer'>
                             <span>shop now</span>
-                            <span className='absolute bottom-0 right-0 w-full h-[1px] bg-black transition-all duration-300 group-hover:w-0'></span>
-                            <span className='absolute bottom-0 left-0 w-0 h-[1px] bg-black transition-all duration-300 delay-300 group-hover:w-full'></span>
+                            <span className='absolute bottom-0 right-0 w-full h-[0.5px] bg-black transition-all duration-200 group-hover:w-0'></span>
+                            <span className='absolute bottom-0 left-0 w-0 h-[0.5px] bg-black transition-all duration-200 delay-400 group-hover:w-full'></span>
                         </button>
                     </div>
 
@@ -50,8 +50,8 @@ const NewArrival = (props) => {
                         <h2 className='text-2xl font-normal '>new dresses arrival</h2>
                         <button className='uppercase text-xs relative group cursor-pointer'>
                             <span>shop now</span>
-                            <span className='absolute bottom-0 right-0 w-full h-[1px] bg-black transition-all duration-300 group-hover:w-0'></span>
-                            <span className='absolute bottom-0 left-0 w-0 h-[1px] bg-black transition-all duration-300 delay-300 group-hover:w-full'></span>
+                            <span className='absolute bottom-0 right-0 w-full h-[1px] bg-black transition-all duration-200 group-hover:w-0'></span>
+                            <span className='absolute bottom-0 left-0 w-0 h-[1px] bg-black transition-all duration-200 delay-400 group-hover:w-full'></span>
                         </button>
                     </div>
 

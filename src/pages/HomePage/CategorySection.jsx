@@ -17,6 +17,7 @@ import Hijab from '../../assets/Hijabs/hijab-jersey-luxe-soft-ready-to_Pos1.png'
 import productsData from '../../../ProductsDB.json';
 import { useNavigate } from 'react-router-dom';
 
+
 const CategorySection = () => {
     const [activeButton, setActiveButton] = useState('All');
     const [isOpen, setIsOpen] = useState(false);
@@ -30,9 +31,8 @@ const CategorySection = () => {
     // Get the first 9 products from filtered results
     const displayedProducts = filteredProducts.slice(0, 9);
 
-
-    const handleShopNow = () => {
-        navigate('/shop');
+    const handleCategoryClick = (category) => {
+        navigate(`/shop?category=${category}`);
     };
 
     return (
@@ -41,28 +41,40 @@ const CategorySection = () => {
 
             <div className='h-full w-[90%] grid grid-cols-3 gap-x-0 gap-y-3 justify-items-center'>
 
-                <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center !pt-14 overflow-hidden cursor-pointer'>
-                    <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Dresses</h2>
+                <div onClick={() => handleCategoryClick('Dresses')} className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center !pt-14 overflow-hidden cursor-pointer relative'>
+                    <div className='absolute inset-0 flex items-center justify-center z-30'>
+                        <h2 className='opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Dresses</h2>
+                    </div>
                     <img src={dress} className='scale-100 group-hover:blur-md group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-135' alt="" />
                 </div>
-                <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center !pt-20 overflow-hidden cursor-pointer'>
-                    <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Sets</h2>
+                <div onClick={() => handleCategoryClick('Sets')} className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center !pt-20 overflow-hidden cursor-pointer relative'>
+                    <div className='absolute inset-0 flex items-center justify-center z-30'>
+                        <h2 className='opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Sets</h2>
+                    </div>
                     <img src={set} className='scale-120 group-hover:blur-md group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-150' alt="" />
                 </div>
-                <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center overflow-hidden !pt-14 cursor-pointer'>
-                    <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Tops</h2>
+                <div onClick={() => handleCategoryClick('Tops')} className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center overflow-hidden !pt-14 cursor-pointer relative'>
+                    <div className='absolute inset-0 flex items-center justify-center z-30'>
+                        <h2 className='opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Tops</h2>
+                    </div>
                     <img src={top} className='scale-120 group-hover:blur-md !mb-10 group-hover:opacity-50 transition-all duration-300 ease-out  group-hover:scale-140' alt="" />
                 </div>
-                <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center overflow-hidden !pt-5 cursor-pointer'>
-                    <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Bottoms</h2>
+                <div onClick={() => handleCategoryClick('Bottoms')} className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center overflow-hidden !pt-5 cursor-pointer relative'>
+                    <div className='absolute inset-0 flex items-center justify-center z-30'>
+                        <h2 className='opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Bottoms</h2>
+                    </div>
                     <img src={bottom} className='scale-110 group-hover:blur-md !mt-5 group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-130 ' alt="" />
                 </div>
-                <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center overflow-hidden !pt-14 cursor-pointer'>
-                    <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Burkini</h2>
+                <div onClick={() => handleCategoryClick('Burkini')} className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center overflow-hidden !pt-14 cursor-pointer relative'>
+                    <div className='absolute inset-0 flex items-center justify-center z-30'>
+                        <h2 className='opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Burkini</h2>
+                    </div>
                     <img src={Burkini} className='scale-110 group-hover:blur-md group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-150' alt="" />
                 </div>
-                <div className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center overflow-hidden !pt-5 cursor-pointer'>
-                    <h2 className='absolute z-30 opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Hijabs</h2>
+                <div onClick={() => handleCategoryClick('Hijabs')} className='group h-[70vh] w-[29vw] bg-black flex items-center justify-center overflow-hidden !pt-5 cursor-pointer relative'>
+                    <div className='absolute inset-0 flex items-center justify-center z-30'>
+                        <h2 className='opacity-0 text-white tracking-wider font-light text-[3rem] uppercase group-hover:opacity-100 transition-all duration-300'>Hijabs</h2>
+                    </div>
                     <img src={Hijab} className='scale-100 group-hover:blur-md group-hover:opacity-50 transition-all duration-300 ease-out group-hover:scale-150' alt="" />
                 </div>
             </div>

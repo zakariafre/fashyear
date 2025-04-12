@@ -1,6 +1,6 @@
+import React from 'react';
 import { useState } from 'react'
 import { useEffect } from 'react';
-import React from 'react';
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Hero from './pages/HomePage/Hero';
 import HeroSection from './pages/HomePage/HeroSection';
@@ -22,9 +22,13 @@ import ProductPage from './pages/ProductPage/ProductPage';
 import NewArrival from './pages/HomePage/NewArrival';
 
 
+
+
+
 const App = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [isSearchOpen, setIsSearchOpen] = useState(false);
+
 
   useEffect(() => {
     if (isOpen) {
@@ -51,13 +55,13 @@ const App = () => {
         <div className='flex flex-col items-center min-h-screen gap-[10rem] md:gap-[3rem]'>
           <Search isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} products={ProductData} />
           <Navbar isOpen={isOpen} setIsOpen={setIsOpen} isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} />
-          
+
           <Routes>
             <Route path="/" element={
               <div className="flex flex-col min-h-screen gap-[3rem] md:gap-[4rem]">
                 <HeroSection />
                 <CategorySection />
-                <NewArrival/>
+                <NewArrival />
               </div>
             } />
 

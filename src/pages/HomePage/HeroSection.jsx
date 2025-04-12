@@ -40,12 +40,16 @@ const Hero = ({ text, disabled = false, speed = 5, className = '' }) => {
         <div className="relative h-[100vh] w-full flex flex-col text-white z-1">
 
             <div className="h-full w-full flex items-center justify-center gap-10 overflow-hidden cursor-pointer ">
-                <img src={hero} className="opacity-80 scale-100" draggable="false" alt="" />
+                <img src={hero} className="opacity-100 scale-100" draggable="false" alt="" />
 
                 <div className="absolute flex flex-col justify-center items-center !mt-40 gap-2 z-30">
                     <h2 className="uppercase text-[2rem] font-light text-white tracking-wider">new in: hijabs</h2>
 
-                    <button onClick={handleShopNow} className="uppercase text-[0.7rem] font-light text-white tracking-wider underline cursor-pointer">Shop now</button>
+                    <button onClick={handleShopNow} className="uppercase text-[0.7rem] font-light text-white tracking-wider relative group cursor-pointer">
+                        <span>shop now</span>
+                        <span className='absolute bottom-0 right-0 w-full h-[1px] bg-white transition-all duration-300 group-hover:w-0'></span>
+                        <span className='absolute bottom-0 left-0 w-0 h-[1px] bg-white transition-all duration-300 delay-300 group-hover:w-full'></span>
+                    </button>
                 </div>
 
             </div>

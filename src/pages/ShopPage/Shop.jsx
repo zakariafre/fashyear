@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import { useEffect } from "react";
+import React, { useState, useEffect } from "react";
+import { useSearchParams, useNavigate } from 'react-router-dom';
 import ShopCard from "../HomePage/CardProduct";
 import WishListPopUp from "../../components/WishListPopUp";
 import DownArrow from "../../assets/Icons/DownArrow.svg";
@@ -26,17 +26,38 @@ const Shop = () => {
 
 
 
+
+    const [searchParams] = useSearchParams();
+    const navigate = useNavigate();
     // Use the imported JSON data
     const initialProducts = productsData;
 
+
     const [isFiltersOpen, setIsFiltersOpen] = useState(false);
     const [isOpen, setIsOpen] = useState(false);
-    const [totalFilterCount, setTotalFilterCount] = useState(0);
+    const [totalFilterCount, setTotalFilterCount] = useState(() => {
+        const categoryParam = searchParams.get('category');
+        return categoryParam ? 1 : 0;
+    });
 
-    const [selectedCategories, setSelectedCategories] = useState([]);
+    const [selectedCategories, setSelectedCategories] = useState(() => {
+        const categoryParam = searchParams.get('category');
+        return categoryParam ? [categoryParam] : [];
+    });
     const [selectedColor, setSelectedColor] = useState([]);
     const [selectedSize, setSelectedSize] = useState([]);
     const [selectedSorting, setSelectedSorting] = useState(null);
+
+
+
+    //useEffect hook updates the selected categories based on the category parameter
+    useEffect(() => {
+        const categoryParam = searchParams.get('category');
+        if (categoryParam) {
+            setSelectedCategories([categoryParam]);
+        }
+    }, [searchParams]);
+
 
 
     // Clear All the Filter when CLear button clicked
@@ -110,12 +131,16 @@ const Shop = () => {
 
 
 
-    const scrollToTop = () => {
-        window.scrollTo({ top: 0, behavior: "smooth" });
-    };
+    // Scroll to top when component mounts
+    useEffect(() => {
+        window.scrollTo({ top: 0, behavior: "instant" });
+    }, []);
 
 
 
+    const handleHomeReturn = () => {
+        navigate('/');
+    }
 
 
 
@@ -156,12 +181,12 @@ const Shop = () => {
                 {/* filter button */}
                 <button
                     onClick={() => setIsFiltersOpen(true)}
-                    className="opacity-80 hover:opacity-100 !mr-10 underline underline-offset-4 cursor-pointer !px-3 font-extralight text-xs bg-transparent duration-100 w-fit h-[4.5vh] rounded-[1.5rem] flex flex-row justify-center items-center gap-3"
+                    className="opacity-80 group hover:opacity-100 !mr-10 cursor-pointer !px-3 font-extralight text-[0.65rem] bg-transparent duration-400 w-fit h-[4.5vh] rounded-[1.5rem] flex flex-row justify-center items-center gap-3"
                 >
-                    <span className="flex flex-row items-center justify-center font-light uppercase tracking-widest gap-1">
-                        Filters
+                    <span className="w-fit underline underline-offset-4 flex flex-row items-center justify-center font-light uppercase tracking-widest gap-1">
+                        Filter
                         {totalFilterCount > 0 && (
-                            <span className="text-white text-xs">
+                            <span className="text-white text-[0.65rem]">
                                 ({totalFilterCount})
                             </span>
                         )}
@@ -184,7 +209,8 @@ const Shop = () => {
                                 {/* buttons */}
                                 <div className="flex flex-row justify-center items-center gap-5">
                                     <button
-                                        className="!px-5 !py-2 flex flex-row gap-3 justify-center items-center text-xs font-light border border-neutral-600 hover:border-neutral-300 text-neutral-200 rounded-full cursor-pointer ease-in-out duration-200"
+                                        onClick={handleHomeReturn}
+                                        className="!px-5 !py-2 flex flex-row gap-3 justify-center uppercase tracking-wider items-center text-[0.65rem] font-light border border-neutral-600 hover:border-neutral-300 text-neutral-200 rounded-full cursor-pointer ease-in-out duration-200"
                                     >
                                         <p>Return to Home</p>
                                         <img src={arrow} className="h-3.5 !mt-0.5 " alt="" />
@@ -193,7 +219,7 @@ const Shop = () => {
 
                                     <button
                                         onClick={clearAllFilters}
-                                        className="!px-5 !py-2 text-xs font-extralight border  border-neutral-700  bg-neutral-700 rounded-full cursor-pointer hover:bg-neutral-800 ease-in-out duration-200"
+                                        className="!px-5 !py-2 text-xs font-light uppercase tracking-wider text-[0.65rem] border  border-neutral-700  bg-neutral-700 rounded-full cursor-pointer hover:bg-neutral-800 ease-in-out duration-200"
                                     >
                                         Browse All Products
                                     </button>
@@ -210,7 +236,7 @@ const Shop = () => {
                         <div className="w-full !mx-auto !px-10 !mt-10 !mb-10 font-light tracking-wider flex flex-col justify-center items-center uppercase text-xl">
                             <h2 className="!mb-4">You might like these</h2>
 
-                            <div className="w-full !mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-y-14 gap-x-6 place-items-center">
+                            <div className="w-full !mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-y-18 gap-x-6 place-items-center">
                                 {initialProducts.slice(0, 6).map((product) => (
                                     <ShopCard
                                         key={product.id}
@@ -227,7 +253,7 @@ const Shop = () => {
                     </>
                 ) : (
                     <div className="container !mx-auto !px-10 !mt-12 !mb-10">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-14 gap-x-6 place-items-center">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-18 gap-x-6 place-items-center">
                             {filteredProducts.map((product) => (
                                 <ShopCard
                                     key={product.id}
@@ -248,8 +274,6 @@ const Shop = () => {
 
             <div className="flex flex-col w-full !mt-18 gap-10">
                 <hr className="opacity-5" />
-                {/* <p className="text-[0.7rem] !ml-5 w-[50%] font-extralight text-neutral-300">Rooted in elegance and designed with intention, Fashyear redefines modest fashion for the modern woman. Each piece blends timeless style with effortless comfort, offering a wardrobe that speaks to both grace and individuality. With a focus on quality craftsmanship and expressive design, Fashyear empowers women to feel confident, comfortable, and true to themselves—every single day.</p> */}
-
             </div>
 
             {/* Wishlist Popup */}

@@ -10,7 +10,7 @@ const CardProduct = ({ img, title, price, setIsOpen, id }) => {
     const [isLoading, setIsLoading] = useState(false);
 
     const handleCardClick = () => {
-        navigate(`/product/${productData.id}`);
+        navigate(`/product/${id}`);
     };
 
     const toggleLike = (e) => {
