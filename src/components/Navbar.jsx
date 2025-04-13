@@ -95,8 +95,10 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
 
           <div className='flex flex-row gap-5 text-[0.8rem] items-center w-[20%] h-full justify-end ' >
             <div
-              className='flex flex-row items-center text-white gap-3 cursor-pointer'>
-              <img src={heartIcon} alt="" className='h-5 relative cursor-pointer' />
+              className='flex flex-row items-center text-white gap-3 cursor-pointer'
+              onClick={() => navigate('/wishlist')}
+            >
+              <img src={heartIcon} alt="" className='h-5 relative brightness-200 cursor-pointer' />
             </div>
 
             <div

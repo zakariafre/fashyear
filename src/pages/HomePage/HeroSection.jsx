@@ -1,10 +1,6 @@
 import React from "react";
 import { useState, useEffect } from "react";
-import Button from '../../components/Button';
-import HeroCardImg from '../../assets/Icons/heroImg.webp';
-import HeroCardImg2 from '../../assets/Icons/heroImg2.webp';
 import hero from '../../assets/Icons/hero2.png'
-import ShinyText from "../../components/ShinyText";
 import '../../App.css'
 import '../../index.css'
 import { useNavigate } from 'react-router-dom';

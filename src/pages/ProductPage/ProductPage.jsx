@@ -17,7 +17,10 @@ const ProductPage = () => {
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState('Size');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(false);
+  const [isWishlisted, setIsWishlisted] = useState(() => {
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    return wishlist.some(item => item.id === id);
+  });
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showProductCare, setShowProductCare] = useState(false);
 
@@ -99,9 +102,20 @@ const ProductPage = () => {
   const allSizes = ['S', 'M', 'L', 'XL', 'XXL'];
 
   const toggleLike = () => {
-    if (!isWishlisted) {
-      setIsOpen(true);
-      setTimeout(() => setIsOpen(false), 2000);
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    const newWishlistedState = !isWishlisted;
+    setIsWishlisted(newWishlistedState);
+
+    if (newWishlistedState) {
+      if (!wishlist.some(item => item.id === currentProduct.id)) {
+        wishlist.push(currentProduct);
+        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        setIsOpen(true);
+        setTimeout(() => setIsOpen(false), 2000);
+      }
+    } else {
+      const updatedWishlist = wishlist.filter(item => item.id !== currentProduct.id);
+      localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
     }
   };
 
@@ -312,10 +326,10 @@ const ProductPage = () => {
       {/* Footer section - Always at the bottom */}
       <footer className="w-full">
         {/* you might like section */}
-        <div className="w-full !mt-14 font-light tracking-wider flex flex-col justify-center items-center uppercase text-lg">
+        <div className="w-full !mt-14 font-light tracking-wider flex flex-col justify-center items-center gap-5 uppercase text-lg">
           <h2 className="!mb-0">You May Also Like</h2>
 
-          <div className="w-full h-fit scale-80 relative bottom-10 grid grid-cols-4 gap-x-[15rem] place-items-center">
+          <div className="w-[90%] h-fit relative grid grid-cols-4 gap-x-10 place-items-center">
             {randomProducts.map((product) => (
               <ShopCard
                 key={product.id}

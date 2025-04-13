@@ -1,15 +1,27 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import arrow from "../../assets/Icons/arrowTop.svg";
+import Plus from '../../assets/Icons/plusIcon.png'
 import { useNavigate } from "react-router-dom";
 import productData from '../../../ProductsDB.json'
 
 const CardProduct = ({ img, title, price, setIsOpen, id }) => {
+
+
     const navigate = useNavigate();
-
-    const [isLiked, setIsLiked] = useState(false);
+    const [isLiked, setIsLiked] = useState(() => {
+        const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+        return wishlist.some(item => item.id === id);
+    });
     const [isLoading, setIsLoading] = useState(false);
+    const [isHovered, setIsHovered] = useState(false);
 
-    const handleCardClick = () => {
+    // Find the product data to get all images
+    const product = productData.find(p => p.id === id);
+    const defaultImage = Array.isArray(img) ? img[0] : img;
+    const hoverImage = product?.img?.[1] || defaultImage;
+
+    const handleCardClick = (e) => {
+        e.stopPropagation();
         navigate(`/product/${id}`);
     };
 
@@ -21,18 +33,48 @@ const CardProduct = ({ img, title, price, setIsOpen, id }) => {
         setTimeout(() => {
             const newLikedState = !isLiked;
             setIsLiked(newLikedState);
-            setIsLoading(false);
 
+            // Update localStorage
+            const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
             if (newLikedState) {
-                setIsOpen(true);
-                setTimeout(() => setIsOpen(false), 2000);
+                if (!wishlist.some(item => item.id === id)) {
+                    // only on the wishlist page reload the page each time i click on the wishlist icon on a product card
+                    if (window.location.pathname === '/wishlist') {
+                        setTimeout(() => {
+                            setIsOpen(false);
+                            window.location.reload();
+                            window.scrollTo(0, 0);
+                        }, 200);
+                        wishlist.push(product);
+                        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                        setIsOpen(true);
+                        setTimeout(() => setIsOpen(false), 10000);  
+                    }
+                    
+                    else {
+                        wishlist.push(product);
+                        localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                        setIsOpen(true);
+                        setTimeout(() => setIsOpen(false), 10000);
+                    }
+
+                }
+            } else {
+                const updatedWishlist = wishlist.filter(item => item.id !== id);
+                localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
             }
+
+            setIsLoading(false);
         }, 1000);
     };
 
     return (
-        <div className="flex flex-col cursor-pointer w-[28vw]" onClick={handleCardClick}>
-            <div className="group relative h-[80vh] bg-black flex justify-center items-center overflow-hidden">
+        <div className="flex flex-col cursor-pointer" onClick={handleCardClick}>
+            <div
+                className="group relative bg-black  h-[60vh] w-[22vw] flex justify-center items-center overflow-hidden"
+                onMouseEnter={() => setIsHovered(true)}
+                onMouseLeave={() => setIsHovered(false)}
+            >
                 {/* Wishlist Icon */}
                 <div className="absolute top-3 right-4 z-30 w-4 h-4" onClick={toggleLike}>
                     {isLoading && (
@@ -50,15 +92,26 @@ const CardProduct = ({ img, title, price, setIsOpen, id }) => {
                 </div>
 
                 {/* Add to cart button */}
-                <div className="opacity-0 group-hover:opacity-100 h-[5vh] w-[9vw] bg-white rounded-[30rem] absolute bottom-2 right-2 z-30 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden duration-400 ease-in-out">
-                    <p className="text-[rgb(33,33,33)] text-[0.7rem] tracking-tighter">ADD TO CART</p>
-                    <div className="h-5 w-5 bg-[#212121] rounded-full flex items-center justify-center">
-                        <img src={arrow} className="h-3 w-3 relative top-0.5" alt="" />
+                <div className="opacity-0 group-hover:opacity-100 h-12 w-[90%] bg-white border border-[#212121]/30 absolute bottom-2 z-30 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden">
+                    <p className="text-[rgb(33,33,33)] text-[0.8rem] font-light uppercase tracking-wider">Quick add</p>
+                    <div className="h-5 w-5 rounded-full absolute right-4 flex items-center justify-center">
+                        <img src={Plus} className="h-5 w-5 relative" alt="" />
                     </div>
                 </div>
 
-                {/* Card Image */}
-                <img src={img} className="relative z-3 top-8 scale-110 transition-all duration-200" alt="" draggable="false" />
+                {/* Card Images */}
+                <img
+                    src={defaultImage}
+                    className={`relative z-3 top-8 scale-115 transition-all duration-100 ease-in-out ${isHovered ? 'opacity-0' : 'opacity-100'}`}
+                    alt=""
+                    draggable="false"
+                />
+                <img
+                    src={hoverImage}
+                    className={`absolute z-3 top-8 scale-115 transition-all duration-100 ease-in-out ${isHovered ? 'opacity-100' : 'opacity-0'}`}
+                    alt=""
+                    draggable="false"
+                />
             </div>
             <div className="text-white w-full uppercase tracking-wider font-extralight text-[0.7rem] !mt-1">
                 <h2>{title}</h2>

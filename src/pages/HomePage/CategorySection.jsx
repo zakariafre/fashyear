@@ -1,8 +1,4 @@
 import React, { useState } from 'react'
-import CategoryBtn from './CategoryBtn'
-import CardProduct from './CardProduct';
-import Button from '../../components/Button'
-import arrow from '../../assets/Icons/arrowTop.svg'
 import WishListPopUp from '../../components/WishListPopUp';
 import '../../App.css'
 

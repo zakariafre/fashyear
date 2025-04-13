@@ -3,13 +3,10 @@ import { useSearchParams, useNavigate } from 'react-router-dom';
 import ShopCard from "../HomePage/CardProduct";
 import WishListPopUp from "../../components/WishListPopUp";
 import DownArrow from "../../assets/Icons/DownArrow.svg";
-import filtersIcon from "../../assets/Icons/filters.svg";
-import ContainerPIc2 from "../../assets/Icons/SetsCollection.png";
 // Import the JSON file from the root directory
 import productsData from "../../../ProductsDB.json";
 
 import Filters from './Filters'
-import SupportedBy from "../HomePage/SupportedBy";
 
 import pattern from '../../assets/Icons/pattern.png'
 import arrow from "../../assets/Icons/arrowTop.svg";
@@ -181,7 +178,7 @@ const Shop = () => {
                 {/* filter button */}
                 <button
                     onClick={() => setIsFiltersOpen(true)}
-                    className="opacity-80 group hover:opacity-100 !mr-10 cursor-pointer !px-3 font-extralight text-[0.65rem] bg-transparent duration-400 w-fit h-[4.5vh] rounded-[1.5rem] flex flex-row justify-center items-center gap-3"
+                    className="opacity-80 group hover:opacity-100 !mr-14 cursor-pointer !px-3 font-extralight text-[0.65rem] bg-transparent duration-400 w-fit h-[4.5vh] rounded-[1.5rem] flex flex-row justify-center items-center gap-3"
                 >
                     <span className="w-fit underline underline-offset-4 flex flex-row items-center justify-center font-light uppercase tracking-widest gap-1">
                         Filter
@@ -236,8 +233,8 @@ const Shop = () => {
                         <div className="w-full !mx-auto !px-10 !mt-10 !mb-10 font-light tracking-wider flex flex-col justify-center items-center uppercase text-xl">
                             <h2 className="!mb-4">You might like these</h2>
 
-                            <div className="w-full !mt-6 grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 lg:grid-cols-3 gap-y-18 gap-x-6 place-items-center">
-                                {initialProducts.slice(0, 6).map((product) => (
+                            <div className="w-[90%] !mt-6 grid grid-cols-4 gap-y-18 gap-x-20 place-items-center">
+                                {initialProducts.slice(0, 4).map((product) => (
                                     <ShopCard
                                         key={product.id}
                                         id={product.id}
@@ -252,8 +249,8 @@ const Shop = () => {
                         </div>
                     </>
                 ) : (
-                    <div className="container !mx-auto !px-10 !mt-12 !mb-10">
-                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-y-18 gap-x-6 place-items-center">
+                    <div className="w-[90%] !mt-12 !mb-10">
+                        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-y-12 place-items-center">
                             {filteredProducts.map((product) => (
                                 <ShopCard
                                     key={product.id}
