@@ -1,13 +1,15 @@
 import React, { useEffect, useState } from "react";
 import { useNavigate } from "react-router-dom";
-import img from '../assets/Dresses/Dress_Gray_Pos3.png'
+
+const WishListPopUp = ({ isOpen, setIsOpen, product }) => {
 
 
-const WishListPopUp = ({ isOpen, setIsOpen }) => {
 
+    
     const [isVisible, setIsVisible] = useState(false);
     const navigate = useNavigate()
 
+    
     
     // Trigger when isOpen changes
     useEffect(() => {
@@ -37,11 +39,13 @@ const WishListPopUp = ({ isOpen, setIsOpen }) => {
                     ${isOpen ? "opacity-100" : "opacity-0 "}`}
                 >
                     <div className="flex flex-row gap-12 overflow-hidden justify-between items-center">
-                        <div className="w-[12%] h-full">
-                            <img src={img} alt="" />
+                        <div className="w-[10%] h-full">
+                            {product && <img id={product.id} src={product.img[0]} alt={product.title} />}
                         </div>
-                        <div className="flex flex-col max-w-[80%] w-fit">
-                            <h2 className="text-[0.75rem]">The item Essential gray dress has been added to your wishlist</h2>
+                        <div className="flex flex-col max-w-[90%] w-fit">
+                            <h2 className="text-[0.75rem]">
+                                {'the item has been added to your wishlist'}
+                            </h2>
                             <h2 className="text-[0.7rem] underline underline-offset-2 cursor-pointer text-neutral-400 hover:text-neutral-300 duration-200" onClick={() => navigate('/wishlist')}>
                                 Access your Wishlist
                             </h2>

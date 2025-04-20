@@ -24,7 +24,7 @@ const Filters = ({
 
 
 
-    const categories = ["Sets", "Dresses", "Tops", "Bottoms" , "Burkini" , "Hijabs"];
+    const categories = ["Sets", "Dresses", "Tops", "Bottoms", "Burkini", "Hijabs"];
 
     // States
     const [localSelectedCategories, setLocalSelectedCategories] = useState(currentCategories || []);
@@ -444,7 +444,7 @@ const Filters = ({
                                 ? "bg-white hover:bg-transparent text-black hover:text-white cursor-pointer"
                                 : "bg-white text-black cursor-pointer"
                             }
-      border border-neutral-400 text-sm duration-300 h-[40%] w-[70%] tracking-tight font-light rounded-full
+      border border-neutral-400 text-md duration-300 h-[45%] w-[80%] tracking-tight font-light rounded-full
     `}
                     >
                         Show Products

@@ -9,19 +9,11 @@ import cartIcon from '../assets/Icons/cart.svg'
 import logo1 from '../assets/Icons/1.png'
 import { motion } from "motion/react"
 import Menu from './Menu'
-
-
-
-
-
-
-
-
-
-
+import { useCart } from '../context/CartContext';
 import '../App.css'
 
 const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
+  const { isCartOpen, setIsCartOpen, cartItems } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
 
@@ -50,7 +42,8 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
         transition={{ duration: 0, ease: "easeIn" }}
         className={`fixed top-0 left-1/2 transform -translate-x-1/2 w-full h-[10vh] flex items-center justify-center hover:bg-neutral-900/30 hover:backdrop-blur-md ease-linear mx-auto transition-all duration-300 
           ${isOpen ? "backdrop-blur-md z-30" : "z-50"}
-          ${isSearchOpen ? "backdrop-blur-xs z-80" : "z-50"} 
+          ${isSearchOpen ? "backdrop-blur-xs z-80" : "z-50"}
+          ${isCartOpen ? "backdrop-blur-xs z-80" : "z-50"}
           ${isScrolled ? 'bg-neutral-900/30 backdrop-blur-md duration-100 ease-linear' : 'duration-100 ease-linear'}`}
       >
         <div className={`bg-neutral-900/0 w-full h-[10vh] flex items-center justify-center`}
@@ -63,16 +56,14 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
           }}
         >
           <div className='flex flex-row gap-5 text-[0.8rem] w-[20%] h-[100%] justify-start '>
-
             {/* Menu logo & text */}
             <div
               className='flex flex-row items-center text-white cursor-pointer'
-              onClick={() => { setIsOpen(true); setIsSearchOpen(false) }} // Open the sidebar menu
+              onClick={() => { setIsOpen(true); setIsSearchOpen(false) }}
             >
               <img src={menuIcon} alt="Menu" className='h-[80%] relative top-1 ' />
               <p className='font-light tracking-widest uppercase'>Menu</p>
             </div>
-
 
             {/* Search logo & text */}
             <div
@@ -84,15 +75,12 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
             </div>
           </div>
 
-
           {/* fashyear Logo */}
           <div className='w-[40%] h-[100%]  flex justify-center items-center'>
             <img src={logo1} className=' h-[40%] cursor-pointer' draggable="false" onClick={handleLogoClick} />
           </div>
 
-
           {/* Heart logo & Cart icon */}
-
           <div className='flex flex-row gap-5 text-[0.8rem] items-center w-[20%] h-full justify-end ' >
             <div
               className='flex flex-row items-center text-white gap-3 cursor-pointer'
@@ -106,18 +94,21 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
               <img src={accountIcon} alt="" className='h-5 relative brightness-200 cursor-pointer' />
             </div>
 
+            {/* Cart icon */}
             <div
-              className='flex flex-row items-center text-white gap-3 cursor-pointer'>
+              className='flex flex-row items-center text-white gap-3 cursor-pointer relative'
+              onClick={() => setIsCartOpen(true)}
+            >
               <img src={cartIcon} alt="" className='h-8 relative cursor-pointer' />
+              {cartItems.length > 0 && (
+                <span className="absolute top-0 -right-1 bg-white text-black text-[0.6rem] w-3 h-3 flex items-center justify-center rounded-full">
+                  {cartItems.length}
+                </span>
+              )}
             </div>
           </div>
-
-
         </div>
       </motion.nav>
-
-
-
     </>
   );
 };

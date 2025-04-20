@@ -3,8 +3,9 @@ import arrow from "../../assets/Icons/arrowTop.svg";
 import Plus from '../../assets/Icons/plusIcon.png'
 import { useNavigate } from "react-router-dom";
 import productData from '../../../ProductsDB.json'
+import { useCart } from "../../context/CartContext";
 
-const CardProduct = ({ img, title, price, setIsOpen, id }) => {
+const CardProduct = ({ img, title, price, setIsOpen, id , setSelectedSize }) => {
 
 
     const navigate = useNavigate();
@@ -14,6 +15,7 @@ const CardProduct = ({ img, title, price, setIsOpen, id }) => {
     });
     const [isLoading, setIsLoading] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
+    const [selectSizeOpen, setSelectSizeOpen] = useState(false);
 
     // Find the product data to get all images
     const product = productData.find(p => p.id === id);
@@ -47,13 +49,15 @@ const CardProduct = ({ img, title, price, setIsOpen, id }) => {
                         }, 200);
                         wishlist.push(product);
                         localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                        localStorage.setItem('lastWishlistedProduct', id);
                         setIsOpen(true);
-                        setTimeout(() => setIsOpen(false), 10000);  
+                        setTimeout(() => setIsOpen(false), 10000);
                     }
-                    
+
                     else {
                         wishlist.push(product);
                         localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                        localStorage.setItem('lastWishlistedProduct', id);
                         setIsOpen(true);
                         setTimeout(() => setIsOpen(false), 10000);
                     }
@@ -67,6 +71,25 @@ const CardProduct = ({ img, title, price, setIsOpen, id }) => {
             setIsLoading(false);
         }, 1000);
     };
+
+
+
+
+    // handle size open and close
+    const handleSizeOpen = () => {
+        setSelectSizeOpen(true);
+    };
+
+    const handleSizeClose = () => {
+        setSelectSizeOpen(false);
+    };
+
+
+    const handleSizeSelection = (size , e) => {
+        e.stopPropagation();
+        setSelectSizeOpen(false);
+    };
+
 
     return (
         <div className="flex flex-col cursor-pointer" onClick={handleCardClick}>
@@ -92,13 +115,43 @@ const CardProduct = ({ img, title, price, setIsOpen, id }) => {
                 </div>
 
                 {/* Add to cart button */}
-                <div className="opacity-0 group-hover:opacity-100 h-12 w-[90%] bg-white border border-[#212121]/30 absolute bottom-2 z-30 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden">
+                <div
+                    onClick={(e) => { handleSizeOpen(); e.stopPropagation(); }}
+                    className="opacity-0 group-hover:opacity-100 h-12 w-[90%] bg-white border border-[#212121]/30 absolute bottom-2 z-30 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden">
                     <p className="text-[rgb(33,33,33)] text-[0.8rem] font-light uppercase tracking-wider">Quick add</p>
                     <div className="h-5 w-5 rounded-full absolute right-4 flex items-center justify-center">
                         <img src={Plus} className="h-5 w-5 relative" alt="" />
                     </div>
                 </div>
 
+
+                {/* Size selector */}
+                {selectSizeOpen && (
+                    <div 
+                        className="opacity-100 h-26 w-[90%] !py-3 bg-white absolute border border-[#212121]/30 bottom-2 z-30 flex flex-col justify-center items-center gap-2 cursor-pointer font-light overflow-hidden"
+                        onMouseLeave={handleSizeClose}
+                        onClick={(e) => handleSizeSelection(e)}
+                    >
+                        <p className="text-[rgb(33,33,33)] bg-[#212121]/0 w-full text-center !py-1 text-[0.8rem] font-light uppercase tracking-wider">Select Size</p>
+                        <div className="w-full h-full grid grid-cols-5 place-items-center">
+                            <div className="w-10 h-10 hover:border text-black hover:border-neutral-300 hover:bg-[#212121]/10 duration-0 transition-all ease-in-out flex justify-center items-center">
+                                <span className="">S</span>
+                            </div>
+                            <div className="w-10 h-10 hover:border text-black hover:border-neutral-300 hover:bg-[#212121]/10 duration-0 transition-all ease-in-out flex justify-center items-center">
+                                <span className="">M</span>
+                            </div>
+                            <div className="w-10 h-10 hover:border text-black hover:border-neutral-300 hover:bg-[#212121]/10 duration-0 transition-all ease-in-out flex justify-center items-center">
+                                <span className="">L</span>
+                            </div>
+                            <div className="w-10 h-10 hover:border text-black hover:border-neutral-300 hover:bg-[#212121]/10 duration-0 transition-all ease-in-out flex justify-center items-center">
+                                <span className="">XL</span>
+                            </div>
+                            <div className="w-10 h-10 hover:border text-black hover:border-neutral-300 hover:bg-[#212121]/10 duration-0 transition-all ease-in-out flex justify-center items-center">
+                                <span className="">XXL</span>
+                            </div>
+                        </div>
+                    </div>
+                )}
                 {/* Card Images */}
                 <img
                     src={defaultImage}

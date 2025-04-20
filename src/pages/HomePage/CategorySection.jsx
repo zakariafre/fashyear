@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import WishListPopUp from '../../components/WishListPopUp';
 import '../../App.css'
 
 // images 
@@ -13,10 +12,8 @@ import Hijab from '../../assets/Hijabs/hijab-jersey-luxe-soft-ready-to_Pos1.png'
 import productsData from '../../../ProductsDB.json';
 import { useNavigate } from 'react-router-dom';
 
-
 const CategorySection = () => {
     const [activeButton, setActiveButton] = useState('All');
-    const [isOpen, setIsOpen] = useState(false);
     const navigate = useNavigate();
 
     // Filter products based on selected category
@@ -26,6 +23,7 @@ const CategorySection = () => {
 
     // Get the first 9 products from filtered results
     const displayedProducts = filteredProducts.slice(0, 9);
+
 
     const handleCategoryClick = (category) => {
         navigate(`/shop?category=${category}`);
@@ -75,8 +73,6 @@ const CategorySection = () => {
                 </div>
             </div>
 
-
-
             {/* <div className='w-full flex justify-center'>
                 <div
                     onClick={handleShopNow}
@@ -91,8 +87,6 @@ const CategorySection = () => {
                     </div>
                 </div>
             </div> */}
-
-            <WishListPopUp isOpen={isOpen} setIsOpen={setIsOpen} />
         </div>
     )
 }

@@ -274,7 +274,7 @@ const Shop = () => {
             </div>
 
             {/* Wishlist Popup */}
-            <WishListPopUp isOpen={isOpen} setIsOpen={setIsOpen} />
+            <WishListPopUp isOpen={isOpen} setIsOpen={setIsOpen} product={filteredProducts.find(p => p.id === localStorage.getItem('lastWishlistedProduct'))} />
         </div>
     );
 };

@@ -3,6 +3,7 @@ import { useParams } from 'react-router-dom';
 import ShopCard from '../../pages/HomePage/CardProduct';
 // Json file
 import productData from '../../../ProductsDB.json';
+import { useCart } from '../../context/CartContext';
 
 // Icons
 import { ChevronDown, Shuffle } from 'lucide-react';
@@ -11,28 +12,40 @@ import { ChevronDown, Shuffle } from 'lucide-react';
 import WishListPopUp from '../../components/WishListPopUp';
 
 const ProductPage = () => {
-
+  const { addToCart } = useCart();
   const { id } = useParams();
   const [currentProduct, setCurrentProduct] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState('Size');
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
-  const [isWishlisted, setIsWishlisted] = useState(() => {
-    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
-    return wishlist.some(item => item.id === id);
-  });
+  const [isWishlisted, setIsWishlisted] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showProductCare, setShowProductCare] = useState(false);
+  const [sizeError, setSizeError] = useState(false);
 
   const imageSectionRef = useRef(null);
   const detailsRef = useRef(null);
   const [isFixed, setIsFixed] = useState(true);
   const [offsetTop, setOffsetTop] = useState(0);
 
+  // Reset states when product ID changes
+  useEffect(() => {
+    setSelectedSize('Size');
+    setIsDropdownOpen(false);
+    setShowFullDescription(false);
+    setShowProductCare(false);
+    
+    // Check wishlist status for new product
+    const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+    setIsWishlisted(wishlist.some(item => item.id === id));
 
+    // Find the new product
+    const product = productData.find(p => p.id === id);
+    setCurrentProduct(product);
 
-
-
+    // Scroll to top
+    window.scrollTo(0, 0);
+  }, [id]);
 
   // Scroll to top when component mounts, but after a slight delay to ensure content is loaded
   useEffect(() => {
@@ -71,12 +84,6 @@ const ProductPage = () => {
     };
   }, []);
 
-
-  useEffect(() => {
-    const product = productData.find(p => p.id === id);
-    setCurrentProduct(product);
-  }, [id]);
-
   // Get random products excluding current product
   const [randomProducts, setRandomProducts] = useState([]);
 
@@ -92,7 +99,7 @@ const ProductPage = () => {
     };
 
     getRandomProducts();
-  }, [id, productData]);
+  }, [id]);
 
   if (!currentProduct) {
     return <div>Loading...</div>;
@@ -130,6 +137,15 @@ const ProductPage = () => {
     }
   };
 
+  const handleAddToCart = () => {
+    if (selectedSize === 'Size') {
+      setSizeError(true);
+      return;
+    }
+    setSizeError(false);
+    addToCart(currentProduct, selectedSize);
+  };
+
 
 
 
@@ -153,15 +169,7 @@ const ProductPage = () => {
             ))}
           </div>
 
-
-
-
-
-
-
-
-
-          {/* Informations Side - Using inline styles to ensure sticky behavior */}
+          {/* Informations Side */}
           <div
             ref={detailsRef}
             className='w-[30%] !mr-20 flex flex-col gap-4'
@@ -173,6 +181,11 @@ const ProductPage = () => {
             }}
 
 
+
+
+
+
+            
           >
             {/* ready to wear and wishlist icon */}
             <div className='flex flex-row justify-between items-center'>
@@ -202,7 +215,7 @@ const ProductPage = () => {
 
             {/* Sizes */}
             <div className='relative !py-2 flex flex-row justify-between items-center text-[0.8rem] font-extralight !mt-10 cursor-pointer' onClick={handleSizeClick}>
-              <h2 className='text-neutral-300 '>{selectedSize === 'Size' ? 'Select Size' : 'Sizes'}</h2>
+              <h2 className='text-neutral-300'>{selectedSize === 'Size' ? 'Select Size' : 'Sizes'}</h2>
 
               <div className='flex flex-row gap-2 items-center text-neutral-300'>
                 {selectedSize !== 'Size' && <span className='text-[0.8rem]'>{selectedSize}</span>}
@@ -216,6 +229,9 @@ const ProductPage = () => {
             {/* Dropdown Container */}
             <div className='relative'>
               {/* Dropdown */}
+              {sizeError && selectedSize === 'Size' && (
+                <p className="text-red-500 text-xs relative bottom-4">Please select a size</p>
+              )}
               <div
                 className={`absolute left-0 -top-20 text-[0.7rem] bg-neutral-800 border-x border-neutral-700 text-neutral-300 rounded-b-lg overflow-hidden shadow-md w-full z-10 transition-all duration-300 ease-in-out transform ${isDropdownOpen
                   ? 'translate-y-13 max-h-50 !pt-4'
@@ -241,8 +257,11 @@ const ProductPage = () => {
 
             {/* Place in Cart button  */}
             <div className=''>
-              <button className='w-full tracking-wider text-sm uppercase bg-neutral-200 text-[#080808] border border-neutral-400 !py-2 rounded-full cursor-pointer hover:bg-transparent hover:text-neutral-300 transition-all duration-200 ease-in-out'>
-                Place in Cart
+              <button 
+                onClick={handleAddToCart}
+                className='w-full text-[0.9rem] font-medium uppercase bg-neutral-200 text-[#080808] !py-3 cursor-pointer hover:bg-neutral-200/80 transition-all duration-200 ease-in-out'
+              >
+                add to bag
               </button>
             </div>
 
@@ -261,11 +280,6 @@ const ProductPage = () => {
                 {showFullDescription ? 'Read Less' : 'Read More'}
               </button>
             </div>
-
-            {/* line */}
-            {/* <hr className='w-full opacity-20 !mt-2 relative top-3' /> */}
-
-
 
             {/* Product Care */}
             {/* <>
@@ -323,7 +337,7 @@ const ProductPage = () => {
         </div>
       </div>
 
-      {/* Footer section - Always at the bottom */}
+      {/* Footer section */}
       <footer className="w-full">
         {/* you might like section */}
         <div className="w-full !mt-14 font-light tracking-wider flex flex-col justify-center items-center gap-5 uppercase text-lg">
@@ -345,7 +359,7 @@ const ProductPage = () => {
       </footer>
 
       {/* wishlist popup */}
-      <WishListPopUp isOpen={isOpen} setIsOpen={setIsOpen} />
+      <WishListPopUp isOpen={isOpen} setIsOpen={setIsOpen} product={currentProduct} />
     </div>
   );
 };
