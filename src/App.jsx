@@ -1,7 +1,7 @@
 import React from 'react';
 import { useState } from 'react'
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
 import HeroSection from './pages/HomePage/HeroSection';
 import Navbar from './components/Navbar';
 import Noise from './components/Noise';
@@ -16,6 +16,7 @@ import NewArrival from './pages/HomePage/NewArrival';
 import Wishlist from './pages/WishlistPage/Wishlist';
 import CartSideBar from './components/CartSideBar';
 import { CartProvider, useCart } from './context/CartContext';
+import LogIn from './pages/Log-in/LogIn';
 
 const App = () => {
 
@@ -41,8 +42,26 @@ const App = () => {
   );
 };
 
+// Main layout with Navbar and Footer
+const MainLayout = ({ children, isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
+  return (
+    <>
+      <Navbar isOpen={isOpen} setIsOpen={setIsOpen} isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} />
+      {children}
+      <Footer />
+    </>
+  );
+};
+
+// Auth layout without Navbar and Footer
+const AuthLayout = ({ children }) => {
+  return children;
+};
+
 const AppContent = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen, isWishlistOpen, setIsWishlistOpen }) => {
   const { isCartOpen } = useCart();
+  const location = useLocation();
+  const isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
 
   useEffect(() => {
     if (isOpen || isSearchOpen || isCartOpen) {
@@ -56,6 +75,20 @@ const AppContent = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen, isWishli
     };
   }, [isOpen, isSearchOpen, isCartOpen]);
 
+  // If we're on an auth page, only render the auth routes
+  if (isAuthPage) {
+    return (
+      <>
+        <Noise patternSize={400} patternAlpha={5} />
+        <Routes>
+          <Route path="/login" element={<LogIn />} />
+          {/* Add signup route when created */}
+        </Routes>
+      </>
+    );
+  }
+
+  // Otherwise render the main app with all decorations
   return (
     <div className="App bg-[#121212] min-h-screen w-full overflow-x-hidden relative">
       <Noise patternSize={400} patternAlpha={10} />
@@ -65,23 +98,40 @@ const AppContent = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen, isWishli
 
       <div className='flex flex-col items-center min-h-screen gap-[10rem] md:gap-[3rem]'>
         <Search isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} products={ProductData} />
-        <Navbar isOpen={isOpen} setIsOpen={setIsOpen} isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} />
 
         <Routes>
+          {/* Auth routes without Navbar and Footer */}
+          <Route path="/login" element={<LogIn />} />
+
+          {/* Main routes with Navbar and Footer */}
           <Route path="/" element={
-            <div className="flex flex-col min-h-screen gap-[3rem] md:gap-[4rem]">
-              <HeroSection />
-              <CategorySection />
-              <NewArrival />
-            </div>
+            <MainLayout isOpen={isOpen} setIsOpen={setIsOpen} isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen}>
+              <div className="flex flex-col min-h-screen gap-[3rem] md:gap-[4rem]">
+                <HeroSection />
+                <CategorySection />
+                <NewArrival />
+              </div>
+            </MainLayout>
           } />
 
-          <Route path="/shop" element={<Shop />} />
-          <Route path="/product/:id" element={<ProductPage />} />
-          <Route path="/wishlist" element={<Wishlist />} />
-        </Routes>
+          <Route path="/shop" element={
+            <MainLayout isOpen={isOpen} setIsOpen={setIsOpen} isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen}>
+              <Shop />
+            </MainLayout>
+          } />
 
-        <Footer />
+          <Route path="/product/:id" element={
+            <MainLayout isOpen={isOpen} setIsOpen={setIsOpen} isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen}>
+              <ProductPage />
+            </MainLayout>
+          } />
+
+          <Route path="/wishlist" element={
+            <MainLayout isOpen={isOpen} setIsOpen={setIsOpen} isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen}>
+              <Wishlist />
+            </MainLayout>
+          } />
+        </Routes>
       </div>
     </div>
   );

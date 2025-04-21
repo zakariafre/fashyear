@@ -1,6 +1,7 @@
 import React from 'react';
 import { useState, useEffect } from "react";
 import { useNavigate } from 'react-router-dom';
+import { Link } from 'react-router-dom';
 import menuIcon from '../assets/Icons/menu.svg'
 import searchIcon from '../assets/Icons/search.svg'
 import heartIcon from '../assets/Icons/heart.svg'
@@ -15,9 +16,51 @@ import '../App.css'
 const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
 
 
+  const navigate = useNavigate();
   const { isCartOpen, setIsCartOpen, cartItems } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
-  const navigate = useNavigate();
+
+  const [wishlistItems, setWishlistItems] = useState(() => {
+    const savedItems = localStorage.getItem('wishlist');
+    return savedItems ? JSON.parse(savedItems) : [];
+  });
+
+
+  // Update wishlist items whenever localStorage changes
+  useEffect(() => {
+    // Function to update wishlist items from localStorage
+    const updateWishlistItems = () => {
+      const savedItems = localStorage.getItem('wishlist');
+      if (savedItems) {
+        setWishlistItems(JSON.parse(savedItems));
+      }
+    };
+
+    // Set up event listener for 'storage' event (for cross-tab sync)
+    window.addEventListener('storage', updateWishlistItems);
+
+    // Create an interval to check for changes in localStorage
+    const intervalId = setInterval(updateWishlistItems, 1000);
+
+    // Custom event listener for wishlist changes from other components
+    const handleWishlistUpdate = (e) => {
+      if (e.detail && e.detail.wishlist) {
+        setWishlistItems(e.detail.wishlist);
+      } else {
+        updateWishlistItems();
+      }
+    };
+
+    window.addEventListener('wishlistUpdated', handleWishlistUpdate);
+
+    // Clean up on component unmount
+    return () => {
+      window.removeEventListener('storage', updateWishlistItems);
+      window.removeEventListener('wishlistUpdated', handleWishlistUpdate);
+      clearInterval(intervalId);
+    };
+  }, []);
+
 
 
   useEffect(() => {
@@ -53,7 +96,7 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
           style={{
             borderWidth: isScrolled ? "1.3px" : "0px",
             borderStyle: "solid",
-            borderTop : 'none' ,
+            borderTop: 'none',
             borderImage: "linear-gradient(to right, rgba(255,255,255,0), rgba(255,255,255,0.25), rgba(255,255,255,0)) 1"
           }}
         >
@@ -88,18 +131,24 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
               className='flex flex-row items-center text-white gap-3 cursor-pointer'
               onClick={() => navigate('/wishlist')}
             >
+              {wishlistItems.length > 0 && (
+                <div className='relative h-1 w-1 -top-3 left-9 bg-red-400 rounded-full flex items-center justify-center'></div>
+              )}
               <img src={heartIcon} draggable="false" alt="" className='h-5 relative brightness-200 cursor-pointer' />
             </div>
 
-            <div
-              className='flex flex-row items-center text-white gap-3 cursor-pointer'>
-              <img src={accountIcon} draggable="false" alt="" className='h-5 relative brightness-200 cursor-pointer' />
-            </div>
+            {/* Account icon */}
+            <Link to="/login">
+              <div
+                className='flex flex-row items-center text-white gap-3 cursor-pointer'>
+                <img src={accountIcon} draggable="false" alt="" className='h-5 relative brightness-200 cursor-pointer' />
+              </div>
+            </Link>
 
             {/* Cart icon */}
             <div
               className='flex flex-row items-center text-white gap-3 cursor-pointer relative'
-              onClick={() => {setIsCartOpen(true) ; setIsSearchOpen(false)}}
+              onClick={() => { setIsCartOpen(true); setIsSearchOpen(false) }}
             >
               <img src={cartIcon} draggable="false" alt="" className='h-8 relative cursor-pointer' />
               {cartItems.length > 0 && (

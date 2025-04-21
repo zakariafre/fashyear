@@ -23,6 +23,7 @@ const ProductPage = () => {
   const [showFullDescription, setShowFullDescription] = useState(false);
   const [showMoreDetails, setShowMoreDetails] = useState(false);
   const [sizeError, setSizeError] = useState(false);
+  const [wishlistedProduct, setWishlistedProduct] = useState(null);
 
   // Zoom state
   const [zoomedImages, setZoomedImages] = useState({});
@@ -137,7 +138,6 @@ const ProductPage = () => {
 
   // Get random products excluding current product
   const [randomProducts, setRandomProducts] = useState([]);
-
   useEffect(() => {
     const getRandomProducts = () => {
       const otherProducts = productData.filter(p => p.id !== id);
@@ -151,6 +151,29 @@ const ProductPage = () => {
 
     getRandomProducts();
   }, [id]);
+
+  // Listen for changes in localStorage to detect wishlisted products
+  useEffect(() => {
+    const handleStorageChange = () => {
+      const lastWishlistedId = localStorage.getItem('lastWishlistedProduct');
+      if (lastWishlistedId) {
+        const foundProduct = productData.find(p => p.id === lastWishlistedId);
+        if (foundProduct) {
+          setWishlistedProduct(foundProduct);
+        }
+      }
+    };
+
+    // Set up event listener
+    window.addEventListener('storage', handleStorageChange);
+    
+    // Also check on mount
+    handleStorageChange();
+    
+    return () => {
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
 
 
   // Check if currentProduct is loaded
@@ -171,6 +194,8 @@ const ProductPage = () => {
       if (!wishlist.some(item => item.id === currentProduct.id)) {
         wishlist.push(currentProduct);
         localStorage.setItem('wishlist', JSON.stringify(wishlist));
+        localStorage.setItem('lastWishlistedProduct', currentProduct.id);
+        setWishlistedProduct(currentProduct);
         setIsOpen(true);
         setTimeout(() => setIsOpen(false), 2000);
       }
@@ -312,7 +337,7 @@ const ProductPage = () => {
 
                   {/* More Detail Section with Materials and Care */}
                   <div>
-                    <div className={`transition-all w-full duration-500 overflow-hidden ${showMoreDetails ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                    <div className={`transition-all w-full duration-200 overflow-hidden ${showMoreDetails ? 'max-h-[35rem] opacity-100' : 'max-h-0 opacity-0'}`}>
                     <hr className='w-full opacity-20 !mt-1' />
                       {/* Materials Section */}
                       <div className='grid grid-cols-12 gap-4 !mt-5'>
@@ -331,7 +356,7 @@ const ProductPage = () => {
                       <hr className='w-full opacity-20 !mt-7' />
 
                       {/* Care Section */}
-                      <div className='grid grid-cols-12 !mt-7 gap-4'>
+                      <div className='grid grid-cols-12 !mt-5 !mb-4 gap-4'>
                         <h3 className='text-neutral-200 font-medium uppercase text-[0.7rem] tracking-widest !mb-2 col-span-3'>Care</h3>
                         <div className='col-span-9'>
                           <ul className='flex flex-col gap-3'>
@@ -345,22 +370,21 @@ const ProductPage = () => {
                       </div>
                     </div>
 
-                    <hr className='w-full opacity-20 !mt-1' />
+                    <div className="flex flex-col space-y-2">
+                      <hr className='w-full opacity-20 !mt-1' />
 
-
-                    <div onClick={() => setShowMoreDetails(!showMoreDetails)} className='flex justify-start items-center !mt-7 cursor-pointer'>
-                      <h3 className='text-neutral-200 font-medium uppercase text-[0.7rem] tracking-widest'>{showMoreDetails ? 'Less' : 'More'} Detail</h3>
-                      <button
-
-                        className="text-neutral-300 flex items-center gap-1"
-                      >
-                        <ChevronDown
-                          size={22}
-                          className={`transition-transform duration-300 !ml-1 !py-1 ${showMoreDetails ? 'rotate-180' : ''}`}
-                        />
-                      </button>
+                      <div onClick={() => setShowMoreDetails(!showMoreDetails)} className='flex justify-start items-center !mt-3 !mb-3 cursor-pointer'>
+                        <h3 className='text-neutral-200 font-medium uppercase text-[0.7rem] tracking-widest'>{showMoreDetails ? 'Less' : 'More'} Detail</h3>
+                        <button
+                          className="text-neutral-300 flex items-center gap-1"
+                        >
+                          <ChevronDown
+                            size={22}
+                            className={`transition-transform duration-300 !ml-1 !py-1 ${showMoreDetails ? 'rotate-180' : ''}`}
+                          />
+                        </button>
+                      </div>
                     </div>
-
 
                   </div>
                 </div>
@@ -371,7 +395,7 @@ const ProductPage = () => {
       </div>
 
       {/* Footer section */}
-      <div className="w-full !mt-auto !pt-80">
+      <div className={`w-full ${showMoreDetails ? '!mt-[30%] duration-300' : '!mt-[10%] duration-300'}`}>
         {/* you might like section */}
         <div className="w-full font-light tracking-wider flex flex-col justify-center items-center gap-5 uppercase text-lg">
           <h2 className="!mb-0">You May Also Like</h2>
@@ -392,7 +416,7 @@ const ProductPage = () => {
       </div>
 
       {/* wishlist popup */}
-      <WishListPopUp isOpen={isOpen} setIsOpen={setIsOpen} product={currentProduct} />
+      <WishListPopUp isOpen={isOpen} setIsOpen={setIsOpen} product={wishlistedProduct || currentProduct} />
     </div>
   );
 };

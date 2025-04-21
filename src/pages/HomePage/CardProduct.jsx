@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import productData from '../../../ProductsDB.json'
 import { useCart } from "../../context/CartContext";
 
-const CardProduct = ({ img, title, price, setIsOpen, id }) => {
+const CardProduct = ({ img, title, price, setIsOpen, id, onWishlistChange }) => {
 
 
 
@@ -44,32 +44,53 @@ const CardProduct = ({ img, title, price, setIsOpen, id }) => {
             const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
             if (newLikedState) {
                 if (!wishlist.some(item => item.id === id)) {
-                    // only on the wishlist page reload the page each time i click on the wishlist icon on a product card
-                    if (window.location.pathname === '/wishlist') {
+                    // Add product to wishlist
+                    wishlist.push(product);
+                    localStorage.setItem('wishlist', JSON.stringify(wishlist));
+                    localStorage.setItem('lastWishlistedProduct', id);
+                    
+                    // Dispatch custom event for Navbar and other components
+                    window.dispatchEvent(new CustomEvent('wishlistUpdated', { 
+                        detail: { wishlist: wishlist } 
+                    }));
+                    
+                    // Call onWishlistChange callback if provided (for real-time updates)
+                    if (onWishlistChange) {
+                        onWishlistChange(wishlist);
+                    }
+                    
+                    // Only if on wishlist page and no callback, do a page reload
+                    if (window.location.pathname === '/wishlist' && !onWishlistChange) {
                         setTimeout(() => {
                             setIsOpen(false);
                             window.location.reload();
                             window.scrollTo(0, 0);
                         }, 200);
-                        wishlist.push(product);
-                        localStorage.setItem('wishlist', JSON.stringify(wishlist));
-                        localStorage.setItem('lastWishlistedProduct', id);
-                        setIsOpen(true);
-                        setTimeout(() => setIsOpen(false), 10000);
                     }
-
-                    else {
-                        wishlist.push(product);
-                        localStorage.setItem('wishlist', JSON.stringify(wishlist));
-                        localStorage.setItem('lastWishlistedProduct', id);
-                        setIsOpen(true);
-                        setTimeout(() => setIsOpen(false), 10000);
-                    }
-
+                    
+                    setIsOpen(true);
+                    setTimeout(() => setIsOpen(false), 10000);
                 }
             } else {
+                // Remove product from wishlist
                 const updatedWishlist = wishlist.filter(item => item.id !== id);
                 localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+                
+                // Dispatch custom event for Navbar and other components
+                window.dispatchEvent(new CustomEvent('wishlistUpdated', { 
+                    detail: { wishlist: updatedWishlist } 
+                }));
+                
+                // Call onWishlistChange callback if provided (for real-time updates)
+                if (onWishlistChange) {
+                    onWishlistChange(updatedWishlist);
+                } 
+                // Only if on wishlist page and no callback, do a page reload
+                else if (window.location.pathname === '/wishlist') {
+                    setTimeout(() => {
+                        window.location.reload();
+                    }, 200);
+                }
             }
 
             setIsLoading(false);

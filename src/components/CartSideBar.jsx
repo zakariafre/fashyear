@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { X, Plus, Minus, Trash, ChevronLeft, ChevronRight } from "lucide-react";
+import { X, Plus, Minus, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCart } from '../context/CartContext';
 import ProductsData from '../../ProductsDB.json';
 import '../App.css';
@@ -189,7 +189,7 @@ const CartSideBar = () => {
                                             onClick={() => removeFromCart(item.id, item.selectedSize)}
                                             className="!p-1 cursor-pointer relative bottom-20 rounded-md transition-colors"
                                         >
-                                            <Trash className="hover:text-red-400" size={16} />
+                                            <Trash2 className="hover:text-red-400" size={16} />
                                         </button>
                                     </div>
                                 ))}

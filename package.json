@@ -17,6 +17,7 @@
     "@mui/material": "^6.4.8",
     "@react-spring/web": "^9.7.5",
     "@tailwindcss/vite": "^4.0.15",
+    "aos": "^2.3.4",
     "framer-motion": "^12.6.2",
     "gsap": "^3.12.7",
     "locomotive-scroll": "^4.1.4",
