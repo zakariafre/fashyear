@@ -17,6 +17,8 @@ import Wishlist from './pages/WishlistPage/Wishlist';
 import CartSideBar from './components/CartSideBar';
 import { CartProvider, useCart } from './context/CartContext';
 import LogIn from './pages/Log-in/LogIn';
+import SignUp from './pages/SignUp/SignUp';
+import Checkout from './pages/CheckOut/Checkout';
 
 const App = () => {
 
@@ -58,10 +60,20 @@ const AuthLayout = ({ children }) => {
   return children;
 };
 
+// Checkout layout with only minimal header
+const CheckoutLayout = ({ children }) => {
+  return (
+    <div className="bg-white min-h-screen">
+      {children}
+    </div>
+  );
+};
+
 const AppContent = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen, isWishlistOpen, setIsWishlistOpen }) => {
   const { isCartOpen } = useCart();
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
+  const isCheckoutPage = location.pathname === '/checkout';
 
   useEffect(() => {
     if (isOpen || isSearchOpen || isCartOpen) {
@@ -75,6 +87,18 @@ const AppContent = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen, isWishli
     };
   }, [isOpen, isSearchOpen, isCartOpen]);
 
+  // If we're on the checkout page, render the checkout layout
+  if (isCheckoutPage) {
+    return (
+      <>
+        <Noise patternSize={400} patternAlpha={5} />
+        <Routes>
+          <Route path="/checkout" element={<Checkout />} />
+        </Routes>
+      </>
+    );
+  }
+
   // If we're on an auth page, only render the auth routes
   if (isAuthPage) {
     return (
@@ -82,7 +106,7 @@ const AppContent = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen, isWishli
         <Noise patternSize={400} patternAlpha={5} />
         <Routes>
           <Route path="/login" element={<LogIn />} />
-          {/* Add signup route when created */}
+          <Route path="/signup" element={<SignUp />} />
         </Routes>
       </>
     );
@@ -102,6 +126,9 @@ const AppContent = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen, isWishli
         <Routes>
           {/* Auth routes without Navbar and Footer */}
           <Route path="/login" element={<LogIn />} />
+          <Route path="/signup" element={<SignUp />} />
+          {/* Checkout route */}
+          <Route path="/checkout" element={<Checkout />} />
 
           {/* Main routes with Navbar and Footer */}
           <Route path="/" element={

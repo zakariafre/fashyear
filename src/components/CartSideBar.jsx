@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
+import { Link } from "react-router-dom";
 import { X, Plus, Minus, Trash2, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCart } from '../context/CartContext';
 import ProductsData from '../../ProductsDB.json';
@@ -35,7 +36,7 @@ const CartSideBar = () => {
         navigate(`/product/${productId}`);
         setIsCartOpen(false);
     };
-    
+
 
     // handle the Card click on CartSideBar
     const handleImgClick = (e, productId) => {
@@ -202,9 +203,12 @@ const CartSideBar = () => {
                                     <span className="text-xs">SubTotal</span>
                                     <span className="text-xs font-light uppercase tracking-widest">{calculateTotal().toFixed(2)} dh</span>
                                 </div>
-                                <button className="w-full cursor-pointer !py-3 uppercase tracking-widest bg-white text-black text-xs font-medium hover:bg-transparent hover:text-white border hover:border-neutral-400 duration-300 ease">
-                                    Continue to Checkout
-                                </button>
+                                <Link to="/checkout">
+                                    <button className="w-full cursor-pointer !py-3 uppercase tracking-widest bg-white text-black text-xs font-medium hover:bg-transparent hover:text-white border hover:border-neutral-400 duration-300 ease">
+                                        Continue to Checkout
+                                    </button>
+                                </Link>
+
                             </div>
 
                         </div>

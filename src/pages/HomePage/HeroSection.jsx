@@ -28,7 +28,7 @@ const Hero = ({ text, disabled = false, speed = 5, className = '' }) => {
 
 
     const handleShopNow = () => {
-        navigate('/shop');
+        navigate('/shop?category=Dresses');
     };
 
 
@@ -39,7 +39,7 @@ const Hero = ({ text, disabled = false, speed = 5, className = '' }) => {
                 <img src={hero} className="opacity-100 scale-100" draggable="false" alt="" />
 
                 <div className="absolute flex flex-col justify-center items-center !mt-40 gap-2 z-30">
-                    <h2 className="uppercase text-[2rem] font-light text-white tracking-wider">new in: hijabs</h2>
+                    <h2 className="uppercase text-[2rem] font-light text-white tracking-wider">new in: Dresses</h2>
 
                     <button onClick={handleShopNow} className="uppercase text-[0.7rem] font-light text-white tracking-wider relative group cursor-pointer">
                         <span>shop now</span>
