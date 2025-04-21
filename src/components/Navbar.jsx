@@ -13,6 +13,8 @@ import { useCart } from '../context/CartContext';
 import '../App.css'
 
 const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
+
+
   const { isCartOpen, setIsCartOpen, cartItems } = useCart();
   const [isScrolled, setIsScrolled] = useState(false);
   const navigate = useNavigate();
@@ -61,7 +63,7 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
               className='flex flex-row items-center text-white cursor-pointer'
               onClick={() => { setIsOpen(true); setIsSearchOpen(false) }}
             >
-              <img src={menuIcon} alt="Menu" className='h-[80%] relative top-1 ' />
+              <img src={menuIcon} draggable="false" alt="Menu" className='h-[80%] relative top-1 ' />
               <p className='font-light tracking-widest uppercase'>Menu</p>
             </div>
 
@@ -70,7 +72,7 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
               className='flex flex-row gap-1 items-center text-white cursor-pointer'
               onClick={() => setIsSearchOpen(true)}
             >
-              <img src={searchIcon} alt="" className='h-[60%] filter brightness-200 relative top-0.5' />
+              <img src={searchIcon} draggable="false" alt="" className='h-[60%] filter brightness-200 relative top-0.5' />
               <p className='font-light tracking-widest uppercase'>Search</p>
             </div>
           </div>
@@ -86,20 +88,20 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
               className='flex flex-row items-center text-white gap-3 cursor-pointer'
               onClick={() => navigate('/wishlist')}
             >
-              <img src={heartIcon} alt="" className='h-5 relative brightness-200 cursor-pointer' />
+              <img src={heartIcon} draggable="false" alt="" className='h-5 relative brightness-200 cursor-pointer' />
             </div>
 
             <div
               className='flex flex-row items-center text-white gap-3 cursor-pointer'>
-              <img src={accountIcon} alt="" className='h-5 relative brightness-200 cursor-pointer' />
+              <img src={accountIcon} draggable="false" alt="" className='h-5 relative brightness-200 cursor-pointer' />
             </div>
 
             {/* Cart icon */}
             <div
               className='flex flex-row items-center text-white gap-3 cursor-pointer relative'
-              onClick={() => setIsCartOpen(true)}
+              onClick={() => {setIsCartOpen(true) ; setIsSearchOpen(false)}}
             >
-              <img src={cartIcon} alt="" className='h-8 relative cursor-pointer' />
+              <img src={cartIcon} draggable="false" alt="" className='h-8 relative cursor-pointer' />
               {cartItems.length > 0 && (
                 <span className="absolute top-0 -right-1 bg-white text-black text-[0.6rem] w-3 h-3 flex items-center justify-center rounded-full">
                   {cartItems.length}

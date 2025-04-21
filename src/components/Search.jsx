@@ -46,7 +46,7 @@ const Search = ({ isSearchOpen, setIsSearchOpen, products }) => {
             {/* Background black blured Layer  */}
             {isSearchOpen && (
                 <div
-                    className="fixed inset-0 bg-black/70 backdrop-blur-md z-50 transition-opacity duration-400 overflow-hidden"
+                    className="fixed inset-0 bg-black/90 backdrop-blur-xs z-50 transition-opacity duration-400 overflow-hidden"
                     onClick={() => setIsSearchOpen(false)}
                 ></div>
             )}

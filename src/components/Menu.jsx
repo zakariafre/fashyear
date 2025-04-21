@@ -30,7 +30,7 @@ const Menu = ({ isOpen, setIsOpen }) => {
             {/* Background overlay */}
             {isOpen && (
                 <div
-                    className="fixed inset-0 bg-black/60 backdrop-blur-md z-80 transition-opacity duration-300"
+                    className="fixed inset-0 bg-black/90 backdrop-blur-xs z-80 transition-opacity duration-300"
                     onClick={() => setIsOpen(false)}
                 ></div>
             )}

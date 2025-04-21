@@ -35,7 +35,7 @@ export const CartProvider = ({ children }) => {
                 );
             }
 
-            return [...prevItems, { ...product, selectedSize, quantity: 1 }];
+            return [{ ...product, selectedSize, quantity: 1 }, ...prevItems];
         });
         setIsCartOpen(true);
     };

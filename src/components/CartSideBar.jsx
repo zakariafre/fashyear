@@ -2,12 +2,10 @@ import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
 import { X, Plus, Minus, Trash, ChevronLeft, ChevronRight } from "lucide-react";
 import { useCart } from '../context/CartContext';
-import arrow from '../assets/Icons/arrowTop.svg';
-import dress from '../assets/Dresses/essential-navy-dress_Pos2.png'
 import ProductsData from '../../ProductsDB.json';
 import '../App.css';
 
-const CartSideBar = ({ id }) => {
+const CartSideBar = () => {
 
     const navigate = useNavigate();
 
@@ -31,20 +29,28 @@ const CartSideBar = ({ id }) => {
         setRecommendedProducts(getRandomProducts());
     }, [cartItems]);
 
-    const handleShopDresses = () => {
-        navigate(`/shop?category=Dresses`);
-        setIsCartOpen(false);
-    };
 
+    // handle the click on the recommendations products 
     const handleProductClick = (productId) => {
         navigate(`/product/${productId}`);
         setIsCartOpen(false);
     };
+    
+
+    // handle the Card click on CartSideBar
+    const handleImgClick = (e, productId) => {
+        e.stopPropagation();
+        navigate(`/product/${productId}`);
+        setIsCartOpen(false);
+    };
+
+
+
 
     return (
         <>
             <div
-                className={`fixed inset-0 bg-black/95 backdrop-blur-xs z-[100] transition-all duration-300 ease-in-out
+                className={`fixed inset-0 bg-black/90 backdrop-blur-xs z-[100] transition-all duration-300 ease-in-out
                 ${isCartOpen ? "opacity-100" : "opacity-0 pointer-events-none"}`}
                 onClick={() => setIsCartOpen(false)}
             ></div>
@@ -60,7 +66,7 @@ const CartSideBar = ({ id }) => {
                 `}
             >
                 {/* header */}
-                <div className="sticky top-0 w-full h-14 flex flex-row justify-between bg-black/20 text-neutral-300 items-center !pl-[13%] !pr-[13%] !mt-13">
+                <div className="sticky top-0 w-full h-14 flex flex-row justify-between bg-white/5 text-neutral-300 items-center !pl-[13%] !pr-[13%] !mt-13">
                     <a className="relative text-xs">Your shopping bag ({cartItems.length})</a>
                     <button
                         onClick={() => setIsCartOpen(false)}
@@ -75,13 +81,13 @@ const CartSideBar = ({ id }) => {
 
                 {/* If cart is empty */}
                 {cartItems.length === 0 ? (
-                    <div className="flex flex-col w-full gap-5 relative !mt-4">
-                        <div className="flex flex-col !px-22 !py-6 justify-center items-start gap-1">
+                    <div className="h-fit flex flex-col w-full gap-5 relative !mt-10">
+                        <div className="flex flex-col !px-22 !py-1 justify-center items-start gap-1">
                             <h3 className="text-md font-light uppercase tracking-widest">Your cart is empty</h3>
                             <h3 className="text-md font-light uppercase tracking-widest text-neutral-400">Not sure where to start ? </h3>
                         </div>
                         {/* Update Your Wardrobe section */}
-                        <div className="flex-1 overflow-hidden !mt-10 !px-[13%]">
+                        <div className="flex-1 overflow-hidden !mt-5 !px-[13%]">
                             <div className="flex items-center justify-between !mb-6">
                                 <h3 className="text-sm font-light uppercase tracking-widest text-neutral-400">Shop dresses</h3>
                                 <div className="flex gap-2">
@@ -133,6 +139,11 @@ const CartSideBar = ({ id }) => {
                                 </div>
                             </div>
                         </div>
+                        <div className=" flex flex-col justify-center items-center gap-5 relative border-neutral-700 !py-5 !px-2">
+                            <button onClick={() => setIsCartOpen(false)} className="w-[80%] cursor-pointer !py-3 uppercase tracking-widest bg-white text-black text-xs font-medium hover:bg-transparent hover:text-white border hover:border-neutral-400 duration-300 ease">
+                                Continue shopping
+                            </button>
+                        </div>
                     </div>
                 ) : (
                     <div className="w-full h-full flex flex-col justify-between overflow-hidden">
@@ -145,8 +156,9 @@ const CartSideBar = ({ id }) => {
                                             <img
                                                 src={item.img[1]}
                                                 alt={item.title}
-                                                className="w-full h-full object-cover"
+                                                className="w-full h-full object-cover cursor-pointer"
                                                 draggable={false}
+                                                onClick={(e) => handleImgClick(e, item.id)}
                                             />
                                         </div>
                                         <div className="flex flex-col flex-1">
@@ -190,7 +202,7 @@ const CartSideBar = ({ id }) => {
                                     <span className="text-xs">SubTotal</span>
                                     <span className="text-xs font-light uppercase tracking-widest">{calculateTotal().toFixed(2)} dh</span>
                                 </div>
-                                <button className="w-full cursor-pointer !py-3 uppercase tracking-widest bg-white text-black text-xs font-medium hover:bg-transparent hover:text-white border hover:border-white duration-100 ease-linear">
+                                <button className="w-full cursor-pointer !py-3 uppercase tracking-widest bg-white text-black text-xs font-medium hover:bg-transparent hover:text-white border hover:border-neutral-400 duration-300 ease">
                                     Continue to Checkout
                                 </button>
                             </div>

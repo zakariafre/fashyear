@@ -119,3 +119,11 @@
 }
 
 
+
+.custom-zoom-in {
+  cursor: url('./assets/Icons/zoom-in.svg'), auto;
+}
+
+.custom-zoom-out {
+  cursor: url('./assets/Icons/zoom-out.svg'), auto;
+}

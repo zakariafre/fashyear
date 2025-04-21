@@ -5,9 +5,11 @@ import { useNavigate } from "react-router-dom";
 import productData from '../../../ProductsDB.json'
 import { useCart } from "../../context/CartContext";
 
-const CardProduct = ({ img, title, price, setIsOpen, id , setSelectedSize }) => {
+const CardProduct = ({ img, title, price, setIsOpen, id }) => {
 
 
+
+    const { addToCart } = useCart();
     const navigate = useNavigate();
     const [isLiked, setIsLiked] = useState(() => {
         const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
@@ -16,6 +18,8 @@ const CardProduct = ({ img, title, price, setIsOpen, id , setSelectedSize }) => 
     const [isLoading, setIsLoading] = useState(false);
     const [isHovered, setIsHovered] = useState(false);
     const [selectSizeOpen, setSelectSizeOpen] = useState(false);
+    const [selectedSize, setSelectedSize] = useState('Size');
+
 
     // Find the product data to get all images
     const product = productData.find(p => p.id === id);
@@ -85,10 +89,25 @@ const CardProduct = ({ img, title, price, setIsOpen, id , setSelectedSize }) => 
     };
 
 
-    const handleSizeSelection = (size , e) => {
+
+
+    // size selection
+    const availableSizes = product.size;
+    const allSizes = ['S', 'M', 'L', 'XL', 'XXL'];
+    const handleSizeSelect = (e, size) => {
         e.stopPropagation();
-        setSelectSizeOpen(false);
+        if (availableSizes.includes(size)) {
+            setSelectedSize(size);
+        }
     };
+
+
+
+    // handle add to bag
+    const handleAddToCart = (size) => {
+        addToCart(product, size);
+    };
+
 
 
     return (
@@ -117,7 +136,7 @@ const CardProduct = ({ img, title, price, setIsOpen, id , setSelectedSize }) => 
                 {/* Add to cart button */}
                 <div
                     onClick={(e) => { handleSizeOpen(); e.stopPropagation(); }}
-                    className="opacity-0 group-hover:opacity-100 h-12 w-[90%] bg-white border border-[#212121]/30 absolute bottom-2 z-30 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden">
+                    className="opacity-0 group-hover:opacity-100 h-10 w-[90%] bg-white border border-[#212121]/30 absolute bottom-2 z-30 flex justify-center items-center gap-2 cursor-pointer font-medium overflow-hidden">
                     <p className="text-[rgb(33,33,33)] text-[0.8rem] font-light uppercase tracking-wider">Quick add</p>
                     <div className="h-5 w-5 rounded-full absolute right-4 flex items-center justify-center">
                         <img src={Plus} className="h-5 w-5 relative" alt="" />
@@ -127,28 +146,29 @@ const CardProduct = ({ img, title, price, setIsOpen, id , setSelectedSize }) => 
 
                 {/* Size selector */}
                 {selectSizeOpen && (
-                    <div 
+                    <div
                         className="opacity-100 h-26 w-[90%] !py-3 bg-white absolute border border-[#212121]/30 bottom-2 z-30 flex flex-col justify-center items-center gap-2 cursor-pointer font-light overflow-hidden"
                         onMouseLeave={handleSizeClose}
-                        onClick={(e) => handleSizeSelection(e)}
                     >
-                        <p className="text-[rgb(33,33,33)] bg-[#212121]/0 w-full text-center !py-1 text-[0.8rem] font-light uppercase tracking-wider">Select Size</p>
-                        <div className="w-full h-full grid grid-cols-5 place-items-center">
-                            <div className="w-10 h-10 hover:border text-black hover:border-neutral-300 hover:bg-[#212121]/10 duration-0 transition-all ease-in-out flex justify-center items-center">
-                                <span className="">S</span>
-                            </div>
-                            <div className="w-10 h-10 hover:border text-black hover:border-neutral-300 hover:bg-[#212121]/10 duration-0 transition-all ease-in-out flex justify-center items-center">
-                                <span className="">M</span>
-                            </div>
-                            <div className="w-10 h-10 hover:border text-black hover:border-neutral-300 hover:bg-[#212121]/10 duration-0 transition-all ease-in-out flex justify-center items-center">
-                                <span className="">L</span>
-                            </div>
-                            <div className="w-10 h-10 hover:border text-black hover:border-neutral-300 hover:bg-[#212121]/10 duration-0 transition-all ease-in-out flex justify-center items-center">
-                                <span className="">XL</span>
-                            </div>
-                            <div className="w-10 h-10 hover:border text-black hover:border-neutral-300 hover:bg-[#212121]/10 duration-0 transition-all ease-in-out flex justify-center items-center">
-                                <span className="">XXL</span>
-                            </div>
+                        <p className="text-[rgb(33,33,33)] bg-[#212121]/0 w-full text-center !py-1 text-[0.7rem] font-light uppercase tracking-wider">Select Size</p>
+                        <div className="w-full h-full grid grid-cols-5 place-items-center text-[0.7rem] font-light">
+                            {allSizes.map((size) => (
+                                <div
+                                    key={size}
+                                    onClick={(e) => {
+                                        if (!availableSizes.includes(size)) return e.stopPropagation();
+                                        handleSizeSelect(e, size);
+                                        handleAddToCart(size);
+                                        setSelectSizeOpen(false);
+                                    }}
+                                    className={`transition-colors duration-200 cursor-pointer ${availableSizes.includes(size) ? '' : 'opacity-50 line-through decoration-black'}`} >
+                                    <div className="w-10 h-10 hover:border text-black hover:border-neutral-300 hover:bg-[#212121]/10 duration-0 transition-all ease-in-out flex justify-center items-center">
+                                        <span className=""> {size} </span>
+                                    </div>
+
+                                </div>
+                            ))}
+
                         </div>
                     </div>
                 )}

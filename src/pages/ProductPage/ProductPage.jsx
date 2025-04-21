@@ -1,40 +1,117 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { useParams } from 'react-router-dom';
 import ShopCard from '../../pages/HomePage/CardProduct';
+import '../../App.css';
 // Json file
 import productData from '../../../ProductsDB.json';
 import { useCart } from '../../context/CartContext';
-
 // Icons
-import { ChevronDown, Shuffle } from 'lucide-react';
-
+import { ChevronDown, Shuffle, X, ZoomIn, ZoomOut } from 'lucide-react';
 // wishlist component
 import WishListPopUp from '../../components/WishListPopUp';
 
 const ProductPage = () => {
+
+
+
   const { addToCart } = useCart();
   const { id } = useParams();
   const [currentProduct, setCurrentProduct] = useState(null);
   const [isOpen, setIsOpen] = useState(false);
   const [selectedSize, setSelectedSize] = useState('Size');
-  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
   const [isWishlisted, setIsWishlisted] = useState(false);
   const [showFullDescription, setShowFullDescription] = useState(false);
-  const [showProductCare, setShowProductCare] = useState(false);
+  const [showMoreDetails, setShowMoreDetails] = useState(false);
   const [sizeError, setSizeError] = useState(false);
+
+  // Zoom state
+  const [zoomedImages, setZoomedImages] = useState({});
+  const [positions, setPositions] = useState({});
+
+  // Show full materials and care state
+  const [showFullMaterials, setShowFullMaterials] = useState(false);
+  const [showFullCare, setShowFullCare] = useState(false);
+
+  const imageRefs = useRef({});
+  const zoomLevel = 2; // Fixed zoom level for consistent experience
 
   const imageSectionRef = useRef(null);
   const detailsRef = useRef(null);
-  const [isFixed, setIsFixed] = useState(true);
-  const [offsetTop, setOffsetTop] = useState(0);
+
+  // Handle image click to toggle zoom
+  const handleImageClick = (e, index) => {
+    e.stopPropagation();
+
+    setZoomedImages(prev => {
+      const newZoomed = { ...prev };
+
+      // If already zoomed, unzoom it
+      if (newZoomed[index]) {
+        delete newZoomed[index];
+      } else {
+        // Unzoom any other images first
+        Object.keys(newZoomed).forEach(key => {
+          delete newZoomed[key];
+        });
+
+        // Zoom this image
+        newZoomed[index] = true;
+
+        // Initialize position
+        setPositions(prev => ({
+          ...prev,
+          [index]: { x: 0, y: 0 }
+        }));
+      }
+
+      return newZoomed;
+    });
+  };
+
+  // Handle mouse leave to unzoom
+  const handleMouseLeave = (index) => {
+    setZoomedImages(prev => {
+      const newZoomed = { ...prev };
+      delete newZoomed[index];
+      return newZoomed;
+    });
+  };
+
+  // Handle mouse move to track cursor position
+  const handleMouseMove = (e, index) => {
+    if (zoomedImages[index]) {
+      const container = imageRefs.current[index];
+      if (!container) return;
+
+      // Get container dimensions and position
+      const rect = container.getBoundingClientRect();
+
+      // Calculate cursor position within the container as percentage (0 to 1)
+      const xPercent = (e.clientX - rect.left) / rect.width;
+      const yPercent = (e.clientY - rect.top) / rect.height;
+
+      // Calculate how much the image can move based on zoom level
+      const moveRangeX = (rect.width * zoomLevel - rect.width) / 2;
+      const moveRangeY = (rect.height * zoomLevel - rect.height) / 2;
+
+      // Convert percentage to position (centered at 0.5)
+      const x = (0.5 - xPercent) * (moveRangeX);
+      const y = (0.5 - yPercent) * (moveRangeY);
+
+      // Update position
+      setPositions(prev => ({
+        ...prev,
+        [index]: { x, y }
+      }));
+    }
+  };
 
   // Reset states when product ID changes
   useEffect(() => {
     setSelectedSize('Size');
-    setIsDropdownOpen(false);
     setShowFullDescription(false);
-    setShowProductCare(false);
-    
+    setShowMoreDetails(false);
+
     // Check wishlist status for new product
     const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
     setIsWishlisted(wishlist.some(item => item.id === id));
@@ -57,32 +134,6 @@ const ProductPage = () => {
   }, [id]); // Runs when id changes
 
 
-  // sticky logic 
-  useEffect(() => {
-    const handleScroll = () => {
-      if (!imageSectionRef.current || !detailsRef.current) return;
-
-      const scrollTop = window.scrollY;
-      const imageBottom = imageSectionRef.current.offsetTop + imageSectionRef.current.offsetHeight;
-      const detailsHeight = detailsRef.current.offsetHeight;
-
-      // Reduce the maxFixedScroll by a small amount to make the sticky effect end sooner
-      const maxFixedScroll = imageBottom - detailsHeight - 118; // Reduced by 50 pixels
-
-      // Determine if the details section should be fixed
-      const shouldBeFixed = scrollTop < maxFixedScroll;
-
-      setIsFixed(shouldBeFixed);
-      setOffsetTop(maxFixedScroll);
-    };
-
-    window.addEventListener('scroll', handleScroll);
-    handleScroll(); // Initial call
-
-    return () => {
-      window.removeEventListener('scroll', handleScroll);
-    };
-  }, []);
 
   // Get random products excluding current product
   const [randomProducts, setRandomProducts] = useState([]);
@@ -101,10 +152,13 @@ const ProductPage = () => {
     getRandomProducts();
   }, [id]);
 
+
+  // Check if currentProduct is loaded
   if (!currentProduct) {
     return <div>Loading...</div>;
   }
 
+  // Now that we know currentProduct exists, we can safely access its properties
   const availableSizes = currentProduct.size;
   const allSizes = ['S', 'M', 'L', 'XL', 'XXL'];
 
@@ -126,14 +180,10 @@ const ProductPage = () => {
     }
   };
 
-  const handleSizeClick = () => {
-    setIsDropdownOpen(!isDropdownOpen);
-  };
-
   const handleSizeSelect = (size) => {
     if (availableSizes.includes(size)) {
       setSelectedSize(size);
-      setIsDropdownOpen(false);
+      setSizeError(false);
     }
   };
 
@@ -151,42 +201,44 @@ const ProductPage = () => {
 
 
 
+
+
   return (
-
-
-    <div className="flex flex-col h-fit text-white">
+    <div className="flex flex-col min-h-screen text-white">
       {/* Main content area */}
-      <div className="flex flex-row">
+      <div className="max-h-[900px] !mt-28">
         {/* Product Section */}
-        <div style={{ minHeight: '100vh' }} className='flex flex-row gap-20 w-full !pr-10 relative'>
-
+        <div className='relative grid grid-cols-12 gap-10 !ml-22'>
           {/* Pictures Side */}
-          <div ref={imageSectionRef} className='w-[52%] flex flex-col' onClick={() => setIsDropdownOpen(false)}>
+          <div ref={imageSectionRef} className='relative col-span-7 grid grid-cols-2 gap-x-1 gap-y-1'>
             {currentProduct.img.map((image, index) => (
-              <div key={index} className='w-full overflow-hidden'>
-                <img className='scale-110' src={image} alt="" />
+              <div
+                key={index}
+                className={`w-full aspect-[3/4] overflow-hidden relative ${zoomedImages[index] ? 'custom-zoom-out' : 'custom-zoom-in'}`}
+                ref={el => imageRefs.current[index] = el}
+                onClick={(e) => handleImageClick(e, index)}
+                onMouseMove={(e) => handleMouseMove(e, index)}
+                onMouseLeave={(e) => handleMouseLeave(index)}
+              >
+                <img
+                  className="w-full h-full object-cover transition-transform duration-300"
+                  style={{
+                    transform: zoomedImages[index]
+                      ? `scale(${zoomLevel}) translate(${positions[index]?.x || 0}px, ${positions[index]?.y || 0}px)`
+                      : 'scale(1)',
+                    transformOrigin: 'center center',
+                    transition: 'transform 0.05s ease-out'
+                  }}
+                  draggable={false}
+                  src={image}
+                  alt={`${currentProduct.title} view ${index + 1}`}
+                />
               </div>
             ))}
           </div>
 
           {/* Informations Side */}
-          <div
-            ref={detailsRef}
-            className='w-[30%] !mr-20 flex flex-col gap-4'
-            style={{
-              position: isFixed ? 'fixed' : 'absolute',
-              top: isFixed ? '7rem' : `${offsetTop}px`,
-              right: '5%',
-              width: '30%',
-            }}
-
-
-
-
-
-
-            
-          >
+          <div ref={detailsRef} className='absolute right-26 w-[30%] flex flex-col gap-4'>
             {/* ready to wear and wishlist icon */}
             <div className='flex flex-row justify-between items-center'>
               <h2 className='tracking-wider text-neutral-400 text-[0.5rem]'>READY TO WEAR</h2>
@@ -214,52 +266,33 @@ const ProductPage = () => {
             </div>
 
             {/* Sizes */}
-            <div className='relative !py-2 flex flex-row justify-between items-center text-[0.8rem] font-extralight !mt-10 cursor-pointer' onClick={handleSizeClick}>
-              <h2 className='text-neutral-300'>{selectedSize === 'Size' ? 'Select Size' : 'Sizes'}</h2>
+            <div className='relative !py-2 flex flex-col gap-1 !mt-5 text-[0.8rem] font-light '>
+              <h2 className={`text-neutral-300 uppercase tracking-wider font-medium !mb-1 ${sizeError && selectedSize === 'Size' ? 'text-red-400 text-xs' : ''}`}>{sizeError && selectedSize === 'Size' ? 'please select a size' : 'SIZE'}</h2>
 
-              <div className='flex flex-row gap-2 items-center text-neutral-300'>
-                {selectedSize !== 'Size' && <span className='text-[0.8rem]'>{selectedSize}</span>}
-                <ChevronDown className={`w-4 h-4 opacity-75 ${isDropdownOpen ? 'rotate-180' : ''} transition-all duration-100 ease-in-out`} />
-              </div>
-            </div>
-
-            {/* line */}
-            <hr className='w-full opacity-20 relative bottom-3' />
-
-            {/* Dropdown Container */}
-            <div className='relative'>
-              {/* Dropdown */}
-              {sizeError && selectedSize === 'Size' && (
-                <p className="text-red-500 text-xs relative bottom-4">Please select a size</p>
-              )}
-              <div
-                className={`absolute left-0 -top-20 text-[0.7rem] bg-neutral-800 border-x border-neutral-700 text-neutral-300 rounded-b-lg overflow-hidden shadow-md w-full z-10 transition-all duration-300 ease-in-out transform ${isDropdownOpen
-                  ? 'translate-y-13 max-h-50 !pt-4'
-                  : 'translate-y-13 max-h-0 transition-all !pt-0 ease-in-out duration-300'
-                  }`}
-              >
+              {/* Size grid */}
+              <div className='grid grid-cols-4 gap-2 font-medium'>
                 {allSizes.map((size) => (
                   <div
                     key={size}
-                    onClick={() => handleSizeSelect(size)}
-                    className={`!pl-4 !py-2 transition-colors duration-200 hover:bg-neutral-700/50 cursor-pointer ${availableSizes.includes(size)
-                      ? ''
-                      : 'opacity-40 line-through'
-                      }
-                    ${selectedSize === size ? 'bg-neutral-700/50' : ''}
+                    onClick={() => availableSizes.includes(size) && handleSizeSelect(size)}
+                    className={`
+                      border border-neutral-600 !py-3 !px-3 flex justify-center items-center cursor-pointer transition-colors duration-200
+                      ${selectedSize === size ? 'bg-neutral-300 text-black' : 'bg-transparent text-white  hover:border-neutral-400'}
+                      ${!availableSizes.includes(size) ? 'opacity-40 cursor-not-allowed line-through' : ''}
                     `}
                   >
                     {size}
                   </div>
                 ))}
               </div>
+
             </div>
 
             {/* Place in Cart button  */}
-            <div className=''>
-              <button 
+            <div className='!mt-5'>
+              <button
                 onClick={handleAddToCart}
-                className='w-full text-[0.9rem] font-medium uppercase bg-neutral-200 text-[#080808] !py-3 cursor-pointer hover:bg-neutral-200/80 transition-all duration-200 ease-in-out'
+                className='w-full text-[0.9rem] font-medium uppercase text-[#080808] !py-2.5 cursor-pointer bg-neutral-200/90 hover:bg-neutral-100 duration-75'
               >
                 add to bag
               </button>
@@ -267,83 +300,83 @@ const ProductPage = () => {
 
             {/* description  */}
             <div className='!mt-10'>
-              <div className={`relative text-[0.8rem] font-light tracking-tight text-neutral-400 transition-all duration-300 ease-in-out ${showFullDescription ? 'max-h-50' : 'max-h-20'} overflow-hidden`}>
-                <p>{currentProduct.description}</p>
-                {!showFullDescription && (
-                  <div className="absolute inset-0 bottom-0 bg-gradient-to-t from-[#121212] to-transparent"></div>
-                )}
-              </div>
-              <button
-                onClick={() => setShowFullDescription(!showFullDescription)}
-                className="text-[0.75rem] font-extralight text-neutral-400 underline underline-offset-2 hover:text-neutral-300 mt-2 transition-colors duration-200"
-              >
-                {showFullDescription ? 'Read Less' : 'Read More'}
-              </button>
-            </div>
-
-            {/* Product Care */}
-            {/* <>
-              <div
-                className={`text-[0.9rem] cursor-pointer !py-3 font-light text-neutral-300 flex flex-row justify-between items-center transition-all duration-500 ease-in-out`}
-                onClick={() => setShowProductCare(!showProductCare)}
-              >
-                <h2>Product Care</h2>
-                <div className='flex items-center justify-center w-6 h-6 rounded-full'>
-                  <svg
-                    xmlns="http://www.w3.org/2000/svg"
-                    width="16"
-                    height="16"
-                    viewBox="0 0 24 24"
-                    fill="none"
-                    stroke="currentColor"
-                    strokeWidth="2"
-                    strokeLinecap="round"
-                    strokeLinejoin="round"
-                    className='text-neutral-300 duration-300 ease-in-out'
-                  >
-                    {showProductCare ? (
-                      <>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                      </>
-                    ) : (
-                      <>
-                        <line x1="12" y1="5" x2="12" y2="19"></line>
-                        <line x1="5" y1="12" x2="19" y2="12"></line>
-                      </>
-                    )}
-                  </svg>
-                </div>
-              </div>
-              <div className={`overflow-hidden ${showProductCare ? 'max-h-96' : 'max-h-0'} transition-[max-height] duration-600 ease-[cubic-bezier(0.4,0,0.2,1)]`}>
-                <div className={`overflow-hidden ${showProductCare ? 'max-h-96' : 'max-h-0'} transition-[max-height] duration-600 ease-[cubic-bezier(0.4,0,0.2,1)]`}>
-                  <div className={`transform transition-transform duration-700 ease-[cubic-bezier(0.4,0,0.2,1)]`}>
-                    <div className='text-[0.8rem] font-light text-neutral-400 !pb-8'>
-                      <p>To ensure the longevity and quality of your product, please follow these care instructions:</p>
-                      <ul className='list-disc !mt-4 !pl-8 w-[90%] gap-2 flex flex-col'>
-                        <li>Machine wash cold with like colors. Use a gentle cycle and mild detergent. Avoid bleach.</li>
-                        <li>Tumble dry on low heat or hang to dry. Avoid direct sunlight to prevent fading.</li>
-                        <li>If needed, iron on low heat. Avoid ironing directly on prints or embellishments.</li>
-                        <li>Store in a cool, dry place. Avoid damp areas to prevent mold and mildew.</li>
-                        <li>Handle with care to avoid snags and tears. Keep away from sharp objects.</li>
-                      </ul>
+              <div className='relative text-[0.8rem] font-light tracking-tight text-neutral-400 transition-all duration-300 ease-in-out'>
+                <div className='flex flex-col gap-6'>
+                  {/* Description text */}
+                  <div>
+                    <div className=''>
+                      <h3 className='text-neutral-200 font-medium uppercase text-[0.7rem] tracking-widest !mb-4'>Description</h3>
+                      <p className='text-[0.8rem] leading-relaxed'>{currentProduct.description}</p>
                     </div>
+                  </div>
+
+                  {/* More Detail Section with Materials and Care */}
+                  <div>
+                    <div className={`transition-all w-full duration-500 overflow-hidden ${showMoreDetails ? 'max-h-[1000px] opacity-100' : 'max-h-0 opacity-0'}`}>
+                    <hr className='w-full opacity-20 !mt-1' />
+                      {/* Materials Section */}
+                      <div className='grid grid-cols-12 gap-4 !mt-5'>
+                        <h3 className='text-neutral-200 font-medium uppercase text-[0.7rem] tracking-widest !mb-2 col-span-3'>Materials</h3>
+                        <div className='col-span-9'>
+                          <p className='text-[0.8rem]'>100% Premium Materials</p>
+                          <p className='text-[0.75rem] !mt-2 text-neutral-400'>
+                            At Fashyear, we use only high-quality materials to ensure comfort, durability, and sustainability. 
+                            Our commitment to excellence means carefully selecting fabrics that maintain their quality 
+                            through countless wears and washes. We prioritize materials that not only feel good against 
+                            your skin but also have minimal environmental impact. Each garment undergoes rigorous quality checks 
+                            to ensure it meets our standards before reaching you.
+                          </p>
+                        </div>
+                      </div>
+                      <hr className='w-full opacity-20 !mt-7' />
+
+                      {/* Care Section */}
+                      <div className='grid grid-cols-12 !mt-7 gap-4'>
+                        <h3 className='text-neutral-200 font-medium uppercase text-[0.7rem] tracking-widest !mb-2 col-span-3'>Care</h3>
+                        <div className='col-span-9'>
+                          <ul className='flex flex-col gap-3'>
+                            <li>Machine wash cold with like colors. Use a gentle cycle and mild detergent. Avoid bleach.</li>
+                            <li>Tumble dry on low heat or hang to dry. Avoid direct sunlight to prevent fading.</li>
+                            <li>If needed, iron on low heat. Avoid ironing directly on prints or embellishments.</li>
+                            <li>Store in a cool, dry place. Avoid damp areas to prevent mold and mildew.</li>
+                            <li>Handle with care to avoid snags and tears. Keep away from sharp objects.</li>
+                          </ul>
+                        </div>
+                      </div>
+                    </div>
+
+                    <hr className='w-full opacity-20 !mt-1' />
+
+
+                    <div onClick={() => setShowMoreDetails(!showMoreDetails)} className='flex justify-start items-center !mt-7 cursor-pointer'>
+                      <h3 className='text-neutral-200 font-medium uppercase text-[0.7rem] tracking-widest'>{showMoreDetails ? 'Less' : 'More'} Detail</h3>
+                      <button
+
+                        className="text-neutral-300 flex items-center gap-1"
+                      >
+                        <ChevronDown
+                          size={22}
+                          className={`transition-transform duration-300 !ml-1 !py-1 ${showMoreDetails ? 'rotate-180' : ''}`}
+                        />
+                      </button>
+                    </div>
+
+
                   </div>
                 </div>
               </div>
-              <hr className='w-full opacity-20 relative bottom-7' />
-            </> */}
-
+            </div>
           </div>
         </div>
       </div>
 
       {/* Footer section */}
-      <footer className="w-full">
+      <div className="w-full !mt-auto !pt-80">
         {/* you might like section */}
-        <div className="w-full !mt-14 font-light tracking-wider flex flex-col justify-center items-center gap-5 uppercase text-lg">
+        <div className="w-full font-light tracking-wider flex flex-col justify-center items-center gap-5 uppercase text-lg">
           <h2 className="!mb-0">You May Also Like</h2>
 
-          <div className="w-[90%] h-fit relative grid grid-cols-4 gap-x-10 place-items-center">
+          <div className="w-[90%] h-fit relative grid grid-cols-4 gap-x-0 place-items-center">
             {randomProducts.map((product) => (
               <ShopCard
                 key={product.id}
@@ -356,7 +389,7 @@ const ProductPage = () => {
             ))}
           </div>
         </div>
-      </footer>
+      </div>
 
       {/* wishlist popup */}
       <WishListPopUp isOpen={isOpen} setIsOpen={setIsOpen} product={currentProduct} />
