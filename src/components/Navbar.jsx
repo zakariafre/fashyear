@@ -82,7 +82,7 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
     <>
 
       <motion.nav
-        initial={{ filter: "blur(10px)", opacity: 0, y: -40 }}
+        initial={{ filter: "blur(15px)", opacity: 0, y: -40 }}
         animate={{ filter: "blur(0px)", opacity: 1, y: 0 }}
         transition={{ duration: 0, ease: "easeIn" }}
         className={`fixed top-0 left-1/2 transform -translate-x-1/2 w-full h-[10vh] flex items-center justify-center hover:bg-neutral-900/30 hover:backdrop-blur-md ease-linear mx-auto transition-all duration-300 

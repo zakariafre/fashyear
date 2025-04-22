@@ -170,11 +170,28 @@ const ProductPage = () => {
     // Also check on mount
     handleStorageChange();
     
+    // Add event listener for wishlist updates from ShopCard components
+    const handleWishlistUpdated = (event) => {
+      const { detail } = event;
+      if (detail && detail.product) {
+        setWishlistedProduct(detail.product);
+      }
+    };
+    
+    window.addEventListener('wishlistProductUpdated', handleWishlistUpdated);
+    
     return () => {
       window.removeEventListener('storage', handleStorageChange);
+      window.removeEventListener('wishlistProductUpdated', handleWishlistUpdated);
     };
   }, []);
 
+  // Function to handle wishlist updates from "You May Also Like" section
+  const handleWishlistChange = (wishlistData, product) => {
+    if (product) {
+      setWishlistedProduct(product);
+    }
+  };
 
   // Check if currentProduct is loaded
   if (!currentProduct) {
@@ -409,6 +426,7 @@ const ProductPage = () => {
                 title={product.title}
                 price={product.price}
                 setIsOpen={setIsOpen}
+                onWishlistChange={(wishlist) => handleWishlistChange(wishlist, product)}
               />
             ))}
           </div>

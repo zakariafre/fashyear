@@ -4,6 +4,10 @@ import Plus from '../../assets/Icons/plusIcon.png'
 import { useNavigate } from "react-router-dom";
 import productData from '../../../ProductsDB.json'
 import { useCart } from "../../context/CartContext";
+import { X } from "lucide-react";
+
+
+
 
 const CardProduct = ({ img, title, price, setIsOpen, id, onWishlistChange }) => {
 
@@ -48,26 +52,28 @@ const CardProduct = ({ img, title, price, setIsOpen, id, onWishlistChange }) => 
                     wishlist.push(product);
                     localStorage.setItem('wishlist', JSON.stringify(wishlist));
                     localStorage.setItem('lastWishlistedProduct', id);
-                    
+
                     // Dispatch custom event for Navbar and other components
-                    window.dispatchEvent(new CustomEvent('wishlistUpdated', { 
-                        detail: { wishlist: wishlist } 
+                    window.dispatchEvent(new CustomEvent('wishlistUpdated', {
+                        detail: { wishlist: wishlist }
                     }));
-                    
+
+                    // Dispatch a new event specifically for passing the product data
+                    window.dispatchEvent(new CustomEvent('wishlistProductUpdated', {
+                        detail: { product: product }
+                    }));
+
                     // Call onWishlistChange callback if provided (for real-time updates)
                     if (onWishlistChange) {
-                        onWishlistChange(wishlist);
+                        onWishlistChange(wishlist, product);
                     }
-                    
-                    // Only if on wishlist page and no callback, do a page reload
-                    if (window.location.pathname === '/wishlist' && !onWishlistChange) {
-                        setTimeout(() => {
-                            setIsOpen(false);
-                            window.location.reload();
-                            window.scrollTo(0, 0);
-                        }, 200);
+
+                    // Only if on wishlist page, do a page reload
+                    if (window.location.pathname === '/wishlist') {
+                        window.scrollTo(0, 0);
+                        window.scrollBehavior = 'smooth';
                     }
-                    
+
                     setIsOpen(true);
                     setTimeout(() => setIsOpen(false), 10000);
                 }
@@ -75,21 +81,20 @@ const CardProduct = ({ img, title, price, setIsOpen, id, onWishlistChange }) => 
                 // Remove product from wishlist
                 const updatedWishlist = wishlist.filter(item => item.id !== id);
                 localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
-                
+
                 // Dispatch custom event for Navbar and other components
-                window.dispatchEvent(new CustomEvent('wishlistUpdated', { 
-                    detail: { wishlist: updatedWishlist } 
+                window.dispatchEvent(new CustomEvent('wishlistUpdated', {
+                    detail: { wishlist: updatedWishlist }
                 }));
-                
+
                 // Call onWishlistChange callback if provided (for real-time updates)
                 if (onWishlistChange) {
-                    onWishlistChange(updatedWishlist);
-                } 
+                    onWishlistChange(updatedWishlist, null);
+                }
                 // Only if on wishlist page and no callback, do a page reload
                 else if (window.location.pathname === '/wishlist') {
-                    setTimeout(() => {
-                        window.location.reload();
-                    }, 200);
+                        window.scrollTo(0, 0);
+                        window.scrollBehavior = 'smooth';
                 }
             }
 
@@ -98,6 +103,42 @@ const CardProduct = ({ img, title, price, setIsOpen, id, onWishlistChange }) => 
     };
 
 
+    // handle remove from wishlist / and X icon
+    const RemoveFromWishlist = (e) => {
+        e.stopPropagation();
+
+        // Using the same logic as in toggleLike but for removal only
+        setIsLoading(true);
+
+        // Get current wishlist
+        const wishlist = JSON.parse(localStorage.getItem('wishlist') || '[]');
+
+        // Remove product from wishlist
+        const updatedWishlist = wishlist.filter(item => item.id !== id);
+
+        // Update localStorage
+        localStorage.setItem('wishlist', JSON.stringify(updatedWishlist));
+
+        // Update UI state
+        setIsLiked(false);
+
+        // Dispatch custom event for Navbar and other components
+        window.dispatchEvent(new CustomEvent('wishlistUpdated', {
+            detail: { wishlist: updatedWishlist }
+        }));
+
+        // Call onWishlistChange callback if provided (for real-time updates)
+        if (onWishlistChange) {
+            onWishlistChange(updatedWishlist, null);
+        }
+
+        // Only if on wishlist page , do a page reload
+        if (window.location.pathname === '/wishlist') {
+            window.scrollTo(0, 0);
+        }
+
+        setIsLoading(false);
+    };
 
 
     // handle size open and close
@@ -139,20 +180,26 @@ const CardProduct = ({ img, title, price, setIsOpen, id, onWishlistChange }) => 
                 onMouseLeave={() => setIsHovered(false)}
             >
                 {/* Wishlist Icon */}
-                <div className="absolute top-3 right-4 z-30 w-4 h-4" onClick={toggleLike}>
-                    {isLoading && (
-                        <svg className="absolute top-0 right-1 animate-spin" width="10" height="10" viewBox="0 0 50 50">
-                            <circle cx="25" cy="25" r="20" fill="none" stroke="#212121" strokeWidth="4" strokeDasharray="120" strokeDashoffset="20" strokeLinecap="round" />
-                        </svg>
-                    )}
+                {!isLiked ? (
+                    <div className="absolute top-3 right-4 z-30 w-4 h-4" onClick={toggleLike}>
+                        {isLoading && (
+                            <svg className="absolute top-0 right-1 animate-spin" width="10" height="10" viewBox="0 0 50 50">
+                                <circle cx="25" cy="25" r="20" fill="none" stroke="#212121" strokeWidth="4" strokeDasharray="120" strokeDashoffset="20" strokeLinecap="round" />
+                            </svg>
+                        )}
 
-                    {!isLoading && (
-                        <svg className="absolute inset-0 transition-all duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100"
-                            fill={isLiked ? "#212121" : "none"} stroke="#212121" strokeWidth="5">
-                            <path d="M50 91s-36-27-42-51c-5-19 9-36 27-36 10 0 19 6 23 15 4-9 13-15 23-15 18 0 32 17 27 36-6 24-42 51-42 51z" />
-                        </svg>
-                    )}
-                </div>
+                        {!isLoading && (
+                            <svg className="absolute inset-0 transition-all duration-300" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 100"
+                                fill={isLiked ? "#212121" : "none"} stroke="#212121" strokeWidth="5">
+                                <path d="M50 91s-36-27-42-51c-5-19 9-36 27-36 10 0 19 6 23 15 4-9 13-15 23-15 18 0 32 17 27 36-6 24-42 51-42 51z" />
+                            </svg>
+                        )}
+                    </div>
+                ) : (
+                    <button className="absolute top-2 right-3 z-30 cursor-pointer" onClick={(e) => RemoveFromWishlist(e)}  >
+                        <X className='text-neutral-800' size={18} />
+                    </button>
+                )}
 
                 {/* Add to cart button */}
                 <div

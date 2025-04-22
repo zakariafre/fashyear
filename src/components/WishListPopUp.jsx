@@ -7,9 +7,7 @@ const WishListPopUp = ({ isOpen, setIsOpen, product }) => {
 
     
     const [isVisible, setIsVisible] = useState(false);
-    const navigate = useNavigate()
-
-    
+    const navigate = useNavigate();
     
     // Trigger when isOpen changes
     useEffect(() => {
@@ -19,6 +17,19 @@ const WishListPopUp = ({ isOpen, setIsOpen, product }) => {
             setTimeout(() => setIsVisible(false), 300); // After 300ms (animation duration), remove the popup from the DOM
         }
     }, [isOpen]);
+
+    // Ensure product has valid image data
+    const getProductImage = () => {
+        if (!product) return '';
+        
+        // Handle case where product.img might be a string or an array
+        if (Array.isArray(product.img)) {
+            return product.img[0];
+        }
+        
+        return product.img;
+    };
+    
 
     return (
         <>
@@ -40,13 +51,13 @@ const WishListPopUp = ({ isOpen, setIsOpen, product }) => {
                 >
                     <div className="flex flex-row gap-12 overflow-hidden justify-between items-center">
                         <div className="w-[10%] h-full">
-                            {product && <img id={product.id} src={product.img[0]} alt={product.title} />}
+                            {product && <img id={product.id} src={getProductImage()} alt={product.title || "Product"} />}
                         </div>
                         <div className="flex flex-col max-w-[90%] w-fit">
-                            <h2 className="text-[0.75rem]">
+                            <h2 className="text-[0.75rem] tracking-normal">
                                 {'the item has been added to your wishlist'}
                             </h2>
-                            <h2 className="text-[0.7rem] underline underline-offset-2 cursor-pointer text-neutral-400 hover:text-neutral-300 duration-200" onClick={() => navigate('/wishlist')}>
+                            <h2 className="text-[0.7rem] tracking-normal underline underline-offset-2 cursor-pointer text-neutral-400 hover:text-neutral-200 duration-200" onClick={() => navigate('/wishlist')}>
                                 Access your Wishlist
                             </h2>
                         </div>
