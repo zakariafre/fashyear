@@ -395,7 +395,7 @@ const Profile = () => {
                                 <h2 className="text-xl font-medium">Your Wishlist</h2>
                                 <div className="text-center !py-2 text-neutral-400">
                                     <Heart size={32} className="!mx-auto !mb-4 opacity-50" />
-                                    <p>Your wishlist is empty.</p>
+                                    <p>Your wishlist is empty</p>
                                     <button
                                         onClick={() => navigate('/shop')}
                                         className="!mt-4 !py-2 !px-4 bg-neutral-300 hover:bg-white text-black text-sm"
