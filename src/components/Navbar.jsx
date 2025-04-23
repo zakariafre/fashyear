@@ -11,13 +11,16 @@ import logo1 from '../assets/Icons/1.png'
 import { motion } from "motion/react"
 import Menu from './Menu'
 import { useCart } from '../context/CartContext';
+import { useAuth } from '../context/AuthContext';
 import '../App.css'
+import { User } from 'lucide-react';
 
 const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
 
 
   const navigate = useNavigate();
   const { isCartOpen, setIsCartOpen, cartItems } = useCart();
+  const { isAuthenticated, isAdmin } = useAuth();
   const [isScrolled, setIsScrolled] = useState(false);
 
   const [wishlistItems, setWishlistItems] = useState(() => {
@@ -78,6 +81,19 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
   };
 
 
+
+  const handleProfileClick = () => {
+    if (isAuthenticated) {
+      if (isAdmin) {
+        navigate('/admin');
+      } else {
+        navigate('/profile');
+      }
+    } else {
+      navigate('/login');
+    }
+  };
+
   return (
     <>
 
@@ -137,13 +153,12 @@ const Navbar = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
               <img src={heartIcon} draggable="false" alt="" className='h-5 relative brightness-200 cursor-pointer' />
             </div>
 
-            {/* Account icon */}
-            <Link to="/login">
-              <div
-                className='flex flex-row items-center text-white gap-3 cursor-pointer'>
+            {/* Account/Profile icon */}
+            <div onClick={handleProfileClick}>
+              <div className='flex flex-row items-center text-white gap-3 cursor-pointer'>
                 <img src={accountIcon} draggable="false" alt="" className='h-5 relative brightness-200 cursor-pointer' />
               </div>
-            </Link>
+            </div>
 
             {/* Cart icon */}
             <div

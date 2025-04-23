@@ -15,6 +15,13 @@ const CartSideBar = () => {
     const [hoveredProductId, setHoveredProductId] = useState(null);
     const [currentSlide, setCurrentSlide] = useState(0);
 
+    // Reset body overflow when cart sidebar is closed
+    useEffect(() => {
+        if (!isCartOpen) {
+            document.body.style.overflow = 'auto';
+        }
+    }, [isCartOpen]);
+
     const calculateTotal = () => {
         return cartItems.reduce((total, item) => total + (item.price * item.quantity), 0);
     };
@@ -62,7 +69,7 @@ const CartSideBar = () => {
                     borderStyle: "solid",
                     borderImage: "linear-gradient(to top, rgba(255,255,255,0), rgba(255,255,255,0.5), rgba(255,255,255,0)) 1"
                 }}
-                className={`fixed top-0 right-0 h-full w-[50%] uppercase tracking-widest bg-neutral-800/50 overflow-y-hidden text-white transition-all duration-300 ease-in-out z-[101] flex flex-col
+                className={`fixed top-0 right-0 h-full w-[50%] uppercase tracking-widest bg-neutral-800/50 ${cartItems.length === 0 ? "overflow-y-auto" : "overflow-y-hidden"} text-white transition-all duration-300 ease-in-out z-[101] flex flex-col
                 ${isCartOpen ? "translate-x-0" : "translate-x-full"}
                 `}
             >
@@ -206,9 +213,14 @@ const CartSideBar = () => {
                                         <span className="text-xs">SubTotal</span>
                                         <span className="text-xs font-light uppercase tracking-widest">{calculateTotal().toFixed(2)} dh</span>
                                     </div>
-                                    <Link to="/checkout">
-                                        <button onClick={() => setIsCartOpen(false)} className="w-full cursor-pointer !py-3 uppercase tracking-widest bg-white text-black text-xs font-medium hover:bg-transparent hover:text-white border hover:border-neutral-400 duration-300 ease">
+                                    <Link to="/checkout" onClick={() => { window.scrollTo(0, 0); setIsCartOpen(false) }}>
+                                        <button className="w-full cursor-pointer !py-3 uppercase tracking-widest bg-white text-black text-xs font-medium hover:bg-transparent hover:text-white border hover:border-neutral-400 duration-300 ease">
                                             Continue to Checkout
+                                        </button>
+                                    </Link>
+                                    <Link to="/shop" onClick={() => { window.scrollTo(0, 0); setIsCartOpen(false) }}>
+                                        <button className="w-full cursor-pointer !py-3 uppercase tracking-widest bg-black text-white text-xs font-medium hover:bg-neutral-950 duration-300 ease">
+                                            Continue shopping
                                         </button>
                                     </Link>
 

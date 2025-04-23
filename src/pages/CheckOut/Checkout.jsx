@@ -34,10 +34,17 @@ const Checkout = () => {
 
     const [showCountryDropdown, setShowCountryDropdown] = useState(false);
     const [countryInput, setCountryInput] = useState('');
-    const [countries, setCountries] = useState(['Morocco', 'United States', 'Albania', 'Andorra', 'Antigua and Barbuda', 'Argentina', 'Aruba', 'Australia', 'Austria', 'Bahamas', 'United Kingdom', 'France', 'Germany', 'Italy', 'Spain', 'Portugal']);
+    const [countries, setCountries] = useState(['Morocco', 'Algeria', 'Tunisia', 'Egypt', 'Mauritania', 'Libya', 'United States', 'Albania', 'Andorra', 'Antigua and Barbuda', 'Argentina', 'Aruba', 'Australia', 'Austria', 'Bahamas', 'United Kingdom', 'France', 'Germany', 'Italy', 'Spain', 'Portugal']);
 
     // Form errors
     const [formErrors, setFormErrors] = useState({});
+
+    // Fix for scrolling issue when cart becomes empty
+    useEffect(() => {
+        if (cartItems.length === 0) {
+            document.body.style.overflow = 'auto';
+        }
+    }, [cartItems.length]);
 
     // Input formatting functions
     const formatCardNumber = (value) => {
@@ -180,10 +187,10 @@ const Checkout = () => {
     };
 
     // Handle product image click
-    const handleImgClick = (e, productId) => {
-        e.stopPropagation();
-        navigate(`/product/${productId}`);
-    };
+    // const handleImgClick = (e, productId) => {
+    //     e.stopPropagation();
+    //     navigate(`/product/${productId}`);
+    // };
 
     // Clear form errors when changing steps
     useEffect(() => {
@@ -594,7 +601,7 @@ const Checkout = () => {
                                 {cartItems.length < 1 && (
                                     <div className='flex flex-col gap-4 !mt-10'>
                                         <h3 className='font-light text-md'>Your Bag is empty</h3>
-                                        <button onClick={() => navigate('/shop')} className='text-xs w-full h-12 bg-neutral-200 hover:bg-white text-neutral-900 uppercase tracking-widest font-medium cursor-pointer'>continue shopping</button>
+                                        <button onClick={() => { navigate('/shop'); setIsCartOpen(false)}} className='text-xs w-full h-12 bg-neutral-200 hover:bg-white text-neutral-900 uppercase tracking-widest font-medium cursor-pointer'>continue shopping</button>
                                     </div>
                                 )}
 
@@ -605,7 +612,7 @@ const Checkout = () => {
                                                 <img
                                                     src={item.img[1]}
                                                     alt={item.title}
-                                                    className="w-full h-full object-cover cursor-pointer"
+                                                    className="w-full h-full object-cover"
                                                     draggable={false}
                                                     onClick={(e) => handleImgClick(e, item.id)}
                                                 />

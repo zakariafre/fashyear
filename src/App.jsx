@@ -1,7 +1,7 @@
-import React from 'react';
+import React, { Children } from 'react';
 import { useState } from 'react'
 import { useEffect } from 'react';
-import { BrowserRouter as Router, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter as Router, Routes, Route, useLocation, Navigate } from 'react-router-dom';
 import HeroSection from './pages/HomePage/HeroSection';
 import Navbar from './components/Navbar';
 import Noise from './components/Noise';
@@ -16,9 +16,17 @@ import NewArrival from './pages/HomePage/NewArrival';
 import Wishlist from './pages/WishlistPage/Wishlist';
 import CartSideBar from './components/CartSideBar';
 import { CartProvider, useCart } from './context/CartContext';
+import { AuthProvider } from './context/AuthContext';
+import { useAuth } from './context/AuthContext';
 import LogIn from './pages/Log-in/LogIn';
 import SignUp from './pages/SignUp/SignUp';
 import Checkout from './pages/CheckOut/Checkout';
+import Profile from './pages/ProfilePage/Profile';
+import AdminDashboard from './pages/AdminPage/AdminDashboard';
+import AdminProducts from './pages/AdminPage/AdminProducts';
+import AdminOrders from './pages/AdminPage/AdminOrders';
+import AdminUsers from './pages/AdminPage/AdminUsers';
+import AdminSettings from './pages/AdminPage/AdminSettings';
 
 const App = () => {
 
@@ -27,21 +35,38 @@ const App = () => {
   const [isWishlistOpen, setIsWishlistOpen] = useState(false);
 
   return (
-    <CartProvider>
-      <Router>
-        <AppContent
-          isOpen={isOpen}
-          setIsOpen={setIsOpen}
+    <AuthProvider>
+      <CartProvider>
+        <Router>
+          <AppContent
+            isOpen={isOpen}
+            setIsOpen={setIsOpen}
 
-          isSearchOpen={isSearchOpen}
-          setIsSearchOpen={setIsSearchOpen}
+            isSearchOpen={isSearchOpen}
+            setIsSearchOpen={setIsSearchOpen}
 
-          isWishlistOpen={isWishlistOpen}
-          setIsWishlistOpen={setIsWishlistOpen}
-        />
-      </Router>
-    </CartProvider>
+            isWishlistOpen={isWishlistOpen}
+            setIsWishlistOpen={setIsWishlistOpen}
+          />
+        </Router>
+      </CartProvider>
+    </AuthProvider>
   );
+};
+
+// Protected Route component for admin routes
+const AdminRoute = ({ children }) => {
+  const { isAuthenticated, isAdmin } = useAuth();
+  
+  if (!isAuthenticated) {
+    return <Navigate to="/login" />;
+  }
+  
+  if (!isAdmin) {
+    return <Navigate to="/" />;
+  }
+  
+  return children;
 };
 
 // Main layout with Navbar and Footer
@@ -69,11 +94,34 @@ const CheckoutLayout = ({ children }) => {
   );
 };
 
+// Admin layout
+const AdminLayout = ({ children }) => {
+  return (
+    <div className="bg-[#121212] min-h-screen">
+      {children}
+    </div>
+  );
+};
+
+
+
+const ProfileLayout = ({ children, isOpen, setIsOpen, isSearchOpen, setIsSearchOpen }) => {
+  return (
+    <div className="min-h-screen w-full bg-[#121212] text-white">
+      <Navbar isOpen={isOpen} setIsOpen={setIsOpen} isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen} />
+      {children}
+      <Footer />
+    </div>
+  );
+};
+
 const AppContent = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen, isWishlistOpen, setIsWishlistOpen }) => {
   const { isCartOpen } = useCart();
   const location = useLocation();
   const isAuthPage = location.pathname === '/login' || location.pathname === '/signup';
   const isCheckoutPage = location.pathname === '/checkout';
+  const isProfilePage = location.pathname === '/profile';
+  const isAdminPage = location.pathname.startsWith('/admin');
 
   useEffect(() => {
     if (isOpen || isSearchOpen || isCartOpen) {
@@ -107,6 +155,52 @@ const AppContent = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen, isWishli
         <Routes>
           <Route path="/login" element={<LogIn />} />
           <Route path="/signup" element={<SignUp />} />
+        </Routes>
+      </>
+    );
+  }
+
+  // If we're on an admin page, render the admin layout
+  if (isAdminPage) {
+    return (
+      <>
+        <Noise patternSize={400} patternAlpha={5} />
+        <Routes>
+          <Route path="/admin" element={
+            <AdminRoute>
+              <AdminLayout>
+                <AdminDashboard />
+              </AdminLayout>
+            </AdminRoute>
+          } />
+          <Route path="/admin/products" element={
+            <AdminRoute>
+              <AdminLayout>
+                <AdminProducts />
+              </AdminLayout>
+            </AdminRoute>
+          } />
+          <Route path="/admin/orders" element={
+            <AdminRoute>
+              <AdminLayout>
+                <AdminOrders />
+              </AdminLayout>
+            </AdminRoute>
+          } />
+          <Route path="/admin/users" element={
+            <AdminRoute>
+              <AdminLayout>
+                <AdminUsers />
+              </AdminLayout>
+            </AdminRoute>
+          } />
+          <Route path="/admin/settings" element={
+            <AdminRoute>
+              <AdminLayout>
+                <AdminSettings />
+              </AdminLayout>
+            </AdminRoute>
+          } />
         </Routes>
       </>
     );
@@ -157,6 +251,12 @@ const AppContent = ({ isOpen, setIsOpen, isSearchOpen, setIsSearchOpen, isWishli
             <MainLayout isOpen={isOpen} setIsOpen={setIsOpen} isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen}>
               <Wishlist />
             </MainLayout>
+          } />
+
+          <Route path="/profile" element={
+            <ProfileLayout isOpen={isOpen} setIsOpen={setIsOpen} isSearchOpen={isSearchOpen} setIsSearchOpen={setIsSearchOpen}>
+              <Profile />
+            </ProfileLayout>
           } />
         </Routes>
       </div>

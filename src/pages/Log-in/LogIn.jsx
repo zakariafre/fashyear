@@ -4,17 +4,31 @@ import { ArrowUpLeft } from 'lucide-react';
 import loginPic from '../../assets/Icons/loginPic.png';
 import fashyear from '../../assets/Icons/1.png';
 import pattern from '../../assets/Icons/pattern.png';
+import { useAuth } from '../../context/AuthContext';
 
 const LogIn = () => {
     const navigate = useNavigate();
+    const { login, isLoading, error } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [loginError, setLoginError] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle login logic here
-        console.log('Login attempt with:', { email, password });
+        setLoginError('');
+        
+        try {
+            const user = await login(email, password);
+            // Check if user is admin and redirect accordingly
+            if (user.isAdmin) {
+                navigate('/admin');
+            } else {
+                navigate('/profile');
+            }
+        } catch (err) {
+            setLoginError(err.message || 'Failed to login. Please check your credentials.');
+        }
     };
 
     const handleSignUp = (e) => {
@@ -46,13 +60,20 @@ const LogIn = () => {
 
                         {/* Login Form */}
                         <form onSubmit={handleSubmit} className="w-full flex flex-col gap-8">
+                            {/* Error message */}
+                            {loginError && (
+                                <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3">
+                                    {loginError}
+                                </div>
+                            )}
+                        
                             {/* Email Input */}
                             <div className="relative">
                                 <input
                                     type="email"
                                     className="w-full font-light !pl-3 bg-neutral-900 border-0 border-b border-neutral-800 outline-none focus:border-neutral-300 !py-2"
                                     value={email}
-                                    placeholder={`Email Adress`}
+                                    placeholder={`Email Address`}
                                     onChange={(e) => setEmail(e.target.value)}
                                     required
                                 />
@@ -94,8 +115,9 @@ const LogIn = () => {
                                 <button
                                     type="submit"
                                     className="w-full bg-neutral-300 hover:bg-white text-black !py-3 uppercase font-medium"
+                                    disabled={isLoading}
                                 >
-                                    Log In
+                                    {isLoading ? 'Logging in...' : 'Log In'}
                                 </button>
                             </div>
 

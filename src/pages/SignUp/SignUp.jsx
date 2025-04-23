@@ -3,19 +3,40 @@ import { Link, useNavigate } from 'react-router-dom';
 import { ArrowUpLeft } from 'lucide-react';
 import fashyear from '../../assets/Icons/1.png';
 import signupPic from '../../assets/Icons/signupPic.png';
+import { useAuth } from '../../context/AuthContext';
 
 const SignUp = () => {
     const navigate = useNavigate();
+    const { signup, isLoading } = useAuth();
     const [email, setEmail] = useState('');
     const [password, setPassword] = useState('');
     const [confirmPassword, setConfirmPassword] = useState('');
     const [showPassword, setShowPassword] = useState(false);
+    const [agreedToTerms, setAgreedToTerms] = useState(false);
+    const [signupError, setSignupError] = useState('');
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
-        // Handle signup logic here
-        console.log('Signup submitted with:', { email, password });
-        // Redirect to login or dashboard after successful signup
+        setSignupError('');
+
+        // Validate passwords match
+        if (password !== confirmPassword) {
+            setSignupError('Passwords do not match');
+            return;
+        }
+
+        // Validate terms are agreed to
+        if (!agreedToTerms) {
+            setSignupError('You must agree to the terms and conditions');
+            return;
+        }
+
+        try {
+            await signup(email, password);
+            navigate('/profile');
+        } catch (err) {
+            setSignupError(err.message || 'Failed to create account. Please try again.');
+        }
     };
 
     return (
@@ -40,38 +61,38 @@ const SignUp = () => {
 
             {/* Right Section - Signup Form */}
             <div className="flex flex-col justify-center z-10">
-                {/* Header/Logo for mobile */}
-                <div className="flex items-center gap-2 absolute top-10 left-30 md:hidden">
+                {/* Header/Logo */}
+                <div className="flex items-center gap-2 absolute top-10 left-10 md:left-auto md:right-10">
                     <Link to="/">
                         <img src={fashyear} draggable="false" className="h-4" />
                     </Link>
+                    <span className="text-xs font-light text-neutral-200 uppercase tracking-wide">| CREATE ACCOUNT</span>
                 </div>
 
-                {/* Back button for mobile */}
-                <div className="md:hidden absolute top-6 left-6 z-20">
+                {/* Mobile Back Button */}
+                <div className="md:hidden absolute top-10 right-10">
                     <Link to="/" className="flex items-center gap-2 bg-neutral-800/60 backdrop-blur-xs !py-2 !px-4 border border-neutral-700">
-                        <ArrowUpLeft className='h-5 font-light w-5'/>
-                        <span className='text-xs font-light uppercase tracking-wide'>Back to Home</span>
+                        <ArrowUpLeft className='h-5 font-light w-5' />
+                        <span className='text-xs font-light uppercase tracking-wide'>Home</span>
                     </Link>
                 </div>
 
                 <div className="w-4/5 max-w-md !mx-auto flex flex-col gap-10">
-                    {/* Header/Logo for desktop */}
-                    <div className="hidden md:flex items-center gap-2 !mb-6">
-                        <Link to="/">
-                            <img src={fashyear} draggable="false" className="h-4" />
-                        </Link>
-                        <span className="text-xs font-light text-neutral-200 uppercase tracking-wide">| CREATE ACCOUNT</span>
-                    </div>
-
                     {/* Signup Header */}
-                    <div className='flex flex-col gap-2'>
-                        <h1 className="text-3xl tracking-tight font-light">Join Fashyear</h1>
-                        <p className="text-neutral-400 text-sm">Create your account to have access to a personalized experience</p>
+                    <div className='flex flex-col !mt-10 gap-2'>
+                        <h1 className="text-3xl tracking-tight font-light">Create your account</h1>
+                        <p className="text-neutral-400 text-sm">Join Fashyear and access exclusive offers</p>
                     </div>
 
                     {/* Signup Form */}
                     <form onSubmit={handleSubmit} className="w-full flex flex-col gap-8">
+                        {/* Error message */}
+                        {signupError && (
+                            <div className="bg-red-500/10 border border-red-500/20 text-red-400 text-sm p-3">
+                                {signupError}
+                            </div>
+                        )}
+                    
                         {/* Email Input */}
                         <div className="relative">
                             <input
@@ -94,18 +115,6 @@ const SignUp = () => {
                                 onChange={(e) => setPassword(e.target.value)}
                                 required
                             />
-                        </div>
-
-                        {/* Confirm Password Input */}
-                        <div className="relative">
-                            <input
-                                type={showPassword ? "text" : "password"}
-                                className="w-full font-light !pl-3 bg-neutral-900 border-0 border-b border-neutral-800 outline-none focus:border-neutral-300 !py-2"
-                                value={confirmPassword}
-                                placeholder="Confirm Password"
-                                onChange={(e) => setConfirmPassword(e.target.value)}
-                                required
-                            />
                             <button
                                 type="button"
                                 onClick={() => setShowPassword(!showPassword)}
@@ -124,12 +133,26 @@ const SignUp = () => {
                             </button>
                         </div>
 
+                        {/* Confirm Password Input */}
+                        <div className="relative">
+                            <input
+                                type={showPassword ? "text" : "password"}
+                                className="w-full font-light !pl-3 bg-neutral-900 border-0 border-b border-neutral-800 outline-none focus:border-neutral-300 !py-2"
+                                value={confirmPassword}
+                                placeholder="Confirm Password"
+                                onChange={(e) => setConfirmPassword(e.target.value)}
+                                required
+                            />
+                        </div>
+
                         {/* Terms and Conditions */}
                         <div className="flex items-start gap-2">
                             <input
                                 type="checkbox"
                                 id="terms"
                                 className="w-4 h-4 bg-neutral-900 border border-neutral-700 rounded-0 cursor-pointer appearance-none checked:bg-neutral-700 checked:border-neutral-400 checked:appearance-auto"
+                                checked={agreedToTerms}
+                                onChange={() => setAgreedToTerms(!agreedToTerms)}
                                 required
                             />
                             <label htmlFor="terms" className="text-xs text-neutral-400">
@@ -141,8 +164,9 @@ const SignUp = () => {
                         <button
                             type="submit"
                             className="w-full bg-neutral-300 cursor-pointer hover:bg-white text-black !py-3 uppercase font-medium"
+                            disabled={isLoading}
                         >
-                            Create Account
+                            {isLoading ? 'Creating Account...' : 'Create Account'}
                         </button>
 
                         {/* Login Link */}
