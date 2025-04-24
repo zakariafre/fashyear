@@ -3,8 +3,8 @@ import fyIcon from '../assets/Icons/1.png';
 
 const Footer = () => {
     return (
-        <footer className="w-full bg-transparent text-[#A1A1A1] flex flex-col">
-            <hr className='border-neutral-800 w-[97%] mx-auto' />
+        <footer className="w-full bg-transparent text-[#A1A1A1] flex flex-col justify-center items-center">
+            <hr className='border-neutral-800 w-[90%] mx-auto' />
             
             <div className="max-w-7xl w-full mx-auto grid grid-cols-1 gap-y-8">
                 {/* Main Footer Sections */}

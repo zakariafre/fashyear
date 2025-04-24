@@ -110,55 +110,54 @@ const Profile = () => {
         <div className="min-h-screen w-full !mt-26 flex justify-center bg-[#121212] text-white">
             <div className="w-full !mx-30">
                 <div className="w-full flex flex-col gap-8">
-                    {/* <h2 className="text-2xl tracking-normal text-neutral-300 font-normal">| Account</h2> */}
                     <div className="flex flex-row items-center text-center gap-2">
                                 <div className="w-8 h-8 bg-neutral-800 rounded-full flex items-center justify-center">
                                     <User size={20} className="text-neutral-300" />
                                 </div>
-                                <h2 className="text-2xl font-normal">Account</h2>
+                                <h2 className="text-2xl font-normal"> {currentUser.name || 'User'} </h2>
                             </div>
                     {/* top bar */}
-                    <div className="w-full border-b border-neutral-800">
-                        <div className="flex flex-row gap-6">
-                            <nav className="flex flex-row gap-1 cursor-pointer">
+                    <div className="w-full border border-neutral-800 rounded-lg bg-neutral-900">
+                        <div className="flex flex-row justify-center gap-6">
+                            <nav className="flex flex-row gap-2 cursor-pointer">
                                 <button
                                     onClick={() => setActiveTab('profile')}
-                                    className={`flex items-center gap-3 !py-4 cursor-pointer !px-4 text-left text-sm ${activeTab === 'profile' ? 'border-b border-white text-white' : 'border-b border-transparent text-neutral-400 hover:text-neutral-200'}`}
+                                    className={`flex items-center gap-3 !py-4 cursor-pointer !px-4 text-left text-sm ${activeTab === 'profile' ? 'border-b border-neutral-400 duration-200 ease-out text-white' : 'border-b border-transparent text-neutral-400 duration-200 ease-out hover:text-neutral-200'}`}
                                 >
                                     <User size={16} />
                                     <span>Profile</span>
                                 </button>
                                 <button
                                     onClick={() => setActiveTab('orders')}
-                                    className={`flex items-center gap-3 !py-4 cursor-pointer !px-4 text-left text-sm ${activeTab === 'orders' ? 'border-b border-white text-white' : 'border-b border-transparent text-neutral-400 hover:text-neutral-200'}`}
+                                    className={`flex items-center gap-3 !py-4 cursor-pointer !px-4 text-left text-sm ${activeTab === 'orders' ? 'border-b border-neutral-400 duration-200 ease-out text-white' : 'border-b border-transparent text-neutral-400 duration-200 ease-out hover:text-neutral-200'}`}
                                 >
                                     <ShoppingBag size={16} />
                                     <span>Orders</span>
                                 </button>
                                 <button
                                     onClick={() => setActiveTab('wishlist')}
-                                    className={`flex items-center gap-3 !py-4 cursor-pointer !px-4 text-left text-sm ${activeTab === 'wishlist' ? 'border-b border-white text-white' : 'border-b border-transparent text-neutral-400 hover:text-neutral-200'}`}
+                                    className={`flex items-center gap-3 !py-4 cursor-pointer !px-4 text-left text-sm ${activeTab === 'wishlist' ? 'border-b border-neutral-400 duration-200 ease-out text-white' : 'border-b border-transparent text-neutral-400 duration-200 ease-out hover:text-neutral-200'}`}
                                 >
                                     <Heart size={16} />
                                     <span>Wishlist</span>
                                 </button>
                                 <button
                                     onClick={() => setActiveTab('payment')}
-                                    className={`flex items-center gap-3 !py-4 cursor-pointer !px-4 text-left text-sm ${activeTab === 'payment' ? 'border-b border-white text-white' : 'border-b border-transparent text-neutral-400 hover:text-neutral-200'}`}
+                                    className={`flex items-center gap-3 !py-4 cursor-pointer !px-4 text-left text-sm ${activeTab === 'payment' ? 'border-b border-neutral-400 duration-200 ease-out text-white' : 'border-b border-transparent text-neutral-400 duration-200 ease-out hover:text-neutral-200'}`}
                                 >
                                     <CreditCard size={16} />
                                     <span>Payment Methods</span>
                                 </button>
                                 <button
                                     onClick={() => setActiveTab('addresses')}
-                                    className={`flex items-center gap-3 !py-4 cursor-pointer !px-4 text-left text-sm ${activeTab === 'addresses' ? 'border-b border-white text-white' : 'border-b border-transparent text-neutral-400 hover:text-neutral-200'}`}
+                                    className={`flex items-center gap-3 !py-4 cursor-pointer !px-4 text-left text-sm ${activeTab === 'addresses' ? 'border-b border-neutral-400 duration-200 ease-out text-white' : 'border-b border-transparent text-neutral-400 duration-200 ease-out hover:text-neutral-200'}`}
                                 >
                                     <MapPin size={16} />
                                     <span>Addresses</span>
                                 </button>
                                 <button
                                     onClick={() => setActiveTab('settings')}
-                                    className={`flex items-center gap-3 !py-4 cursor-pointer !px-4 text-left text-sm ${activeTab === 'settings' ? 'border-b border-white text-white' : 'border-b border-transparent text-neutral-400 hover:text-neutral-200'}`}
+                                    className={`flex items-center gap-3 !py-4 cursor-pointer !px-4 text-left text-sm ${activeTab === 'settings' ? 'border-b border-neutral-400 duration-200 ease-out text-white' : 'border-b border-transparent text-neutral-400 duration-200 ease-out hover:text-neutral-200'}`}
                                 >
                                     <Settings size={16} />
                                     <span>Account Settings</span>
@@ -176,16 +175,16 @@ const Profile = () => {
                     </div>
 
                     {/* Main Content */}
-                    <div className="flex-1 rounded-md border border-neutral-700 !p-6 !mb-10">
+                    <div className="flex-1 rounded-lg border border-neutral-700 !p-6 !mb-10">
                         {/* Profile Tab */}
                         {activeTab === 'profile' && (
                             <div className='!px-20 !py-5 flex flex-col justify-center gap-6'>
                                 <div className="flex justify-between items-center !mb-6">
-                                    <h2 className="text-xl font-medium text-white">Personal Information</h2>
+                                    <h2 className="text-xl font-light text-white">Personal Information</h2>
                                     {!isEditing && (
                                         <button
                                             onClick={() => setIsEditing(true)}
-                                            className="flex items-center gap-2 !py-2 !px-3 bg-white border border-neutral-700 text-black text-xs hover:bg-neutral-200 cursor-pointer"
+                                            className="flex items-center rounded-sm gap-2 !py-2 !px-3 bg-white border border-neutral-700 text-black text-xs hover:bg-neutral-200 cursor-pointer"
                                         >
                                             <Edit3 size={14} />
                                             <span>Edit Profile</span>
@@ -279,13 +278,13 @@ const Profile = () => {
                                             <button
                                                 type="button"
                                                 onClick={() => setIsEditing(false)}
-                                                className="!py-2 !px-4 border border-neutral-700 text-neutral-300 text-sm hover:bg-neutral-800 cursor-pointer"
+                                                className="!py-2 !px-4 rounded-sm border border-neutral-700 text-neutral-300 text-sm hover:bg-neutral-800 cursor-pointer"
                                             >
                                                 Cancel
                                             </button>
                                             <button
                                                 type="submit"
-                                                className="!py-2 !px-4 bg-neutral-300 hover:bg-white text-black text-sm cursor-pointer"
+                                                className="!py-2 !px-4 rounded-sm bg-neutral-300 hover:bg-white text-black text-sm cursor-pointer"
                                             >
                                                 Save Changes
                                             </button>
@@ -333,7 +332,7 @@ const Profile = () => {
                         {/* Orders Tab */}
                         {activeTab === 'orders' && (
                             <div className='!px-20 !py-5 flex flex-col justify-center gap-6'>
-                                <h2 className="text-xl font-medium">Order History</h2>
+                                <h2 className="text-xl font-light">Order History</h2>
 
                                 {mockOrders.length > 0 ? (
                                     <div className="flex flex-col gap-6">
@@ -392,13 +391,13 @@ const Profile = () => {
                         {/* Wishlist Tab */}
                         {activeTab === 'wishlist' && (
                             <div className='!px-20 !py-5 flex flex-col justify-center gap-6'>
-                                <h2 className="text-xl font-medium">Your Wishlist</h2>
+                                <h2 className="text-xl font-light">Your Wishlist</h2>
                                 <div className="text-center !py-2 text-neutral-400">
                                     <Heart size={32} className="!mx-auto !mb-4 opacity-50" />
                                     <p>Your wishlist is empty</p>
                                     <button
                                         onClick={() => navigate('/shop')}
-                                        className="!mt-4 !py-2 !px-4 bg-neutral-300 hover:bg-white text-black text-sm"
+                                        className="!mt-4 rounded-sm cursor-pointer !py-2 !px-4 bg-neutral-300 hover:bg-white text-black text-sm"
                                     >
                                         Browse Products
                                     </button>
@@ -408,12 +407,12 @@ const Profile = () => {
 
                         {/* Payment Methods Tab */}
                         {activeTab === 'payment' && (
-                            <div>
-                                <h2 className="text-xl font-light !mb-6">Payment Methods</h2>
-                                <div className="text-center !py-8 text-neutral-400">
+                            <div className='!px-20 !py-5 flex flex-col justify-center gap-6'>
+                                <h2 className="text-xl font-light">Payment Methods</h2>
+                                <div className="text-center !py-2 text-neutral-400">
                                     <CreditCard size={32} className="!mx-auto !mb-4 opacity-50" />
                                     <p>You haven't saved any payment methods yet.</p>
-                                    <button className="!mt-4 !py-2 !px-4 bg-neutral-300 hover:bg-white text-black text-sm">
+                                    <button className="!mt-4 rounded-sm cursor-pointer !py-2 !px-4 bg-neutral-300 hover:bg-white text-black text-sm">
                                         Add Payment Method
                                     </button>
                                 </div>
@@ -422,12 +421,12 @@ const Profile = () => {
 
                         {/* Addresses Tab */}
                         {activeTab === 'addresses' && (
-                            <div>
-                                <h2 className="text-xl font-light !mb-6">Saved Addresses</h2>
-                                <div className="text-center !py-8 text-neutral-400">
+                            <div className='!px-20 !py-5 flex flex-col justify-center gap-6'>
+                                <h2 className="text-xl font-light">Saved Addresses</h2>
+                                <div className="text-center !py-2 text-neutral-400">
                                     <MapPin size={32} className="!mx-auto !mb-4 opacity-50" />
                                     <p>You haven't saved any addresses yet.</p>
-                                    <button className="!mt-4 !py-2 !px-4 bg-neutral-300 hover:bg-white text-black text-sm">
+                                    <button className="!mt-4 rounded-sm cursor-pointer !py-2 !px-4 bg-neutral-300 hover:bg-white text-black text-sm">
                                         Add New Address
                                     </button>
                                 </div>
@@ -436,24 +435,24 @@ const Profile = () => {
 
                         {/* Settings Tab */}
                         {activeTab === 'settings' && (
-                            <div>
-                                <h2 className="text-xl font-light !mb-6">Account Settings</h2>
+                            <div className='!px-20 !py-5 flex flex-col justify-center gap-6'>
+                                <h2 className="text-xl font-light">Account Settings</h2>
 
                                 <div className="flex flex-col gap-6">
-                                    <div className="border border-neutral-800 !p-4">
+                                    <div className="border border-neutral-800 bg-neutral-900 rounded-lg !p-4">
                                         <h3 className="text-sm font-medium !mb-4">Password</h3>
                                         <div className="flex justify-between items-center">
                                             <div>
                                                 <p className="text-sm">Change your password</p>
                                                 <p className="text-xs text-neutral-400 !mt-1">Last updated: Never</p>
                                             </div>
-                                            <button className="text-xs border border-neutral-700 !py-2 !px-3 hover:bg-neutral-800">
+                                            <button className="text-xs cursor-pointer border rounded-sm border-neutral-700 !py-2 !px-3 hover:bg-neutral-800">
                                                 Change Password
                                             </button>
                                         </div>
                                     </div>
 
-                                    <div className="border border-neutral-800 !p-4">
+                                    <div className="border border-neutral-800 bg-neutral-900 rounded-lg !p-4">
                                         <h3 className="text-sm font-medium !mb-4">Notifications</h3>
                                         <div className="flex items-center justify-between">
                                             <div>
@@ -467,11 +466,11 @@ const Profile = () => {
                                         </div>
                                     </div>
 
-                                    <div className="border border-neutral-800 !p-4">
+                                    <div className="border border-red-800/60 rounded-lg !p-4">
                                         <h3 className="text-sm font-medium !mb-2 text-red-500">Danger Zone</h3>
                                         <p className="text-xs text-neutral-400 !mb-4">These actions are irreversible</p>
 
-                                        <button className="text-xs border border-red-800 text-red-500 !py-2 !px-3 hover:bg-red-900/20">
+                                        <button className="text-xs border rounded-sm cursor-pointer border-red-800 text-red-500 !py-2 !px-3 hover:bg-red-900/20">
                                             Delete Account
                                         </button>
                                     </div>

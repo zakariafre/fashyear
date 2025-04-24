@@ -28,7 +28,7 @@ export const AuthProvider = ({ children }) => {
         try {
             // Mock login - in a real app, this would be an API call
             // For demo purposes, we'll just check if the email has an @ symbol
-            if (!email.includes('@')) {
+            if (!email.includes('@' , 'gmail' , 'hotmail' , 'outlook' ,'.com' , '.fr' , '.net' , '.org' , '.io' , '.co' , '.in' , '.co.in' , '.co.uk' , '.co.us' , '.co.ca' , '.co.au' , '.co.nz' , '.co.za' , '.co.in' , '.co.uk' , '.co.us' , '.co.ca' , '.co.au' , '.co.nz' , '.co.za' )) {
                 throw new Error('Invalid email format');
             }
 
