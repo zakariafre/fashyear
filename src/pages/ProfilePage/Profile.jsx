@@ -175,7 +175,7 @@ const Profile = () => {
                     </div>
 
                     {/* Main Content */}
-                    <div className="flex-1 rounded-lg border border-neutral-700 !p-6 !mb-10">
+                    <div className="flex-1 rounded-lg bg-neutral-900 border border-neutral-700 !p-6 !mb-10">
                         {/* Profile Tab */}
                         {activeTab === 'profile' && (
                             <div className='!px-20 !py-5 flex flex-col justify-center gap-6'>
