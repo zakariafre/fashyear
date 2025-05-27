@@ -10,53 +10,60 @@ use Illuminate\Support\Facades\Validator;
 class CategoryController extends Controller
 {
     /**
-     * Display a public listing of all categories.
-     * This is used for the customer-facing category navigation.
+     * Display a listing of the categories.
+     *
+     * @return \Illuminate\Http\Response
      */
     public function listingCategories()
     {
-        try {
-            $categories = Category::withCount('products')
-                ->whereHas('products', function($query) {
-                    $query->where('stock', true);
-                })
-                ->get();
-            
-            return response()->json([
-                'status' => 'success',
-                'data' => $categories
-            ]);
-        } catch (\Exception $e) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Error fetching categories'
-            ], 500);
+        // Get static categories instead of from database
+        $categories = Category::getStaticCategories();
+        
+        // For each category, get the actual product count
+        foreach ($categories as &$category) {
+            $category['productCount'] = Product::where('category_id', $category['id'])->count();
         }
+        
+        return response()->json([
+            'status' => 'success',
+            'data' => $categories
+        ]);
     }
 
     /**
-     * Display the specified category with its products.
+     * Get a specific category
+     *
+     * @param  int  $id
+     * @return \Illuminate\Http\Response
      */
-    public function showCategories(string $id)
+    public function showCategories($id)
     {
-        try {
-            $category = Category::findOrFail($id);
-            $products = Product::where('category_id', $id)
-                ->paginate(12);
-            
-            return response()->json([
-                'status' => 'success',
-                'data' => [
-                    'category' => $category,
-                    'products' => $products
-                ]
-            ]);
-        } catch (\Exception $e) {
+        // Get static categories
+        $allCategories = Category::getStaticCategories();
+        
+        // Find the requested category
+        $category = null;
+        foreach ($allCategories as $cat) {
+            if ($cat['id'] == $id) {
+                $category = $cat;
+                break;
+            }
+        }
+        
+        if (!$category) {
             return response()->json([
                 'status' => 'error',
                 'message' => 'Category not found'
             ], 404);
         }
+        
+        // Get the actual product count
+        $category['productCount'] = Product::where('category_id', $category['id'])->count();
+        
+        return response()->json([
+            'status' => 'success',
+            'data' => $category
+        ]);
     }
 
     /**

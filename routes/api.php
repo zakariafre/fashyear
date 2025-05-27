@@ -13,6 +13,7 @@ use App\Http\Controllers\OrderitemController;
 use App\Http\Controllers\WishlistController;
 use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InvoiceController;
+use App\Http\Controllers\ImageUploadController;
 
 // CSRF token route - available without authentication
 Route::get('/csrf-token', function (Request $request) {
@@ -100,12 +101,12 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::put('/products/{id}', [AdminController::class, 'updateProduct']);
         Route::delete('/products/{id}', [AdminController::class, 'deleteProduct']);
 
-        // Category management
+        // Category management - read-only
         Route::get('/categories/stats', [AdminController::class, 'getCategoryStats']);
         Route::get('/categories/manage', [AdminController::class, 'listCategories']);
-        Route::post('/categories', [AdminController::class, 'createCategory']);
-        Route::put('/categories/{id}', [AdminController::class, 'updateCategory']);
-        Route::delete('/categories/{id}', [AdminController::class, 'deleteCategory']);
+        
+        // Image upload route for products
+        Route::post('/upload-image', [ImageUploadController::class, 'upload']);
         
         // Invoice management
         Route::get('/invoices', [AdminController::class, 'getInvoices']);

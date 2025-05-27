@@ -26,6 +26,7 @@ class Product extends Model
     protected $casts = [
         'imgURLs' => 'array',
         'price' => 'decimal:2',
+        'stock' => 'boolean',
     ];
 
     // Relationship: Product belongs to a Category
