@@ -24,6 +24,26 @@ class ProductController extends Controller
                 $query->where('category_id', $request->category_id);
             }
 
+            // Filter by color if provided
+            if ($request->has('color')) {
+                $colors = explode(',', $request->color);
+                $query->where(function($q) use ($colors) {
+                    foreach ($colors as $color) {
+                        $q->orWhereJsonContains('colors', ['name' => $color]);
+                    }
+                });
+            }
+
+            // Filter by size if provided
+            if ($request->has('size')) {
+                $sizes = explode(',', $request->size);
+                $query->where(function($q) use ($sizes) {
+                    foreach ($sizes as $size) {
+                        $q->orWhereJsonContains('size', $size);
+                    }
+                });
+            }
+
             // Filter by price range if provided
             if ($request->has('min_price')) {
                 $query->where('price', '>=', $request->min_price);
@@ -48,7 +68,7 @@ class ProductController extends Controller
             }
 
             // Sort products
-            $sortField = $request->input('sort_by', 'created_at');
+            $sortField = $request->input('sort_field', 'created_at');
             $sortDirection = $request->input('sort_direction', 'desc');
             
             // Validate sort field to prevent SQL injection
