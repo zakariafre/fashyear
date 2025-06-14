@@ -6,6 +6,7 @@ use App\Models\Category;
 use App\Models\Product;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Validator;
+use Illuminate\Support\Facades\Log;
 
 class CategoryController extends Controller
 {
@@ -14,20 +15,22 @@ class CategoryController extends Controller
      *
      * @return \Illuminate\Http\Response
      */
-    public function listingCategories()
+    public function index()
     {
-        // Get static categories instead of from database
-        $categories = Category::getStaticCategories();
-        
-        // For each category, get the actual product count
-        foreach ($categories as &$category) {
-            $category['productCount'] = Product::where('category_id', $category['id'])->count();
+        try {
+            $categories = Category::getAllCategories();
+            
+            // Update product count for each category
+            $categories = $categories->map(function ($category) {
+                $category->productCount = $category->products()->count();
+                return $category;
+            });
+
+            return response()->json($categories);
+        } catch (\Exception $e) {
+            Log::error('Error fetching categories: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to fetch categories'], 500);
         }
-        
-        return response()->json([
-            'status' => 'success',
-            'data' => $categories
-        ]);
     }
 
     /**
@@ -36,34 +39,15 @@ class CategoryController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function showCategories($id)
+    public function show(Category $category)
     {
-        // Get static categories
-        $allCategories = Category::getStaticCategories();
-        
-        // Find the requested category
-        $category = null;
-        foreach ($allCategories as $cat) {
-            if ($cat['id'] == $id) {
-                $category = $cat;
-                break;
-            }
+        try {
+            $category->productCount = $category->products()->count();
+            return response()->json($category);
+        } catch (\Exception $e) {
+            Log::error('Error fetching category: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to fetch category'], 500);
         }
-        
-        if (!$category) {
-            return response()->json([
-                'status' => 'error',
-                'message' => 'Category not found'
-            ], 404);
-        }
-        
-        // Get the actual product count
-        $category['productCount'] = Product::where('category_id', $category['id'])->count();
-        
-        return response()->json([
-            'status' => 'success',
-            'data' => $category
-        ]);
     }
 
     /**
@@ -72,34 +56,54 @@ class CategoryController extends Controller
      */
     public function store(Request $request)
     {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'This endpoint is only available through the admin API'
-        ], 403);
+        try {
+            $validatedData = $request->validate([
+                'name' => 'required|string|max:255',
+                'description' => 'required|string',
+                'imageUrl' => 'required|string'
+            ]);
+
+            $category = Category::create($validatedData);
+            return response()->json($category, 201);
+        } catch (\Exception $e) {
+            Log::error('Error creating category: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to create category'], 500);
+        }
     }
 
     /**
      * Update an existing category (admin only).
      * This method is not implemented here as it's handled by AdminController.
      */
-    public function update(Request $request, string $id)
+    public function update(Request $request, Category $category)
     {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'This endpoint is only available through the admin API'
-        ], 403);
+        try {
+            $validatedData = $request->validate([
+                'name' => 'string|max:255',
+                'description' => 'string',
+                'imageUrl' => 'string'
+            ]);
+
+            $category->update($validatedData);
+            return response()->json($category);
+        } catch (\Exception $e) {
+            Log::error('Error updating category: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to update category'], 500);
+        }
     }
 
     /**
      * Delete a category (admin only).
      * This method is not implemented here as it's handled by AdminController.
      */
-    public function destroy(string $id)
+    public function destroy(Category $category)
     {
-        return response()->json([
-            'status' => 'error',
-            'message' => 'This endpoint is only available through the admin API'
-        ], 403);
+        try {
+            $category->delete();
+            return response()->json(null, 204);
+        } catch (\Exception $e) {
+            Log::error('Error deleting category: ' . $e->getMessage());
+            return response()->json(['error' => 'Failed to delete category'], 500);
+        }
     }
-   
 }

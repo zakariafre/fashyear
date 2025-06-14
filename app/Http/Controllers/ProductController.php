@@ -81,10 +81,10 @@ class ProductController extends Controller
     /**
      * Display the specified product with its category.
      */
-    public function show(string $id)
+    public function show(string $slug)
     {
         try {
-            $product = Product::with('category')->findOrFail($id);
+            $product = Product::with('category')->where('slug', $slug)->firstOrFail();
             
             // Get related products from the same category
             $relatedProducts = Product::where('category_id', $product->category_id)

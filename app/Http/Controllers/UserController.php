@@ -19,29 +19,39 @@ class UserController extends Controller
     // Login client
     public function login(Request $request)
     {
-        $request->validate([
-            'email' => 'required|email',
-            'password' => 'required',
-        ]);
+        try {
+            $request->validate([
+                'email' => 'required|email',
+                'password' => 'required',
+            ]);
 
-        $credentials = $request->only('email', 'password');
+            // Find the user by email
+            $user = User::where('email', $request->email)->first();
 
-        if (!Auth::attempt($credentials)) {
+            // Check if user exists and password is correct
+            if (!$user || !Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Invalid credentials',
+                ], 401);
+            }
+
+            // Delete existing tokens and create a new one
+            $user->tokens()->delete();
+            $token = $user->createToken('auth_token')->plainTextToken;
+
+            return response()->json([
+                'status' => 'success',
+                'token' => $token,
+                'user' => $user,
+                'role' => $user->type,
+            ]);
+        } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Invalid credentials',
-            ], 401);
+                'message' => $e->getMessage(),
+            ], 500);
         }
-
-        $user = Auth::user();
-        $token = $user->createToken('auth_token')->plainTextToken;
-
-        return response()->json([
-            'status' => 'success',
-            'token' => $token,
-            'user' => $user,
-            'role' => $user->type,
-        ]);
     }
 
     // SignUp action - only for clients
@@ -65,10 +75,7 @@ class UserController extends Controller
                 'phone_number' => $request->phone_number,
             ]);
 
-            // Login the user
-            Auth::login($user);
-            
-            // Create token
+            // Create token immediately after user creation
             $token = $user->createToken('auth_token')->plainTextToken;
 
             // Return the response

@@ -16,6 +16,10 @@ class Category extends Model
         'imageUrl',
     ];
 
+    protected $casts = [
+        'id' => 'integer'
+    ];
+
     public function products(): HasMany
     {
         return $this->hasMany(Product::class);
@@ -31,39 +35,62 @@ class Category extends Model
         return [
             [
                 'id' => 1,
-                'name' => 'Men',
-                'description' => 'Clothing and accessories for men',
-                'imageUrl' => 'https://images.unsplash.com/photo-1552374196-1ab2a1c593e8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=687&q=80',
+                'name' => 'Hijabs',
+                'description' => 'Traditional and modern hijabs in various styles, fabrics and colors.',
+                'imageUrl' => 'hijab-image-url',
                 'productCount' => 0
             ],
             [
                 'id' => 2,
-                'name' => 'Women',
-                'description' => 'Clothing and accessories for women',
-                'imageUrl' => 'https://images.unsplash.com/photo-1581044777550-4cfa60707c03?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=686&q=80',
+                'name' => 'Dresses',
+                'description' => 'Elegant modest dresses suitable for various occasions and styles.',
+                'imageUrl' => 'dress-image-url',
                 'productCount' => 0
             ],
             [
                 'id' => 3,
-                'name' => 'Kids',
-                'description' => 'Clothing and accessories for kids',
-                'imageUrl' => 'https://images.unsplash.com/photo-1622290291468-a28f7a7dc6a8?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=1072&q=80',
+                'name' => 'Tops',
+                'description' => 'Fashionable modest tops, blouses, and shirts for everyday wear.',
+                'imageUrl' => 'top-image-url',
                 'productCount' => 0
             ],
             [
                 'id' => 4,
-                'name' => 'Accessories',
-                'description' => 'Fashion accessories for all',
-                'imageUrl' => 'https://images.unsplash.com/photo-1511499767150-a48a237f0083?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=880&q=80',
+                'name' => 'Bottoms',
+                'description' => 'Comfortable and stylish pants, skirts, and other bottom wear options.',
+                'imageUrl' => 'bottom-image-url',
                 'productCount' => 0
             ],
             [
                 'id' => 5,
-                'name' => 'Footwear',
-                'description' => 'Shoes and footwear',
-                'imageUrl' => 'https://images.unsplash.com/photo-1562183241-b937e95585b6?ixlib=rb-4.0.3&ixid=M3wxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8fA%3D%3D&auto=format&fit=crop&w=765&q=80',
+                'name' => 'Sets',
+                'description' => 'Coordinated outfit sets for a complete and harmonious look.',
+                'imageUrl' => 'set-image-url',
+                'productCount' => 0
+            ],
+            [
+                'id' => 6,
+                'name' => 'Burkini',
+                'description' => 'Modest swimwear designed for comfort and coverage while swimming.',
+                'imageUrl' => 'burkini-image-url',
                 'productCount' => 0
             ]
         ];
+    }
+
+    /**
+     * Get all categories, either from database or static list
+     */
+    public static function getAllCategories()
+    {
+        // Always get from database first
+        $categories = self::all();
+        
+        // Add product count to each category
+        $categories->each(function ($category) {
+            $category->productCount = $category->products()->count();
+        });
+        
+        return $categories;
     }
 }

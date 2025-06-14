@@ -11,29 +11,31 @@ class AdminMiddleware
 {
     /**
      * Handle an incoming request.
-     * 
-     * Ensure that the authenticated user has admin privileges.
      *
-     * @param  \Closure(\Illuminate\Http\Request): (\Symfony\Component\HttpFoundation\Response)  $next
+     * @param  \Illuminate\Http\Request  $request
+     * @param  \Closure  $next
+     * @return mixed
      */
-    public function handle(Request $request, Closure $next): Response
+    public function handle(Request $request, Closure $next)
     {
-        // Check if user is authenticated
-        if (!Auth::check()) {
+        if (!$request->bearerToken()) {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Unauthorized - Not authenticated'
+                'message' => 'Unauthorized. Bearer token required.'
             ], 401);
         }
-        
-        // Check if authenticated user is an admin
+
+        if (!Auth::check()) {
+            return response()->json([
+                'message' => 'Unauthorized. Invalid token.'
+            ], 401);
+        }
+
         if (Auth::user()->type !== 'admin') {
             return response()->json([
-                'status' => 'error',
-                'message' => 'Forbidden - Admin privileges required'
+                'message' => 'Forbidden. Admin access required.'
             ], 403);
         }
-        
+
         return $next($request);
     }
-} 
+}

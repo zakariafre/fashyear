@@ -10,22 +10,20 @@ use Illuminate\Support\Str;
 class ImageUploadController extends Controller
 {
     /**
-     * Handle image upload request
+     * Handle multiple image upload request
      *
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
     public function upload(Request $request)
     {
-        \Log::info('Image upload request received', ['request' => $request->all()]);
-        
-        // Validate the uploaded file
+        // Validate the uploaded files
         $validator = Validator::make($request->all(), [
-            'image' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB max
+            'images' => 'required|array',
+            'images.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:5120', // 5MB max per image
         ]);
 
         if ($validator->fails()) {
-            \Log::error('Image validation failed:', $validator->errors()->toArray());
             return response()->json([
                 'status' => 'error',
                 'message' => 'Validation failed',
@@ -34,67 +32,44 @@ class ImageUploadController extends Controller
         }
 
         try {
-            if ($request->hasFile('image')) {
-                $file = $request->file('image');
+            if ($request->hasFile('images')) {
+                $uploadedUrls = [];
                 
-                // Log file information
-                \Log::info('Processing uploaded file:', [
-                    'original_name' => $file->getClientOriginalName(),
-                    'mime_type' => $file->getMimeType(),
-                    'size' => $file->getSize()
-                ]);
-                
-                // Determine the target directory based on type parameter
-                $type = $request->input('type', 'products'); // Default to products if not specified
-                $directory = in_array($type, ['categories', 'products']) ? $type : 'products';
-                
-                // Generate a unique filename
-                $filename = $directory . '_' . Str::uuid() . '.' . $file->getClientOriginalExtension();
-                
-                // Ensure the directory exists
-                Storage::disk('public')->makeDirectory($directory);
-                
-                // Store the file in the public disk under the appropriate directory
-                $path = $file->storeAs($directory, $filename, 'public');
-                
-                if (!$path) {
-                    throw new \Exception('Failed to store the file');
+                foreach ($request->file('images') as $file) {
+                    // Determine the target directory based on type parameter
+                    $type = $request->input('type', 'products'); // Default to products if not specified
+                    $directory = in_array($type, ['categories', 'products']) ? $type : 'products';
+                    
+                    // Generate a unique filename
+                    $filename = $directory . '_' . Str::uuid() . '.' . $file->getClientOriginalExtension();
+                    
+                    // Store the file in the public disk under the appropriate directory
+                    $path = $file->storeAs($directory, $filename, 'public');
+                    
+                    // Generate the URL for the stored image
+                    $url = asset('storage/' . $path);
+                    
+                    $uploadedUrls[] = $url;
                 }
-                
-                // Generate the URL for the stored image
-                $url = asset('storage/' . $path);
-                
-                \Log::info('Image uploaded successfully', [
-                    'path' => $path,
-                    'url' => $url
-                ]);
                 
                 return response()->json([
                     'status' => 'success',
-                    'message' => 'Image uploaded successfully',
+                    'message' => 'Images uploaded successfully',
                     'data' => [
-                        'imageUrl' => $url,
-                        'filename' => $filename,
-                        'path' => $path
+                        'imageUrls' => $uploadedUrls
                     ]
                 ]);
             }
             
-            \Log::error('No image file provided in request');
             return response()->json([
                 'status' => 'error',
-                'message' => 'No image file provided'
+                'message' => 'No images provided'
             ], 400);
             
         } catch (\Exception $e) {
-            \Log::error('Failed to upload image:', [
-                'error' => $e->getMessage(),
-                'trace' => $e->getTraceAsString()
-            ]);
-            
             return response()->json([
                 'status' => 'error',
-                'message' => 'Failed to upload image: ' . $e->getMessage()
+                'message' => 'Failed to upload images: ' . $e->getMessage()
             ], 500);
         }
     }

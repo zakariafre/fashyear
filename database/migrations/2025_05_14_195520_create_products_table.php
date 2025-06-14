@@ -17,7 +17,7 @@ return new class extends Migration
             $table->text('description');
             $table->decimal('price', 8, 2);
             $table->boolean('stock')->default(true);
-            $table->json('imgURLs')->nullable();
+            $table->json('imgURLs');
             $table->foreignId('category_id')->onDelete('cascade');
             $table->timestamps();
         });

@@ -12,10 +12,10 @@ use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\Auth;
 use Illuminate\Support\Facades\Validator;
 
+
+
 class AdminController extends Controller
 {
-
-
 
     // Get dashboard statistics for admin
     // Returns counts of users, orders, products, and revenue statistics
@@ -331,36 +331,88 @@ class AdminController extends Controller
 
 
 
+
+
+
+
+
     // get all the product , and by filters 
     /**
-     * List products for admin management with filters
-     * 
-     * @param Request $request
-     * @return \Illuminate\Http\JsonResponse
+     * Get all products with pagination
      */
-    public function listProducts(Request $request)
+    public function getAllProducts(Request $request)
     {
-        $query = Product::query();
+        if (!Auth::check()) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Unauthorized'
+            ], 401);
+        }
 
-        // search by name and category
-        if ($request->has('search')) {
+        try {
+            $query = Product::query();
 
-            $search = $request->search;
-            $query->where(function ($q) use ($search) {
+            // Apply search if provided
+            if ($request->has('search')) {
+                $search = $request->search;
+                $query->where('name', 'like', "%{$search}%");
+            }
+
+            // Apply category filter if provided
+            if ($request->has('category_id')) {
+                $query->where('category_id', $request->category_id);
+            }
+
+            // Apply sorting
+            $sortBy = $request->input('sort_by', 'created_at');
+            $sortOrder = $request->input('sort_order', 'desc');
+            $query->orderBy($sortBy, $sortOrder);
+
+            // Get paginated results
+            $perPage = $request->input('per_page', 10);
+            $products = $query->with('category')->paginate($perPage);
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $products->items(),
+                'total' => $products->total(),
+                'current_page' => $products->currentPage(),
+                'per_page' => $products->perPage(),
+                'last_page' => $products->lastPage()
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to fetch products'
+            ], 500);
+        }
+    }
+
+    /**
+     * Search products by name and category
+     */
+    public function searchProducts(Request $request)
+    {
+        if (!$request->has('search')) {
+            return response()->json([
+                'message' => 'Search parameter is required'
+            ], 400);
+        }
+
+        $search = $request->search;
+        $perPage = $request->input('per_page', 10);
+
+        $products = Product::with('category')
+            ->where(function ($q) use ($search) {
                 $q->where('name', 'like', "%{$search}%")
                     ->orWhereHas('category', function ($Qr) use ($search) {
                         $Qr->where('name', 'like', "%{$search}%");
                     });
-            });
-        }
+            })
+            ->orderBy('created_at', 'DESC')
+            ->paginate($perPage);
 
-        // Get paginated results
-        $perPage = $request->input('per_page', 10);
-        $products = $query->orderBy('created_at', 'Desc')->paginate($perPage);
-
-        return response()->json(
-            $products
-        );
+        return response()->json($products);
     }
 
 
@@ -369,59 +421,55 @@ class AdminController extends Controller
      */
     public function createProduct(Request $request)
     {
-        \Log::info('Creating product with data:', $request->all());
-        
+        \Log::info('Received product creation request', ['data' => $request->all()]);
+
         // Validate the data
         $ValidatePr = Validator::make($request->all(), [
-            'name' => 'required|string|max:255',
+            'name' => 'required|string',
             'description' => 'required|string|max:1000',
             'price' => 'required|numeric|min:0',
             'stock' => 'required|boolean',
-            'imgURLs' => 'nullable|array',
-            'imgURLs.*' => 'nullable|string|url',
-            'category_id' => 'required|integer|exists:categories,id',
+            'imgURLs' => 'required|array',
+            'imgURLs.*' => 'required|string',
+            'category_id' => 'required|exists:categories,id',
+            'size' => 'required|json',
+            'colors' => 'required|json'
         ]);
 
         // if validation Fails
         if ($ValidatePr->fails()) {
-            \Log::error('Product validation failed:', $ValidatePr->errors()->toArray());
+            \Log::warning('Product validation failed', ['errors' => $ValidatePr->errors()]);
             return response()->json([
                 'status' => 'error',
-                'message' => 'Validation failed',
+                'message' => 'validation failed',
                 'errors' => $ValidatePr->errors()
             ], 422);
         }
 
         try {
-            // Ensure imgURLs is an array
-            $imgURLs = $request->imgURLs ?? [];
-            if (!is_array($imgURLs)) {
-                $imgURLs = [$imgURLs];
-            }
+            \Log::info('Attempting to create product', [
+                'name' => $request->name,
+                'category_id' => $request->category_id,
+                'price' => $request->price
+            ]);
 
-            // Filter out any null or empty URLs
-            $imgURLs = array_filter($imgURLs, function($url) {
-                return !empty($url) && is_string($url);
-            });
+            // Decode the JSON strings for size and colors
+            $size = json_decode($request->size, true);
+            $colors = json_decode($request->colors, true);
 
             // Create the product
-            $productData = [
-                'name' => trim($request->name),
-                'description' => trim($request->description),
-                'price' => (float) $request->price,
-                'stock' => (bool) $request->stock,
-                'imgURLs' => array_values($imgURLs), // Reindex array
-                'category_id' => (int) $request->category_id,
-            ];
+            $Product = Product::create([
+                'name' => $request->name,
+                'description' => $request->description,
+                'price' => $request->price,
+                'stock' => $request->stock,
+                'imgURLs' => $request->imgURLs,
+                'category_id' => $request->category_id,
+                'size' => $size,
+                'colors' => $colors
+            ]);
 
-            \Log::info('Creating product with processed data:', $productData);
-
-            $Product = Product::create($productData);
-
-            // Load the category relationship
-            $Product->load('category');
-
-            \Log::info('Product created successfully:', $Product->toArray());
+            \Log::info('Product created successfully', ['product_id' => $Product->id]);
 
             // Success message
             return response()->json([
@@ -430,7 +478,7 @@ class AdminController extends Controller
                 'product' => $Product
             ], 201);
         } catch (\Exception $e) {
-            \Log::error('Failed to create product:', [
+            \Log::error('Failed to create product', [
                 'error' => $e->getMessage(),
                 'trace' => $e->getTraceAsString()
             ]);
@@ -455,7 +503,7 @@ class AdminController extends Controller
             // find the product by Id
             $Product = Product::findOrFail($id);
 
-            // Valide the data
+            // Validate the data
             $ValidatePr = Validator::make($request->all(), [
                 'name' => 'sometimes|required|string',
                 'description' => 'sometimes|required|string|max:1000',
@@ -464,6 +512,8 @@ class AdminController extends Controller
                 'imgURLs' => 'sometimes|nullable|array',
                 'imgURLs.*' => 'sometimes|nullable|string',
                 'category_id' => 'sometimes|required|exists:categories,id',
+                'size' => 'sometimes|required|json',
+                'colors' => 'sometimes|required|json'
             ]);
 
             // if validation Fails
@@ -488,15 +538,19 @@ class AdminController extends Controller
                 $Product->imgURLs = $request->imgURLs;
             if ($request->has('category_id'))
                 $Product->category_id = $request->category_id;
+            if ($request->has('size'))
+                $Product->size = json_decode($request->size, true);
+            if ($request->has('colors'))
+                $Product->colors = json_decode($request->colors, true);
 
             // save the changes
             $Product->save();
 
             // return Success response
             return response()->json([
-                'status' => 'Success',
+                'status' => 'success',
                 'message' => 'Product updated successfully',
-                'product' => $Product
+                'data' => $Product
             ]);
         } catch (\Exception $e) {
             return response()->json([
@@ -535,7 +589,7 @@ class AdminController extends Controller
     }
 
     /**
-     * List all categories for admin management
+     * List all categories with their product counts
      * 
      * @param Request $request
      * @return \Illuminate\Http\JsonResponse
@@ -543,29 +597,30 @@ class AdminController extends Controller
     public function listCategories(Request $request)
     {
         try {
-            // Get static categories instead of from database
-            $categories = Category::getStaticCategories();
+            // Get categories from database
+            $categories = Category::query();
             
             // Apply search filter if provided
             if ($request->has('search') && !empty($request->search)) {
                 $search = strtolower($request->search);
-                $categories = array_filter($categories, function($category) use ($search) {
-                    return strpos(strtolower($category['name']), $search) !== false ||
-                           strpos(strtolower($category['description']), $search) !== false;
+                $categories->where(function($query) use ($search) {
+                    $query->where('name', 'like', "%{$search}%")
+                          ->orWhere('description', 'like', "%{$search}%");
                 });
             }
             
-            // For each category, get the actual product count
-            foreach ($categories as &$category) {
-                $category['productCount'] = Product::where('category_id', $category['id'])->count();
-            }
+            // Get the categories with their product counts
+            $categories = $categories->get()->map(function($category) {
+                $category->productCount = $category->products()->count();
+                return $category;
+            });
             
             return response()->json([
                 'status' => 'success',
-                'data' => array_values($categories),
+                'data' => $categories,
                 'pagination' => [
-                    'total' => count($categories),
-                    'per_page' => count($categories),
+                    'total' => $categories->count(),
+                    'per_page' => $categories->count(),
                     'current_page' => 1,
                     'last_page' => 1
                 ]
@@ -584,35 +639,26 @@ class AdminController extends Controller
     public function getCategoryStats()
     {
         try {
-            // Get static categories
-            $categories = Category::getStaticCategories();
-            $totalCategories = count($categories);
+            // Get categories from database
+            $categories = Category::all();
+            $totalCategories = $categories->count();
             
             // Get product counts for each category
-            $categoriesWithProductCounts = [];
-            $categoriesWithProducts = 0;
-            
-            foreach ($categories as $category) {
-                $productCount = Product::where('category_id', $category['id'])->count();
-                
-                if ($productCount > 0) {
-                    $categoriesWithProducts++;
-                }
-                
-                $categoriesWithProductCounts[] = [
-                    'id' => $category['id'],
-                    'name' => $category['name'],
-                    'products_count' => $productCount
+            $categoriesWithProductCounts = $categories->map(function($category) {
+                return [
+                    'id' => $category->id,
+                    'name' => $category->name,
+                    'products_count' => $category->products()->count()
                 ];
-            }
-            
-            // Sort by product count descending
-            usort($categoriesWithProductCounts, function($a, $b) {
-                return $b['products_count'] - $a['products_count'];
             });
             
-            // Take top 5
-            $popularCategories = array_slice($categoriesWithProductCounts, 0, 5);
+            // Count categories with products
+            $categoriesWithProducts = $categoriesWithProductCounts->filter(function($category) {
+                return $category['products_count'] > 0;
+            })->count();
+            
+            // Sort by product count descending and take top 5
+            $popularCategories = $categoriesWithProductCounts->sortByDesc('products_count')->take(5)->values();
             
             return response()->json([
                 'status' => 'success',
