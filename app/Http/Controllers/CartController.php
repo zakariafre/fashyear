@@ -47,7 +47,8 @@ class CartController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'product_id' => 'required|exists:products,id',
-                'quantity' => 'required|integer|min:1'
+                'quantity' => 'required|integer|min:1',
+                'selected_size' => 'required|string'
             ]);
 
             if ($validator->fails()) {
@@ -68,13 +69,14 @@ class CartController extends Controller
                 ], 400);
             }
 
-            // Check if product already exists in cart
+            // Check if product already exists in cart with the same size
             $cartItem = CartItem::where('user_id', Auth::id())
                 ->where('product_id', $request->product_id)
+                ->where('selected_size', $request->selected_size)
                 ->first();
 
             if ($cartItem) {
-                // Update quantity if product already in cart
+                // Update quantity if product already in cart with same size
                 $cartItem->quantity += $request->quantity;
                 $cartItem->save();
             } else {
@@ -83,7 +85,8 @@ class CartController extends Controller
                     'user_id' => Auth::id(),
                     'product_id' => $request->product_id,
                     'quantity' => $request->quantity,
-                    'price' => $product->price
+                    'price' => $product->price,
+                    'selected_size' => $request->selected_size
                 ]);
                 $cartItem->save();
             }
@@ -91,7 +94,7 @@ class CartController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Product added to cart',
-                'data' => $cartItem
+                'data' => $cartItem->load('product')
             ], 201);
         } catch (\Exception $e) {
             return response()->json([
