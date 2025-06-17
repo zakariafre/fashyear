@@ -208,19 +208,21 @@ class ClientController extends Controller
         try {
             $validated = $request->validate([
                 'product_id' => 'required|exists:products,id',
-                'quantity' => 'required|integer|min:1'
+                'quantity' => 'required|integer|min:1',
+                'selected_size' => 'required|string'
             ]);
 
             $user = Auth::user();
             $product = Product::findOrFail($validated['product_id']);
 
-            // Check if product exists in cart already
+            // Check if product exists in cart already with the same size
             $cartItem = CartItem::where('user_id', $user->id)
                 ->where('product_id', $validated['product_id'])
+                ->where('selected_size', $validated['selected_size'])
                 ->first();
 
             if ($cartItem) {
-                // Update quantity if product already in cart
+                // Update quantity if product already in cart with same size
                 $cartItem->quantity += $validated['quantity'];
                 $cartItem->save();
             } else {
@@ -229,7 +231,8 @@ class ClientController extends Controller
                     'user_id' => $user->id,
                     'product_id' => $validated['product_id'],
                     'quantity' => $validated['quantity'],
-                    'price' => $product->price
+                    'price' => $product->price,
+                    'selected_size' => $validated['selected_size']
                 ]);
 
                 $cartItem->save();
