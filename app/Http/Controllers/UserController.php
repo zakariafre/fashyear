@@ -60,19 +60,22 @@ class UserController extends Controller
         try {
             // Validate the request
             $validatedData = $request->validate([
-                'username' => 'nullable|string',
+                'name' => 'required|string|max:255',
                 'email' => 'required|email|unique:users',
                 'password' => 'required|min:8|confirmed',
+                'type' => 'required|string|in:client',
+                'address' => 'nullable|string',
+                'phone_number' => 'nullable|string'
             ]);
 
-            // Create the user - always as client
+            // Create the user
             $user = User::create([
-                'username' => $request->username ?? explode('@', $request->email)[0], // Use part of email as username if not provided
-                'email' => $request->email,
-                'password' => Hash::make($request->password),
-                'type' => 'client', // Set type to client
-                'address' => $request->address,
-                'phone_number' => $request->phone_number,
+                'name' => $validatedData['name'],
+                'email' => $validatedData['email'],
+                'password' => Hash::make($validatedData['password']),
+                'type' => $validatedData['type'],
+                'address' => $validatedData['address'],
+                'phone_number' => $validatedData['phone_number']
             ]);
 
             // Create token immediately after user creation

@@ -100,7 +100,7 @@ class AdminController extends Controller
                     'id' => $user->id,
                     'name' => $user->name,
                     'email' => $user->email,
-                    'role' => $user->type === 'admin' ? 'Admin' : 'User',
+                    'role' => $user->type === 'admin' ? 'Admin' : 'Client',
                     'status' => 'Active',
                     'orders_count' => $user->orders_count,
                     'total_spent' => $user->orders_sum_total_price,
