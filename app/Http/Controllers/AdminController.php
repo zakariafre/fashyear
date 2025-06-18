@@ -72,7 +72,9 @@ class AdminController extends Controller
      */
     public function listUsers(Request $request)
     {
-        $query = User::query();
+        $query = User::query()
+            ->withCount('orders')
+            ->withSum('orders', 'total_price');
 
         // Apply type filter if provided
         if ($request->has('type')) {
@@ -83,16 +85,29 @@ class AdminController extends Controller
         if ($request->has('search')) {
             $search = $request->search;
             $query->where(function ($q) use ($search) {
-                $q->where('username', 'like', "%{$search}%")
+                $q->where('name', 'like', "%{$search}%")
                     ->orWhere('email', 'like', "%{$search}%");
             });
         }
 
-        // Get paginated results
-        $perPage = $request->input('per_page', 10);
-        $users = $query->orderBy('created_at', 'desc')->paginate($perPage);
+        // Get all users
+        $users = $query->orderBy('created_at', 'desc')->get();
 
-        return response()->json($users);
+        return response()->json([
+            'status' => 'success',
+            'data' => $users->map(function ($user) {
+                return [
+                    'id' => $user->id,
+                    'name' => $user->name,
+                    'email' => $user->email,
+                    'role' => $user->type === 'admin' ? 'Admin' : 'User',
+                    'status' => 'Active',
+                    'orders_count' => $user->orders_count,
+                    'total_spent' => $user->orders_sum_total_price,
+                    'created_at' => $user->created_at
+                ];
+            })
+        ]);
     }
 
     /**
@@ -104,7 +119,7 @@ class AdminController extends Controller
     public function createUser(Request $request)
     {
         $validator = Validator::make($request->all(), [
-            'username' => 'required|string|max:255',
+            'name' => 'required|string|max:255',
             'email' => 'required|string|email|max:255|unique:users',
             'password' => 'required|string|min:8',
             'type' => 'required|in:admin,client',
@@ -121,7 +136,7 @@ class AdminController extends Controller
         }
 
         $user = User::create([
-            'username' => $request->username,
+            'name' => $request->name,
             'email' => $request->email,
             'password' => Hash::make($request->password),
             'type' => $request->type,
@@ -148,7 +163,7 @@ class AdminController extends Controller
         $user = User::findOrFail($id);
 
         $validator = Validator::make($request->all(), [
-            'username' => 'sometimes|required|string|max:255',
+            'name' => 'sometimes|required|string|max:255',
             'email' => 'sometimes|required|string|email|max:255|unique:users,email,' . $id,
             'type' => 'sometimes|required|in:admin,client',
             'address' => 'nullable|string',
@@ -169,8 +184,8 @@ class AdminController extends Controller
         }
 
         // Update other fields
-        if ($request->has('username'))
-            $user->username = $request->username;
+        if ($request->has('name'))
+            $user->name = $request->name;
         if ($request->has('email'))
             $user->email = $request->email;
         if ($request->has('type'))

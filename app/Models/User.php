@@ -21,7 +21,7 @@ class User extends Authenticatable
      * @var array<string>
      */
     protected $fillable = [
-        'username',
+        'name',
         'email',
         'password',
         'type', // To differentiate between Client and Admin
