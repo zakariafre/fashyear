@@ -17,6 +17,7 @@ use App\Http\Controllers\CategoryController;
 use App\Http\Controllers\InvoiceController;
 use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\AuthController;
+use App\Http\Controllers\GuestCartController;
 use App\Http\Middleware\AdminMiddleware;
 
 
@@ -40,6 +41,14 @@ Route::get('/products/category/{categoryId}', [ProductController::class, 'getPro
 Route::get('/products/{slug}', [ProductController::class, 'show']);
 Route::get('/categories', [CategoryController::class, 'index']);
 Route::get('/categories/{category}', [CategoryController::class, 'show']);
+
+
+// Guest routes
+Route::prefix('guest')->group(function () {
+    Route::post('/cart', [GuestCartController::class, 'addToCart']);
+    Route::post('/cart/validate', [GuestCartController::class, 'validateCart']);
+    Route::post('/orders', [OrderController::class, 'guestOrder']);
+});
 
 
 // Protected routes (authentication required)
@@ -67,6 +76,8 @@ Route::middleware('auth:sanctum')->group(function () {
         Route::post('/cart', [ClientController::class, 'addToCart']);
         Route::delete('/cart/{productId}', [ClientController::class, 'removeFromCart']);
         Route::put('/cart/{productId}', [ClientController::class, 'updateCartItem']);
+
+        Route::post('/orders', [OrderController::class,'store']);
 
         // Invoices
         Route::get('/invoices', [ClientController::class, 'getInvoices']);
