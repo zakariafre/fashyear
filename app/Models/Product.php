@@ -35,6 +35,56 @@ class Product extends Model
     ];
 
     /**
+     * Get the image URLs with full paths.
+     */
+    protected function getImgURLsAttribute($value)
+    {
+        if (!$value) {
+            return [];
+        }
+
+        $urls = is_array($value) ? $value : json_decode($value, true);
+        if (!is_array($urls)) {
+            return [];
+        }
+
+        return array_map(function ($url) {
+            if (!$url) {
+                return null;
+            }
+            
+            // If it's already a full URL, return it as is
+            if (filter_var($url, FILTER_VALIDATE_URL)) {
+                return $url;
+            }
+
+            // If it starts with storage/, add the app URL
+            if (str_starts_with($url, 'storage/')) {
+                return config('app.url') . '/' . $url;
+            }
+
+            // If it's a relative path, assume it's in storage and add the full path
+            return config('app.url') . '/storage/' . ltrim($url, '/');
+        }, $urls);
+    }
+
+    /**
+     * Set the image URLs
+     */
+    public function setImgURLsAttribute($value)
+    {
+        if (is_string($value)) {
+            $value = json_decode($value, true);
+        }
+
+        if (!is_array($value)) {
+            $value = [];
+        }
+
+        $this->attributes['imgURLs'] = json_encode($value);
+    }
+
+    /**
      * Boot the model.
      */
     protected static function boot()

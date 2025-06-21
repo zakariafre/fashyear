@@ -46,10 +46,8 @@ class ImageUploadController extends Controller
                     // Store the file in the public disk under the appropriate directory
                     $path = $file->storeAs($directory, $filename, 'public');
                     
-                    // Generate the URL for the stored image
-                    $url = asset('storage/' . $path);
-                    
-                    $uploadedUrls[] = $url;
+                    // Store the full URL
+                    $uploadedUrls[] = asset('storage/' . $path);
                 }
                 
                 return response()->json([

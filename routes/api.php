@@ -19,6 +19,7 @@ use App\Http\Controllers\ImageUploadController;
 use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GuestCartController;
 use App\Http\Middleware\AdminMiddleware;
+use App\Http\Controllers\GuestController;
 
 
 
@@ -133,6 +134,13 @@ Route::prefix('admin')->middleware(['auth:sanctum', AdminMiddleware::class])->gr
     Route::get('/invoices', [AdminController::class, 'getInvoices']);
     Route::get('/invoices/{id}', [AdminController::class, 'getInvoiceDetails']);
     Route::post('/invoices/generate', [AdminController::class, 'generateInvoice']);
+});
+
+// Guest routes (no authentication required)
+Route::prefix('guest')->group(function () {
+    Route::post('/cart/sync', [GuestController::class, 'syncGuestCart']);
+    Route::post('/cart/validate', [GuestController::class, 'validateGuestCartItems']);
+    Route::post('/wishlist/sync', [GuestController::class, 'syncGuestWishlist']);
 });
 
 
