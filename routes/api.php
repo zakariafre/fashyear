@@ -126,6 +126,8 @@ Route::prefix('admin')->middleware(['auth:sanctum', AdminMiddleware::class])->gr
     
     // Orders
     Route::get('/orders/stats', [AdminController::class, 'getOrderStats']);
+    Route::get('/orders', [AdminController::class, 'getAllOrders']);
+    Route::put('/orders/{id}/status', [AdminController::class, 'updateOrderStatus']);
     
     // Images
     Route::post('/upload-image', [ImageUploadController::class, 'upload']);

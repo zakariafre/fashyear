@@ -27,6 +27,8 @@ class User extends Authenticatable
         'type', // To differentiate between Client and Admin
         'address',
         'phone_number',
+        'city',
+        'country',
     ];
 
     /**

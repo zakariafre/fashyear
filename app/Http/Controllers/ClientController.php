@@ -48,10 +48,12 @@ class ClientController extends Controller
             $client = Auth::user();
 
             $validated = $request->validate([
-                'username' => 'sometimes|string|max:255|unique:users,username,' . $client->id,
+                'name' => 'sometimes|string|max:255',
                 'email' => 'sometimes|email|unique:users,email,' . $client->id,
                 'phone_number' => 'nullable|string|max:20',
                 'address' => 'nullable|string|max:255',
+                'city' => 'nullable|string|max:255',
+                'country' => 'nullable|string|max:255',
                 'current_password' => 'required_with:new_password|current_password',
                 'new_password' => 'sometimes|min:8|confirmed',
             ]);
@@ -86,16 +88,41 @@ class ClientController extends Controller
             $orders = Auth::user()->orders()
                 ->with(['orderItems.product'])
                 ->orderBy('created_at', 'desc')
-                ->paginate(10);
+                ->get();
+
+            // Transform the orders to include necessary information
+            $transformedOrders = $orders->map(function ($order) {
+                // Get the original total from the database
+                $originalTotal = $order->getRawOriginal('total_price');
+                
+                return [
+                    'id' => $order->id,
+                    'date' => $order->created_at->format('Y-m-d'),
+                    'status' => $order->status ?? 'pending',
+                    'total' => floatval($originalTotal), // Use the raw value from database
+                    'items' => $order->orderItems->map(function ($item) {
+                        $price = floatval($item->price ?? 0);
+                        $quantity = intval($item->quantity ?? 1);
+                        return [
+                            'id' => $item->id,
+                            'name' => $item->product->name ?? 'Unknown Product',
+                            'quantity' => $quantity,
+                            'price' => $price,
+                            'subtotal' => $price * $quantity
+                        ];
+                    })
+                ];
+            });
 
             return response()->json([
                 'status' => 'success',
-                'data' => $orders
+                'data' => $transformedOrders
             ]);
         } catch (\Exception $e) {
+            \Log::error('Error fetching orders: ' . $e->getMessage());
             return response()->json([
                 'status' => 'error',
-                'message' => 'Error fetching orders'
+                'message' => 'Failed to load orders'
             ], 500);
         }
     }

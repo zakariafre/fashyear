@@ -839,6 +839,56 @@ class AdminController extends Controller
             ], 500);
         }
     }
+
+    /**
+     * Get all orders with details
+     */
+    public function getAllOrders()
+    {
+        try {
+            $orders = Order::with(['user', 'orderItems.product'])
+                ->orderBy('created_at', 'desc')
+                ->get();
+
+            return response()->json([
+                'status' => 'success',
+                'data' => $orders
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to fetch orders'
+            ], 500);
+        }
+    }
+
+    /**
+     * Update order status
+     */
+    public function updateOrderStatus(Request $request, $id)
+    {
+        try {
+            $order = Order::findOrFail($id);
+            
+            $validated = $request->validate([
+                'status' => 'required|in:pending,processing,shipped,delivered,cancelled'
+            ]);
+
+            $order->status = $validated['status'];
+            $order->save();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Order status updated successfully',
+                'data' => $order
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Failed to update order status'
+            ], 500);
+        }
+    }
 }
 
 

@@ -101,12 +101,7 @@ class OrderController extends Controller
                 $order = Order::create([
                     'user_id' => Auth::id(),
                     'total_price' => $totalPrice,
-                    'subtotal' => $subtotal,
-                    'discount' => $discount,
-                    'tax' => $tax,
-                    'shipping' => $shipping,
                     'status' => 'pending',
-                    'date' => now(),
                     'shipping_address' => $request->shipping_address,
                     'payment_method' => $request->payment_method,
                     'payment_details' => $request->payment_method === 'cash_on_delivery' ? null : $request->payment_details,
