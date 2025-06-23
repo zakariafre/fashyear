@@ -467,4 +467,42 @@ class ClientController extends Controller
             ], 404);
         }
     }
+
+    /**
+     * Delete client's profile
+     */
+    public function deleteProfile(Request $request)
+    {
+        try {
+            $request->validate([
+                'password' => 'required'
+            ]);
+
+            $user = Auth::user();
+
+            // Verify password
+            if (!Hash::check($request->password, $user->password)) {
+                return response()->json([
+                    'status' => 'error',
+                    'message' => 'Current password is incorrect'
+                ], 403);
+            }
+
+            // Delete user's data
+            $user->wishlist()->delete();
+            $user->cart()->delete();
+            $user->orders()->delete();
+            $user->delete();
+
+            return response()->json([
+                'status' => 'success',
+                'message' => 'Account deleted successfully'
+            ]);
+        } catch (\Exception $e) {
+            return response()->json([
+                'status' => 'error',
+                'message' => 'Error deleting account'
+            ], 500);
+        }
+    }
 }

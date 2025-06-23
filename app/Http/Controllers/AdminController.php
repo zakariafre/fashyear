@@ -6,6 +6,7 @@ use App\Models\User;
 use App\Models\Order;
 use App\Models\Product;
 use App\Models\Category;
+use App\Models\OrderItem;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Hash;
@@ -21,49 +22,147 @@ class AdminController extends Controller
     // Returns counts of users, orders, products, and revenue statistics
     public function getDashboardStats()
     {
-        // Count total users (clients only)
-        $userCount = User::where('type', 'client')->count();
+        try {
+            // Count total users (clients only)
+            $userCount = User::where('type', 'client')->count();
+            
+            // Get current month and last month's start/end dates
+            $currentMonth = now()->startOfMonth();
+            $lastMonth = now()->subMonth()->startOfMonth();
+            
+            // Calculate current and previous month stats
+            $currentMonthRevenue = Order::whereYear('created_at', $currentMonth->year)
+                ->whereMonth('created_at', $currentMonth->month)
+                ->sum('total_price') ?? 0;
+            
+            $lastMonthRevenue = Order::whereYear('created_at', $lastMonth->year)
+                ->whereMonth('created_at', $lastMonth->month)
+                ->sum('total_price') ?? 0;
+                
+            $currentMonthOrders = Order::whereYear('created_at', $currentMonth->year)
+                ->whereMonth('created_at', $currentMonth->month)
+                ->count() ?? 0;
+                
+            $lastMonthOrders = Order::whereYear('created_at', $lastMonth->year)
+                ->whereMonth('created_at', $lastMonth->month)
+                ->count() ?? 0;
+                
+            $currentMonthUsers = User::where('type', 'client')
+                ->whereYear('created_at', $currentMonth->year)
+                ->whereMonth('created_at', $currentMonth->month)
+                ->count() ?? 0;
+                
+            $lastMonthUsers = User::where('type', 'client')
+                ->whereYear('created_at', $lastMonth->year)
+                ->whereMonth('created_at', $lastMonth->month)
+                ->count() ?? 0;
 
-        // Count total orders
-        $orderCount = Order::count();
+            // Calculate percentage changes
+            $revenueChange = $lastMonthRevenue > 0 ? 
+                (($currentMonthRevenue - $lastMonthRevenue) / $lastMonthRevenue) * 100 : 0;
+            
+            $ordersChange = $lastMonthOrders > 0 ? 
+                (($currentMonthOrders - $lastMonthOrders) / $lastMonthOrders) * 100 : 0;
+            
+            $usersChange = $lastMonthUsers > 0 ? 
+                (($currentMonthUsers - $lastMonthUsers) / $lastMonthUsers) * 100 : 0;
 
-        // Count total products
-        $productCount = Product::count();
+            // Count total orders
+            $orderCount = Order::count() ?? 0;
 
-        // Calculate total revenue
-        $totalRevenue = Order::sum('total_amount');
+            // Count total products
+            $productCount = Product::count() ?? 0;
 
-        // Get recent orders (last 5)
-        $recentOrders = Order::with(['user', 'orderItems'])
-            ->orderBy('created_at', 'desc')
-            ->take(5)
-            ->get();
+            // Calculate total revenue
+            $totalRevenue = Order::sum('total_price') ?? 0;
 
-        // Get monthly revenue for the current year
-        $monthlyRevenue = Order::selectRaw('MONTH(created_at) as month, SUM(total_amount) as revenue')
-            ->whereYear('created_at', date('Y'))
-            ->groupBy('month')
-            ->orderBy('month')
-            ->get()
-            ->pluck('revenue', 'month')
-            ->toArray();
+            // Get recent orders (last 5) with error handling
+            try {
+                $recentOrders = Order::with(['user', 'orderItems.product'])
+                    ->orderBy('created_at', 'desc')
+                    ->take(5)
+                    ->get();
+            } catch (\Exception $e) {
+                \Log::error('Error fetching recent orders: ' . $e->getMessage());
+                $recentOrders = [];
+            }
 
-        // Fill in missing months with zero
-        $formattedMonthlyRevenue = [];
-        for ($i = 1; $i <= 12; $i++) {
-            $formattedMonthlyRevenue[$i] = $monthlyRevenue[$i] ?? 0;
+            // Get monthly revenue for the current year with error handling
+            try {
+                $monthlyRevenue = Order::selectRaw('MONTH(created_at) as month, SUM(total_price) as revenue')
+                    ->whereYear('created_at', date('Y'))
+                    ->groupBy('month')
+                    ->orderBy('month')
+                    ->get()
+                    ->pluck('revenue', 'month')
+                    ->toArray();
+            } catch (\Exception $e) {
+                \Log::error('Error fetching monthly revenue: ' . $e->getMessage());
+                $monthlyRevenue = [];
+            }
+
+            // Fill in missing months with zero
+            $formattedMonthlyRevenue = [];
+            for ($i = 1; $i <= 12; $i++) {
+                $formattedMonthlyRevenue[$i] = $monthlyRevenue[$i] ?? 0;
+            }
+
+            // Get top products by order frequency with error handling
+            try {
+                $topProducts = OrderItem::select('product_id')
+                    ->selectRaw('COUNT(*) as order_count')
+                    ->selectRaw('SUM(quantity) as total_quantity')
+                    ->with(['product' => function($query) {
+                        $query->select('id', 'name', 'price', 'image_url');
+                    }])
+                    ->whereHas('product') // Only include items where the product still exists
+                    ->groupBy('product_id')
+                    ->orderByDesc('order_count')
+                    ->take(5)
+                    ->get()
+                    ->map(function ($item) {
+                        if ($item->product) {
+                            return [
+                                'product' => $item->product,
+                                'order_count' => $item->order_count,
+                                'total_quantity' => $item->total_quantity
+                            ];
+                        }
+                        return null;
+                    })
+                    ->filter()
+                    ->values();
+            } catch (\Exception $e) {
+                \Log::error('Error fetching top products: ' . $e->getMessage());
+                $topProducts = [];
+            }
+
+            return response()->json([
+                'stats' => [
+                    'userCount' => $userCount,
+                    'orderCount' => $orderCount,
+                    'productCount' => $productCount,
+                    'totalRevenue' => $totalRevenue,
+                    'changes' => [
+                        'revenue' => round($revenueChange, 1),
+                        'orders' => round($ordersChange, 1),
+                        'users' => round($usersChange, 1)
+                    ]
+                ],
+                'recentOrders' => $recentOrders,
+                'monthlyRevenue' => $formattedMonthlyRevenue,
+                'topProducts' => $topProducts
+            ]);
+        } catch (\Exception $e) {
+            \Log::error('Dashboard stats error: ' . $e->getMessage());
+            \Log::error($e->getTraceAsString());
+            
+            return response()->json([
+                'error' => 'Failed to fetch dashboard stats',
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ], 500);
         }
-
-        return response()->json([
-            'stats' => [
-                'userCount' => $userCount,
-                'orderCount' => $orderCount,
-                'productCount' => $productCount,
-                'totalRevenue' => $totalRevenue,
-            ],
-            'recentOrders' => $recentOrders,
-            'monthlyRevenue' => $formattedMonthlyRevenue,
-        ]);
     }
 
     /* List all users with optional filtering and pagination

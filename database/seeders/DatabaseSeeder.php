@@ -35,5 +35,9 @@ class DatabaseSeeder extends Seeder
             ]);
         }
 
+        $this->call([
+            // ... other seeders ...
+            SettingsSeeder::class,
+        ]);
     }
 }

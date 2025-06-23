@@ -20,6 +20,7 @@ use App\Http\Controllers\AuthController;
 use App\Http\Controllers\GuestCartController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\GuestController;
+use App\Http\Controllers\SettingsController;
 
 
 
@@ -64,6 +65,7 @@ Route::middleware('auth:sanctum')->group(function () {
     Route::prefix('client')->group(function () {
         Route::get('/profile', [ClientController::class, 'profile']);
         Route::put('/profile', [ClientController::class, 'updateProfile']);
+        Route::delete('/profile', [ClientController::class, 'deleteProfile']);
         Route::get('/orders', [ClientController::class, 'getOrders']);
         Route::get('/orders/{orderId}', [ClientController::class, 'getOrderDetails']);
 
@@ -100,7 +102,7 @@ Route::middleware('auth:sanctum')->group(function () {
 
 // Admin routes
 Route::prefix('admin')->middleware(['auth:sanctum', AdminMiddleware::class])->group(function () {
-    Route::get('/dashboard/stats', [AdminController::class, 'getDashboardStats']);
+    Route::get('/dashboard', [AdminController::class, 'getDashboardStats']);
     
     // Products
     Route::get('/products', [AdminController::class, 'getAllProducts']);
@@ -128,6 +130,10 @@ Route::prefix('admin')->middleware(['auth:sanctum', AdminMiddleware::class])->gr
     Route::get('/orders/stats', [AdminController::class, 'getOrderStats']);
     Route::get('/orders', [AdminController::class, 'getAllOrders']);
     Route::put('/orders/{id}/status', [AdminController::class, 'updateOrderStatus']);
+    
+    // Settings
+    Route::get('/settings', [SettingsController::class, 'index']);
+    Route::put('/settings', [SettingsController::class, 'update']);
     
     // Images
     Route::post('/upload-image', [ImageUploadController::class, 'upload']);
