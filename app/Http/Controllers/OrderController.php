@@ -88,7 +88,11 @@ class OrderController extends Controller
                 return $item->quantity * $item->price;
             });
             
-            $discount = $subtotal * 0.15; // 15% discount
+            // Check if this is the user's first order
+            $isFirstOrder = !Order::where('user_id', Auth::id())->exists();
+            
+            // Apply 15% discount only for first order
+            $discount = $isFirstOrder ? ($subtotal * 0.15) : 0;
             $tax = $subtotal * 0.07; // 7% tax
             $shipping = 0; // Free shipping
             $totalPrice = $subtotal - $discount + $tax + $shipping;
