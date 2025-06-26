@@ -3,6 +3,8 @@
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 use Illuminate\Support\Facades\Log;
+use Illuminate\Support\Facades\Storage;
+use Illuminate\Support\Facades\Response;
 
 use App\Http\Controllers\ClientController;
 use App\Http\Controllers\UserController;
@@ -21,6 +23,7 @@ use App\Http\Controllers\GuestCartController;
 use App\Http\Middleware\AdminMiddleware;
 use App\Http\Controllers\GuestController;
 use App\Http\Controllers\SettingsController;
+use App\Http\Controllers\StripeController;
 
 
 
@@ -152,3 +155,50 @@ Route::prefix('guest')->group(function () {
 });
 
 
+
+// Product image route
+Route::get('/product-image/{filename}', function ($filename) {
+    \Log::info('Attempting to serve image:', [
+        'filename' => $filename,
+        'full_path' => 'products/' . $filename
+    ]);
+    
+    $path = 'products/' . $filename;
+    
+    if (!Storage::disk('public')->exists($path)) {
+        \Log::error('Image not found:', [
+            'filename' => $filename,
+            'path' => $path,
+            'storage_path' => Storage::disk('public')->path($path)
+        ]);
+        return response()->json(['error' => 'Image not found'], 404);
+    }
+
+    try {
+        $file = Storage::disk('public')->get($path);
+        $type = Storage::disk('public')->mimeType($path);
+
+        \Log::info('Successfully serving image:', [
+            'filename' => $filename,
+            'mime_type' => $type,
+            'size' => strlen($file)
+        ]);
+
+        $response = Response::make($file, 200);
+        $response->header("Content-Type", $type);
+        return $response;
+    } catch (\Exception $e) {
+        \Log::error('Error serving image:', [
+            'filename' => $filename,
+            'error' => $e->getMessage(),
+            'trace' => $e->getTraceAsString()
+        ]);
+        return response()->json(['error' => 'Failed to serve image'], 500);
+    }
+});
+
+
+// Stripe routes
+Route::get('/checkout', [StripeController::class, 'checkout'])->name('stripe.checkout');
+Route::get('/success', [StripeController::class, 'success'])->name('stripe.success');
+Route::get('/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');

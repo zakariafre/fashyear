@@ -39,39 +39,31 @@ class Product extends Model
      */
     protected function getImgURLsAttribute($value)
     {
+        \Log::info('Raw database value for imgURLs:', ['value' => $value]);
+
         if (!$value) {
             return [];
         }
 
+        // If the value is already an array, use it directly
         $urls = is_array($value) ? $value : json_decode($value, true);
+        
         if (!is_array($urls)) {
             return [];
         }
 
         return array_map(function ($url) {
-            if (!$url) {
-                return null;
-            }
+            if (!$url) return null;
             
-            // If it's already a full URL, return it as is
-            if (filter_var($url, FILTER_VALIDATE_URL)) {
-                return $url;
-            }
-
-            // If it starts with storage/, add the app URL
-            if (str_starts_with($url, 'storage/')) {
-                return config('app.url') . '/' . $url;
-            }
-
-            // If it's a relative path, assume it's in storage and add the full path
-            return config('app.url') . '/storage/' . ltrim($url, '/');
+            // Return URLs as is since they're now stored as full URLs
+            return $url;
         }, $urls);
     }
 
     /**
      * Set the image URLs
      */
-    public function setImgURLsAttribute($value)
+    protected function setImgURLsAttribute($value)
     {
         if (is_string($value)) {
             $value = json_decode($value, true);
@@ -81,7 +73,31 @@ class Product extends Model
             $value = [];
         }
 
-        $this->attributes['imgURLs'] = json_encode($value);
+        // Clean up URLs before storing
+        $value = array_map(function ($url) {
+            if (!$url) return null;
+            
+            // If it's a full URL, store it as is
+            if (filter_var($url, FILTER_VALIDATE_URL)) {
+                return $url;
+            }
+            
+            // For relative paths, ensure clean format and convert to full URL
+            $url = str_replace('\\', '/', $url); // Convert backslashes to forward slashes
+            $url = ltrim($url, '/'); // Remove leading slashes
+            $url = str_replace(['storage/', 'public/'], '', $url); // Remove storage/ or public/ prefixes
+            
+            // If it's just a filename, assume it's in the products directory
+            if (!str_contains($url, '/')) {
+                $url = 'products/' . $url;
+            }
+            
+            // Return the full URL using asset helper
+            return asset('storage/' . $url);
+        }, $value);
+
+        // Store as a JSON array without escaped slashes
+        $this->attributes['imgURLs'] = json_encode(array_filter($value), JSON_UNESCAPED_SLASHES);
     }
 
     /**

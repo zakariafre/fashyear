@@ -25,4 +25,4 @@ class GenerateProductSlugs extends Command
 
         $this->info("Generated slugs for {$count} products.");
     }
-} 
+}

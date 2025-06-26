@@ -32,39 +32,47 @@ class ImageUploadController extends Controller
         }
 
         try {
-            if ($request->hasFile('images')) {
-                $uploadedUrls = [];
-                
-                foreach ($request->file('images') as $file) {
-                    // Determine the target directory based on type parameter
-                    $type = $request->input('type', 'products'); // Default to products if not specified
-                    $directory = in_array($type, ['categories', 'products']) ? $type : 'products';
-                    
-                    // Generate a unique filename
-                    $filename = $directory . '_' . Str::uuid() . '.' . $file->getClientOriginalExtension();
-                    
-                    // Store the file in the public disk under the appropriate directory
-                    $path = $file->storeAs($directory, $filename, 'public');
-                    
-                    // Store the full URL
-                    $uploadedUrls[] = asset('storage/' . $path);
-                }
-                
+            if (!$request->hasFile('images')) {
                 return response()->json([
-                    'status' => 'success',
-                    'message' => 'Images uploaded successfully',
-                    'data' => [
-                        'imageUrls' => $uploadedUrls
-                    ]
-                ]);
+                    'status' => 'error',
+                    'message' => 'No images provided'
+                ], 400);
+            }
+
+            // Ensure the storage directory exists
+            if (!Storage::disk('public')->exists('products')) {
+                Storage::disk('public')->makeDirectory('products');
+            }
+
+            $uploadedUrls = [];
+            foreach ($request->file('images') as $file) {
+                // Generate a unique filename
+                $filename = Str::uuid() . '.' . $file->getClientOriginalExtension();
+                
+                // Store the file in the public disk under the products directory
+                $path = $file->storeAs('products', $filename, 'public');
+                
+                // Get the full URL for the stored file
+                $url = asset('storage/' . $path);
+                
+                // Store the full URL
+                $uploadedUrls[] = $url;
             }
             
+            \Log::info('Uploaded image URLs:', ['urls' => $uploadedUrls]);
+            
             return response()->json([
-                'status' => 'error',
-                'message' => 'No images provided'
-            ], 400);
+                'status' => 'success',
+                'message' => 'Images uploaded successfully',
+                'data' => [
+                    'imageUrls' => $uploadedUrls
+                ]
+            ]);
             
         } catch (\Exception $e) {
+            \Log::error('Image upload error: ' . $e->getMessage());
+            \Log::error($e->getTraceAsString());
+            
             return response()->json([
                 'status' => 'error',
                 'message' => 'Failed to upload images: ' . $e->getMessage()
