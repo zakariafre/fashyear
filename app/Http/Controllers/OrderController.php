@@ -48,9 +48,14 @@ class OrderController extends Controller
         try {
             $validator = Validator::make($request->all(), [
                 'shipping_address' => 'required|string',
-                'payment_method' => 'required|string|in:credit_card,paypal,cash_on_delivery',
-                'payment_details' => 'required_unless:payment_method,cash_on_delivery',
-                'email' => 'required|email'
+                'payment_method' => 'required|string|in:creditCard,paypal,cashOnDelivery',
+                'email' => 'required|email',
+                'total_amount' => 'required|numeric|min:0',
+                'items' => 'required|array|min:1',
+                'items.*.product_id' => 'required|exists:products,id',
+                'items.*.quantity' => 'required|integer|min:1',
+                'items.*.price' => 'required|numeric|min:0',
+                'items.*.selected_size' => 'required|string'
             ]);
 
             if ($validator->fails()) {
@@ -61,69 +66,37 @@ class OrderController extends Controller
                 ], 422);
             }
 
-            // Get user's cart items
-            $cartItems = CartItem::where('user_id', Auth::id())
-                ->with('product')
-                ->get();
-
-            if ($cartItems->isEmpty()) {
-                return response()->json([
-                    'status' => 'error',
-                    'message' => 'Cart is empty'
-                ], 400);
-            }
-
-            // Check if all products are in stock
-            foreach ($cartItems as $item) {
-                if (!$item->product->stock) {
-                    return response()->json([
-                        'status' => 'error',
-                        'message' => "Product '{$item->product->name}' is out of stock"
-                    ], 400);
-                }
-            }
-
-            // Calculate totals
-            $subtotal = $cartItems->sum(function ($item) {
-                return $item->quantity * $item->price;
-            });
-            
-            // Check if this is the user's first order
-            $isFirstOrder = !Order::where('user_id', Auth::id())->exists();
-            
-            // Apply 15% discount only for first order
-            $discount = $isFirstOrder ? ($subtotal * 0.15) : 0;
-            $tax = $subtotal * 0.07; // 7% tax
-            $shipping = 0; // Free shipping
-            $totalPrice = $subtotal - $discount + $tax + $shipping;
-
             // Begin transaction
             DB::beginTransaction();
 
             try {
-                // Create order
+                // Create order with appropriate status based on payment method
+                $status = match($request->payment_method) {
+                    'creditCard' => 'paid',      // Credit card payments are confirmed via Stripe
+                    'cashOnDelivery' => 'pending', // COD orders start as pending
+                    'paypal' => 'pending',       // PayPal (for future implementation)
+                    default => 'pending'
+                };
+
                 $order = Order::create([
                     'user_id' => Auth::id(),
-                    'total_price' => $totalPrice,
-                    'status' => 'pending',
+                    'email' => $request->email,
+                    'total_price' => $request->total_amount,
+                    'status' => $status,
                     'shipping_address' => $request->shipping_address,
                     'payment_method' => $request->payment_method,
-                    'payment_details' => $request->payment_method === 'cash_on_delivery' ? null : $request->payment_details,
-                    'email' => $request->email
+                    'date' => now()
                 ]);
 
                 // Create order items
-                foreach ($cartItems as $item) {
+                foreach ($request->items as $item) {
                     OrderItem::create([
                         'order_id' => $order->id,
-                        'product_id' => $item->product_id,
-                        'quantity' => $item->quantity,
-                        'price' => $item->price,
-                        'selected_size' => $item->selected_size
+                        'product_id' => $item['product_id'],
+                        'quantity' => $item['quantity'],
+                        'price' => $item['price'],
+                        'selected_size' => $item['selected_size']
                     ]);
-
-                    // Update product stock (if you're tracking inventory)
-                    // $item->product->decrement('stock', $item->quantity);
                 }
 
                 // Clear cart
@@ -133,7 +106,7 @@ class OrderController extends Controller
                 $invoice = Invoice::create([
                     'order_id' => $order->id,
                     'date' => now(),
-                    'total_amount' => $totalPrice
+                    'total_amount' => $request->total_amount
                 ]);
 
                 DB::commit();
@@ -344,7 +317,7 @@ class OrderController extends Controller
                     'message' => 'Order placed successfully',
                     'data' => [
                         'order_id' => $order->id,
-                        'token' => $user ? JWTAuth::fromUser($user) : null
+                        // 'token' => $user ? JWTAuth::fromUser($user) : null
                     ]
                 ]);
             } catch (\Exception $e) {

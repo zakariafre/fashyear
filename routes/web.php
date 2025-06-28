@@ -14,3 +14,5 @@ Route::get('/{any?}', function () {
 
 // Include auth routes for web authentication (not used by our API)
 require __DIR__.'/auth.php';
+
+

@@ -56,6 +56,13 @@ Route::prefix('guest')->group(function () {
 });
 
 
+// Stripe Payment routes
+Route::post('/create-payment-intent', [StripeController::class, 'createPaymentIntent']);
+Route::post('/stripe/checkout', [StripeController::class, 'checkout']);
+Route::get('/stripe/success', [StripeController::class, 'success']);
+Route::get('/stripe/cancel', [StripeController::class, 'cancel']);
+
+
 // Protected routes (authentication required)
 Route::middleware('auth:sanctum')->group(function () {
 
@@ -196,9 +203,3 @@ Route::get('/product-image/{filename}', function ($filename) {
         return response()->json(['error' => 'Failed to serve image'], 500);
     }
 });
-
-
-// Stripe routes
-Route::get('/checkout', [StripeController::class, 'checkout'])->name('stripe.checkout');
-Route::get('/success', [StripeController::class, 'success'])->name('stripe.success');
-Route::get('/cancel', [StripeController::class, 'cancel'])->name('stripe.cancel');

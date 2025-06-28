@@ -242,6 +242,9 @@ class ClientController extends Controller
             $user = Auth::user();
             $product = Product::findOrFail($validated['product_id']);
 
+            // Ensure a cart exists for the user
+            $cart = \App\Models\Cart::firstOrCreate(['user_id' => $user->id]);
+
             // Check if product exists in cart already with the same size
             $cartItem = CartItem::where('user_id', $user->id)
                 ->where('product_id', $validated['product_id'])
@@ -268,7 +271,7 @@ class ClientController extends Controller
             return response()->json([
                 'status' => 'success',
                 'message' => 'Product added to cart',
-                'data' => $cartItem
+                'data' => $cartItem->load('product')
             ]);
         } catch (\Exception $e) {
             return response()->json([
