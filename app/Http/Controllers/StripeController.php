@@ -21,10 +21,21 @@ class StripeController extends Controller
         $this->stripeKey = config('services.stripe.secret');
         
         if (empty($this->stripeKey)) {
-            throw new \Exception('Stripe secret key is not configured');
+            Log::error('Stripe secret key is not configured');
+            throw new \Exception('Stripe secret key is not configured. Please check your .env file.');
         }
 
+        try {
         Stripe::setApiKey($this->stripeKey);
+            // Test the Stripe connection with a simple API call
+            \Stripe\Balance::retrieve();
+        } catch (\Exception $e) {
+            Log::error('Stripe initialization error', [
+                'error' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
+            ]);
+            throw new \Exception('Failed to initialize Stripe: ' . $e->getMessage());
+        }
     }
 
     public function index()
@@ -35,25 +46,62 @@ class StripeController extends Controller
     public function createPaymentIntent(Request $request)
     {
         try {
+            Log::info('Creating payment intent', ['request' => $request->all()]);
+            
             $validated = $request->validate([
-                'amount' => 'required|numeric|min:1'
+                'amount' => 'required|numeric|min:1',
+                'currency' => 'required|string',
+                'metadata' => 'nullable|array'
             ]);
 
             $amount = round($validated['amount']);
             
-            $paymentIntent = PaymentIntent::create([
+            Log::info('Validated payment intent data', [
                 'amount' => $amount,
-                'currency' => 'mad',
+                'currency' => $validated['currency']
+            ]);
+
+            try {
+                $paymentIntent = PaymentIntent::create([
+                    'amount' => $amount,
+                    'currency' => $validated['currency'],
+                    'metadata' => $validated['metadata'] ?? [],
                 'payment_method_types' => ['card']
             ]);
 
-            return response()->json([
-                'clientSecret' => $paymentIntent->client_secret
-            ]);
+                Log::info('Payment intent created successfully', [
+                    'payment_intent_id' => $paymentIntent->id
+                ]);
 
+                return response()->json([
+                    'clientSecret' => $paymentIntent->client_secret,
+                    'publishableKey' => config('services.stripe.key')
+                ]);
+
+            } catch (\Stripe\Exception\ApiErrorException $e) {
+                Log::error('Stripe API Error', [
+                    'error' => $e->getMessage(),
+                    'type' => get_class($e),
+                    'code' => $e->getStripeCode()
+                ]);
+            return response()->json([
+                    'error' => 'Stripe API Error',
+                    'message' => $e->getMessage()
+                ], 400);
+            }
+
+        } catch (\Illuminate\Validation\ValidationException $e) {
+            Log::error('Validation Error', [
+                'errors' => $e->errors()
+            ]);
+            return response()->json([
+                'error' => 'Validation Error',
+                'message' => $e->errors()
+            ], 422);
         } catch (\Exception $e) {
-            Log::error('Stripe Error:', [
-                'message' => $e->getMessage()
+            Log::error('Payment Intent Error', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString()
             ]);
             return response()->json([
                 'error' => 'Payment processing error',

@@ -49,13 +49,15 @@ class OrderController extends Controller
             $validator = Validator::make($request->all(), [
                 'shipping_address' => 'required|string',
                 'payment_method' => 'required|string|in:creditCard,paypal,cashOnDelivery',
+                'payment_status' => 'required|string|in:pending,processing,paid,failed',
                 'email' => 'required|email',
                 'total_amount' => 'required|numeric|min:0',
                 'items' => 'required|array|min:1',
                 'items.*.product_id' => 'required|exists:products,id',
                 'items.*.quantity' => 'required|integer|min:1',
                 'items.*.price' => 'required|numeric|min:0',
-                'items.*.selected_size' => 'required|string'
+                'items.*.selected_size' => 'required|string',
+                'stripe_payment_intent' => 'nullable|string'
             ]);
 
             if ($validator->fails()) {
@@ -70,13 +72,11 @@ class OrderController extends Controller
             DB::beginTransaction();
 
             try {
-                // Create order with appropriate status based on payment method
-                $status = match($request->payment_method) {
-                    'creditCard' => 'paid',      // Credit card payments are confirmed via Stripe
-                    'cashOnDelivery' => 'pending', // COD orders start as pending
-                    'paypal' => 'pending',       // PayPal (for future implementation)
-                    default => 'pending'
-                };
+                // Create order with appropriate status based on payment method and status
+                $status = $request->payment_status;
+                if ($request->payment_method === 'cashOnDelivery') {
+                    $status = 'pending';
+                }
 
                 $order = Order::create([
                     'user_id' => Auth::id(),
@@ -85,11 +85,18 @@ class OrderController extends Controller
                     'status' => $status,
                     'shipping_address' => $request->shipping_address,
                     'payment_method' => $request->payment_method,
+                    'stripe_payment_intent' => $request->stripe_payment_intent,
                     'date' => now()
                 ]);
 
-                // Create order items
+                // Create order items and validate stock
                 foreach ($request->items as $item) {
+                    $product = Product::find($item['product_id']);
+                    
+                    if (!$product) {
+                        throw new \Exception("Product not found: {$item['product_id']}");
+                    }
+
                     OrderItem::create([
                         'order_id' => $order->id,
                         'product_id' => $item['product_id'],
@@ -115,18 +122,20 @@ class OrderController extends Controller
                     'status' => 'success',
                     'message' => 'Order created successfully',
                     'data' => [
-                        'order' => $order->load('items.product'),
-                        'invoice' => $invoice
+                        'order_id' => $order->id,
+                        'invoice_id' => $invoice->id
                     ]
-                ], 201);
+                ]);
+
             } catch (\Exception $e) {
                 DB::rollBack();
                 throw $e;
             }
+
         } catch (\Exception $e) {
             return response()->json([
                 'status' => 'error',
-                'message' => 'Error creating order: ' . $e->getMessage()
+                'message' => $e->getMessage()
             ], 500);
         }
     }
