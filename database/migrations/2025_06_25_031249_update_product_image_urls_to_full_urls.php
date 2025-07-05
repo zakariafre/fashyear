@@ -12,6 +12,12 @@ return new class extends Migration
      */
     public function up(): void
     {
+        $baseUrl = config('app.url');
+        if (!$baseUrl) {
+            // Default to https://localhost if app.url is not set
+            $baseUrl = 'https://localhost';
+        }
+
         $products = Product::all();
 
         foreach ($products as $product) {
@@ -22,7 +28,7 @@ return new class extends Migration
             if (!is_array($urls)) continue;
 
             // Update each URL to be a full URL
-            $updatedUrls = array_map(function ($url) {
+            $updatedUrls = array_map(function ($url) use ($baseUrl) {
                 if (!$url) return null;
                 
                 // If it's already a full URL, keep it as is
@@ -40,8 +46,8 @@ return new class extends Migration
                     $url = 'products/' . $url;
                 }
                 
-                // Return the full URL
-                return asset('storage/' . $url);
+                // Return the full URL using the configured base URL
+                return $baseUrl . '/storage/' . $url;
             }, $urls);
 
             // Update the product with the new URLs

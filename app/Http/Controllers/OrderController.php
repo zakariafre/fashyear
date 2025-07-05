@@ -14,6 +14,7 @@ use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Validator;
 use Illuminate\Support\Facades\Hash;
 use Tymon\JWTAuth\Facades\JWTAuth;
+use Illuminate\Support\Facades\Log;
 
 class OrderController extends Controller
 {
@@ -46,10 +47,15 @@ class OrderController extends Controller
     public function store(Request $request)
     {
         try {
+            // Debug log
+            Log::info('Order creation request received:', [
+                'request_data' => $request->all()
+            ]);
+
             $validator = Validator::make($request->all(), [
                 'shipping_address' => 'required|string',
-                'payment_method' => 'required|string|in:creditCard,paypal,cashOnDelivery',
-                'payment_status' => 'required|string|in:pending,processing,paid,failed',
+                'payment_method' => 'required|string|in:credit_card,paypal,cash_on_delivery',
+                'payment_status' => 'required|string|in:pending,processing,completed,cancelled',
                 'email' => 'required|email',
                 'total_amount' => 'required|numeric|min:0',
                 'items' => 'required|array|min:1',
@@ -57,10 +63,16 @@ class OrderController extends Controller
                 'items.*.quantity' => 'required|integer|min:1',
                 'items.*.price' => 'required|numeric|min:0',
                 'items.*.selected_size' => 'required|string',
-                'stripe_payment_intent' => 'nullable|string'
+                'stripe_payment_intent' => 'nullable|string',
+                'user_id' => 'nullable|exists:users,id'
             ]);
 
             if ($validator->fails()) {
+                Log::warning('Order validation failed:', [
+                    'errors' => $validator->errors()->toArray(),
+                    'request_data' => $request->all()
+                ]);
+
                 return response()->json([
                     'status' => 'error',
                     'message' => 'Validation failed',
@@ -72,31 +84,34 @@ class OrderController extends Controller
             DB::beginTransaction();
 
             try {
-                // Create order with appropriate status based on payment method and status
-                $status = $request->payment_status;
-                if ($request->payment_method === 'cashOnDelivery') {
-                    $status = 'pending';
-                }
+                // Create order with appropriate status based on payment method
+                $status = 'pending';
+                $payment_status = $request->payment_status;
 
-                $order = Order::create([
-                    'user_id' => Auth::id(),
+                // Debug log
+                Log::info('Creating order with data:', [
+                    'user_id' => $request->user_id ?? Auth::id(),
                     'email' => $request->email,
                     'total_price' => $request->total_amount,
                     'status' => $status,
-                    'shipping_address' => $request->shipping_address,
+                    'payment_status' => $payment_status,
                     'payment_method' => $request->payment_method,
-                    'stripe_payment_intent' => $request->stripe_payment_intent,
-                    'date' => now()
+                    'stripe_payment_intent' => $request->stripe_payment_intent
                 ]);
 
-                // Create order items and validate stock
-                foreach ($request->items as $item) {
-                    $product = Product::find($item['product_id']);
-                    
-                    if (!$product) {
-                        throw new \Exception("Product not found: {$item['product_id']}");
-                    }
+                $order = Order::create([
+                    'user_id' => $request->user_id ?? Auth::id(),
+                    'email' => $request->email,
+                    'total_price' => $request->total_amount,
+                    'status' => $status,
+                    'payment_status' => $payment_status,
+                    'payment_method' => $request->payment_method,
+                    'shipping_address' => $request->shipping_address,
+                    'stripe_payment_intent' => $request->stripe_payment_intent
+                ]);
 
+                // Create order items
+                foreach ($request->items as $item) {
                     OrderItem::create([
                         'order_id' => $order->id,
                         'product_id' => $item['product_id'],
@@ -106,8 +121,10 @@ class OrderController extends Controller
                     ]);
                 }
 
-                // Clear cart
-                CartItem::where('user_id', Auth::id())->delete();
+                // Clear cart if user is authenticated
+                if (Auth::check()) {
+                    CartItem::where('user_id', Auth::id())->delete();
+                }
 
                 // Generate invoice
                 $invoice = Invoice::create([
@@ -116,15 +133,20 @@ class OrderController extends Controller
                     'total_amount' => $request->total_amount
                 ]);
 
+                // If we get here, everything worked, so commit the transaction
                 DB::commit();
+
+                // Debug log
+                Log::info('Order created successfully:', [
+                    'order_id' => $order->id,
+                    'status' => $order->status,
+                    'payment_status' => $order->payment_status
+                ]);
 
                 return response()->json([
                     'status' => 'success',
                     'message' => 'Order created successfully',
-                    'data' => [
-                        'order_id' => $order->id,
-                        'invoice_id' => $invoice->id
-                    ]
+                    'order' => $order
                 ]);
 
             } catch (\Exception $e) {
@@ -133,9 +155,15 @@ class OrderController extends Controller
             }
 
         } catch (\Exception $e) {
+            Log::error('Order creation error:', [
+                'message' => $e->getMessage(),
+                'trace' => $e->getTraceAsString(),
+                'request' => $request->all()
+            ]);
+
             return response()->json([
                 'status' => 'error',
-                'message' => $e->getMessage()
+                'message' => 'Failed to create order: ' . $e->getMessage()
             ], 500);
         }
     }

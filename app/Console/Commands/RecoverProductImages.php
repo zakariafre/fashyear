@@ -45,41 +45,43 @@ class RecoverProductImages extends Command
             $currentUrls = $product->getRawOriginal('imgURLs');
             $urls = json_decode($currentUrls, true) ?? [];
 
-            $this->info("\nProduct ID: {$product->id}");
-            $this->info("Name: {$product->name}");
-            $this->info("Current URLs: " . json_encode($urls));
+            if ($this->option('debug')) {
+                $this->info("\nProduct ID: {$product->id}");
+                $this->info("Name: {$product->name}");
+                $this->info("Current URLs: " . json_encode($urls));
+            }
 
-            if (empty($urls)) {
-                $emptyCount++;
-                // Find matching files for this product
-                $matchingFiles = array_filter($files, function($file) use ($product) {
-                    // Extract the UUID from the filename
-                    $uuid = substr(basename($file), 0, 36);
-                    return strpos($file, $uuid) !== false;
-                });
+            // Always try to update the URLs to ensure they have the correct base URL
+            $matchingFiles = array_filter($files, function($file) use ($product) {
+                // Extract the UUID from the filename
+                $uuid = substr(basename($file), 0, 36);
+                return strpos($file, $uuid) !== false;
+            });
 
-                if (!empty($matchingFiles)) {
-                    $newUrls = array_map(function($file) {
-                        return asset('storage/' . $file);
-                    }, array_values($matchingFiles));
+            if (!empty($matchingFiles)) {
+                $baseUrl = config('app.url');
+                $newUrls = array_map(function($file) use ($baseUrl) {
+                    return $baseUrl . '/storage/' . $file;
+                }, array_values($matchingFiles));
 
-                    $product->imgURLs = $newUrls;
-                    $product->save();
+                $product->imgURLs = $newUrls;
+                $product->save();
 
+                if ($this->option('debug')) {
                     $this->info("Updated URLs: " . json_encode($newUrls));
-                    $updatedCount++;
-                } else {
+                }
+                $updatedCount++;
+            } else {
+                if ($this->option('debug')) {
                     $this->warn("No matching files found for this product");
                 }
-            } else {
-                $hasImagesCount++;
+                $emptyCount++;
             }
         }
 
         $this->info("\nRecovery completed:");
-        $this->info("- Products with images: {$hasImagesCount}");
+        $this->info("- Products updated: {$updatedCount}");
         $this->info("- Products without images: {$emptyCount}");
-        $this->info("- Updated products: {$updatedCount}");
         $this->info("- Total products: {$products->count()}");
     }
 }
